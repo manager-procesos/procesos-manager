@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manager · Portal de Gestión de Procesos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #1F3864;
+  --blue:    #2E6DA4;
+  --sky:     #00B0F0;
+  --red:     #C0001A;
+  --bg:      #F3F5F9;
+  --card:    #FFFFFF;
+  --border:  #DDE4EE;
+  --border-hi:#B4C6E7;
+  --text:    #18243C;
+  --text-2:  #4A5A78;
+  --text-3:  #8898B8;
+  --sidebar-w:260px;
+  --font:    'DM Sans', sans-serif;
+  --font-mono:'DM Mono', monospace;
+  --font-disp:'Fraunces', Georgia, serif;
+  --r:8px; --r-lg:12px;
+  --shadow:0 1px 3px rgba(30,50,100,0.07),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 16px rgba(30,50,100,0.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);background:var(--bg);display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);background:var(--navy);position:fixed;inset:0 auto 0 0;display:flex;flex-direction:column;overflow-y:auto;z-index:200;}
+.sb-brand{padding:22px 18px 16px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sb-logo{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.sb-mark{width:36px;height:36px;background:linear-gradient(135deg,var(--sky),var(--blue));border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;flex-shrink:0;letter-spacing:-0.5px;}
+.sb-name{font-size:15px;font-weight:600;color:#fff;line-height:1.2;}
+.sb-sub{font-size:10.5px;color:rgba(255,255,255,0.4);margin-top:2px;}
+.sb-dept{margin-top:10px;display:inline-flex;align-items:center;gap:5px;background:rgba(0,176,240,0.15);color:var(--sky);font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;border:1px solid rgba(0,176,240,0.25);}
+
+.sb-section{padding:16px 18px 6px;font-family:var(--font-mono);font-size:9px;letter-spacing:0.12em;color:rgba(255,255,255,0.28);text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;}
+.sb-section-add{color:rgba(255,255,255,0.25);font-size:16px;cursor:pointer;transition:color 0.15s;}
+.sb-section-add:hover{color:var(--sky);}
+
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 18px;color:rgba(255,255,255,0.6);text-decoration:none;font-size:12.5px;border-left:2px solid transparent;transition:all 0.15s;cursor:pointer;}
+.sb-item:hover{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.9);border-left-color:rgba(0,176,240,0.35);}
+.sb-item.active{background:rgba(0,176,240,0.12);color:#fff;border-left-color:var(--sky);}
+.sb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sb-item-badge{margin-left:auto;font-family:var(--font-mono);font-size:9px;padding:1px 6px;border-radius:8px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);}
+
+.sb-soon{opacity:0.4;pointer-events:none;}
+
+.sb-footer{margin-top:auto;padding:14px 18px;border-top:1px solid rgba(255,255,255,0.06);}
+.sb-footer-text{font-size:10px;color:rgba(255,255,255,0.25);line-height:1.6;}
+
+/* MAIN */
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;}
+
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:0 36px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.tb-left{display:flex;align-items:center;gap:10px;}
+.tb-title{font-size:13px;font-weight:600;color:var(--text);}
+.tb-badge{background:#EEF3FC;color:var(--navy);font-size:10px;padding:3px 9px;border-radius:10px;font-weight:600;border:1px solid var(--border-hi);}
+
+.content{padding:36px 40px 80px;max-width:1120px;}
+
+/* HERO PORTAL */
+.portal-hero{background:linear-gradient(135deg,var(--navy) 0%,#264F8C 60%,#3A72B0 100%);border-radius:var(--r-lg);padding:40px 44px;margin-bottom:36px;position:relative;overflow:hidden;}
+.portal-hero::before{content:'';position:absolute;right:-60px;top:-60px;width:280px;height:280px;border-radius:50%;background:rgba(0,176,240,0.07);}
+.portal-hero::after{content:'';position:absolute;right:80px;bottom:-80px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.03);}
+.ph-eyebrow{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;color:var(--sky);text-transform:uppercase;margin-bottom:12px;}
+.ph-title{font-family:var(--font-disp);font-size:36px;color:#fff;line-height:1.15;margin-bottom:12px;}
+.ph-title em{font-style:italic;color:rgba(255,255,255,0.55);}
+.ph-desc{color:rgba(255,255,255,0.6);font-size:14px;max-width:520px;line-height:1.65;margin-bottom:24px;}
+.ph-stats{display:flex;gap:24px;flex-wrap:wrap;}
+.ph-stat{text-align:center;}
+.ph-stat-n{font-family:var(--font-disp);font-size:28px;color:#fff;line-height:1;}
+.ph-stat-l{font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px;}
+
+/* SECTION TITLE */
+.sec-title{font-size:17px;font-weight:600;color:var(--text);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
+.sec-title-actions{display:flex;gap:8px;}
+.btn-sm{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text-2);font-family:var(--font);transition:all 0.15s;}
+.btn-sm:hover{border-color:var(--border-hi);color:var(--text);background:var(--bg);}
+.btn-sm.primary{background:var(--navy);color:#fff;border-color:var(--navy);}
+.btn-sm.primary:hover{background:var(--blue);}
+
+/* DOC CARDS */
+.docs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin-bottom:36px;}
+
+.doc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);transition:box-shadow 0.2s,transform 0.2s;display:flex;flex-direction:column;}
+.doc-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+
+.doc-card-stripe{height:4px;}
+.doc-card-body{padding:18px 18px 14px;flex:1;}
+.doc-card-type{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 8px;border-radius:4px;margin-bottom:10px;}
+.doc-card-title{font-size:16px;font-weight:600;color:var(--text);line-height:1.25;margin-bottom:6px;}
+.doc-card-desc{font-size:13px;color:var(--text-2);line-height:1.55;margin-bottom:14px;}
+.doc-card-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.doc-meta-pill{font-size:11px;color:var(--text-3);background:var(--bg);border:1px solid var(--border);padding:2px 8px;border-radius:8px;}
+.doc-status{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:8px;}
+.status-vigente{background:#E6F4EC;color:#0A6A32;border:1px solid #A8DCBC;}
+.status-borrador{background:#FFF8E6;color:#7A4A00;border:1px solid #F0D080;}
+.status-pronto{background:#F0F0F0;color:#888;border:1px solid #D0D0D0;}
+
+.doc-card-footer{padding:12px 18px;border-top:1px solid var(--bg);display:flex;align-items:center;justify-content:space-between;background:#FAFBFD;}
+.doc-card-code{font-family:var(--font-mono);font-size:10px;color:var(--text-3);}
+.doc-card-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--navy);text-decoration:none;padding:5px 10px;border-radius:6px;border:1px solid var(--border-hi);transition:all 0.15s;}
+.doc-card-link:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+.doc-card-link-disabled{color:var(--text-3);border-color:var(--border);cursor:default;pointer-events:none;}
+
+/* COMING SOON */
+.coming-soon-card{background:var(--card);border:1px dashed var(--border-hi);border-radius:var(--r-lg);padding:20px 22px;display:flex;align-items:center;gap:16px;opacity:0.65;}
+.cs-icon{width:40px;height:40px;background:var(--bg);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.cs-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.cs-desc{font-size:12.5px;color:var(--text-2);}
+
+/* AREAS TABLE */
+.areas-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);font-size:13px;margin-bottom:36px;}
+.areas-table th{background:var(--navy);color:rgba(255,255,255,0.8);padding:10px 16px;text-align:left;font-weight:500;font-size:11.5px;}
+.areas-table td{padding:11px 16px;border-bottom:1px solid var(--border);vertical-align:top;}
+.areas-table tr:last-child td{border-bottom:none;}
+.areas-table tr:nth-child(even) td{background:#FAFBFD;}
+.area-name{font-weight:600;color:var(--text);}
+.area-role{color:var(--text-2);}
+
+/* QUICK STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;box-shadow:var(--shadow);}
+.stat-n{font-family:var(--font-disp);font-size:28px;font-weight:700;color:var(--navy);line-height:1;}
+.stat-l{font-size:12px;color:var(--text-2);margin-top:4px;}
+.stat-sub{font-size:11px;color:var(--text-3);margin-top:2px;}
+
+/* ABOUT DEPT */
+.dept-card{background:linear-gradient(135deg,#EEF3FC,#E8F0F8);border:1px solid var(--border-hi);border-radius:var(--r-lg);padding:24px 28px;margin-bottom:36px;}
+.dept-title{font-size:16px;font-weight:600;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.dept-body{font-size:13.5px;color:var(--text-2);line-height:1.7;}
+.dept-pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;}
+.pillar{background:var(--card);border-radius:8px;padding:12px 14px;border:1px solid var(--border);}
+.pillar-icon{font-size:18px;margin-bottom:4px;}
+.pillar-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.pillar-desc{font-size:11.5px;color:var(--text-2);line-height:1.5;}
+
+/* VIEWS */
+.view{display:none;}
+.view.active{display:block;}
+
+/* SEARCH */
+.search-bar{position:relative;margin-bottom:20px;}
+.search-input{width:100%;padding:10px 14px 10px 36px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;font-family:var(--font);background:var(--card);color:var(--text);outline:none;transition:border 0.15s;}
+.search-input:focus{border-color:var(--border-hi);box-shadow:0 0 0 3px rgba(0,176,240,0.08);}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-3);font-size:14px;}
+
+/* BACK TO TOP */
+#back-top{position:fixed;bottom:24px;right:24px;width:36px;height:36px;background:var(--navy);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity 0.2s;font-size:16px;box-shadow:var(--shadow-md);z-index:300;border:none;}
+#back-top.visible{opacity:1;}
+#back-top:hover{background:var(--blue);}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">
+      <div class="sb-mark">M</div>
+      <div>
+        <div class="sb-name">Manager ERP</div>
+        <div class="sb-sub">Portal de Procesos Internos</div>
+      </div>
+    </div>
+    <div class="sb-dept">⚙ Control de Gestión</div>
+  </div>
+
+  <div class="sb-section">Inicio</div>
+  <div class="sb-item active" onclick="showView('home',this)">
+    <div class="sb-dot" style="background:var(--sky);"></div>
+    Inicio / Dashboard
+  </div>
+
+  <div class="sb-section">
+    Procedimientos
+    <span class="sb-section-add" title="Agregar procedimiento">+</span>
+  </div>
+  <a class="sb-item" href="PRO-MIG-ASP-001.html" target="_blank">
+    <div class="sb-dot" style="background:#00B0F0;"></div>
+    Migración Local → ASP
+    <span class="sb-item-badge">v1.0</span>
+  </a>
+  <div class="sb-item sb-soon">
+    <div class="sb-dot" style="background:rgba(255,255,255,0.2);"></div>
+    Proceso DTE / Acepta
+    <span class="sb-item-badge">pronto</span>
+  </div>
+  <div class="sb-item sb-soon">
+    <div class="sb-dot" style="background:rgba(255,255,255,0.2);"></div>
+    Alta de Cliente ASP
+    <span class="sb-item-badge">pronto</span>
+  </div>
+
+  <div class="sb-section">
+    Guías Técnicas
+    <span class="sb-section-add" title="Agregar guía">+</span>
+  </div>
+  <a class="sb-item" href="Guia_ManagerGO_v4.html" target="_blank">
+    <div class="sb-dot" style="background:#00C896;"></div>
+    Manager GO – Punto de Venta
+    <span class="sb-item-badge">v4</span>
+  </a>
+  <div class="sb-item sb-soon">
+    <div class="sb-dot" style="background:rgba(255,255,255,0.2);"></div>
+    Soporte Nivel 1
+    <span class="sb-item-badge">pronto</span>
+  </div>
+
+  <div class="sb-section">
+    Plantillas
+    <span class="sb-section-add" title="Agregar plantilla">+</span>
+  </div>
+  <div class="sb-item sb-soon">
+    <div class="sb-dot" style="background:rgba(255,255,255,0.2);"></div>
+    Acta de Cierre de Proyecto
+    <span class="sb-item-badge">pronto</span>
+  </div>
+  <div class="sb-item sb-soon">
+    <div class="sb-dot" style="background:rgba(255,255,255,0.2);"></div>
+    Checklist Comercial PDF
+    <span class="sb-item-badge">pronto</span>
+  </div>
+
+  <div class="sb-section">Áreas</div>
+  <div class="sb-item" onclick="showView('areas',this)">
+    <div class="sb-dot" style="background:rgba(255,255,255,0.3);"></div>
+    Áreas y Responsabilidades
+  </div>
+
+  <div class="sb-footer">
+    <div class="sb-footer-text">
+      Manager · Control de Gestión<br>
+      Uso interno · Confidencial<br>
+      Mayo 2026
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="tb-left">
+      <div class="tb-title">Portal de Gestión de Procesos</div>
+      <div class="tb-badge">Control de Gestión · v1.0</div>
+    </div>
+    <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-3);">
+      Mayo 2026
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══ HOME VIEW ═══ -->
+    <div class="view active" id="view-home">
+
+      <!-- HERO -->
+      <div class="portal-hero">
+        <div class="ph-eyebrow">Manager ERP · Control de Gestión · Portal Interno</div>
+        <div class="ph-title">Portal de Procedimientos<br><em>y Guías Operativas</em></div>
+        <div class="ph-desc">Documentación oficial, actualizada y centralizada para todas las áreas de Manager. Primer entregable formal del área de Control de Gestión.</div>
+        <div class="ph-stats">
+          <div class="ph-stat"><div class="ph-stat-n">2</div><div class="ph-stat-l">Docs publicados</div></div>
+          <div class="ph-stat"><div class="ph-stat-n">5</div><div class="ph-stat-l">Áreas cubiertas</div></div>
+          <div class="ph-stat"><div class="ph-stat-n">v1.0</div><div class="ph-stat-l">Primera versión</div></div>
+          <div class="ph-stat"><div class="ph-stat-n">∞</div><div class="ph-stat-l">Documentos por venir</div></div>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-n">1</div>
+          <div class="stat-l">Procedimiento publicado</div>
+          <div class="stat-sub">Migración Local → ASP</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-n">1</div>
+          <div class="stat-l">Guía técnica publicada</div>
+          <div class="stat-sub">Manager GO POS</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-n">4</div>
+          <div class="stat-l">Documentos en camino</div>
+          <div class="stat-sub">DTE, Soporte, Alta ASP…</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-n">0</div>
+          <div class="stat-l">Documentos desactualizados</div>
+          <div class="stat-sub">Todo al día ✓</div>
+        </div>
+      </div>
+
+      <!-- DEPT CARD -->
+      <div class="dept-card">
+        <div class="dept-title">⚙ Área de Control de Gestión · Manager</div>
+        <div class="dept-body">Este portal es el primer entregable formal de una función que Manager no tenía hasta ahora: la gestión, validación y publicación centralizada de procedimientos operativos. Sin un área que documente y estandarice, cada equipo opera con su propia versión del proceso, sin trazabilidad y sin posibilidad de mejora continua.</div>
+        <div class="dept-pillars">
+          <div class="pillar">
+            <div class="pillar-icon">📋</div>
+            <div class="pillar-title">Documentar</div>
+            <div class="pillar-desc">Capturar el conocimiento operativo real de cada área en procedimientos formales y guías técnicas.</div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon">🔍</div>
+            <div class="pillar-title">Validar</div>
+            <div class="pillar-desc">Revisar que los procesos sean correctos, eficientes y estén alineados entre todas las áreas.</div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon">🚀</div>
+            <div class="pillar-title">Publicar y Mejorar</div>
+            <div class="pillar-desc">Mantener la documentación viva, accesible y actualizada. Base para onboarding y mejora continua.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROCEDIMIENTOS -->
+      <div class="sec-title">
+        Procedimientos Operativos
+        <div class="sec-title-actions">
+          <button class="btn-sm">Filtrar ▾</button>
+        </div>
+      </div>
+      <div class="docs-grid">
+
+        <!-- PRO-MIG-ASP-001 -->
+        <div class="doc-card">
+          <div class="doc-card-stripe" style="background:linear-gradient(90deg,#1F3864,#00B0F0);"></div>
+          <div class="doc-card-body">
+            <div class="doc-card-type" style="background:#EEF3FC;color:#1F3864;">📋 Procedimiento</div>
+            <div class="doc-card-title">Migración Local Manager Time → ASP</div>
+            <div class="doc-card-desc">Define el proceso completo de migración de clientes fidelizados desde servidores propios a la nube ASP de Manager, incluyendo responsabilidades, tiempos y entregables.</div>
+            <div class="doc-card-meta">
+              <span class="doc-status status-vigente">● Vigente</span>
+              <span class="doc-meta-pill">12 etapas</span>
+              <span class="doc-meta-pill">5 áreas</span>
+              <span class="doc-meta-pill">v1.0</span>
+            </div>
+          </div>
+          <div class="doc-card-footer">
+            <div class="doc-card-code">PRO-MIG-ASP-001</div>
+            <a href="PRO-MIG-ASP-001.html" target="_blank" class="doc-card-link">Abrir →</a>
+          </div>
+        </div>
+
+        <!-- PROC DTE (pronto) -->
+        <div class="doc-card" style="opacity:0.65;">
+          <div class="doc-card-stripe" style="background:linear-gradient(90deg,#9B1B30,#E8932A);"></div>
+          <div class="doc-card-body">
+            <div class="doc-card-type" style="background:#FEE8EC;color:#9B1B30;">📋 Procedimiento</div>
+            <div class="doc-card-title">Proceso DTE / Acepta</div>
+            <div class="doc-card-desc">Configuración de certificados digitales, cesiones de factoring, rutas y prueba de emisión en el SII para clientes con Acepta.</div>
+            <div class="doc-card-meta">
+              <span class="doc-status status-pronto">En preparación</span>
+            </div>
+          </div>
+          <div class="doc-card-footer">
+            <div class="doc-card-code">PRO-DTE-001</div>
+            <span class="doc-card-link doc-card-link-disabled">Próximamente</span>
+          </div>
+        </div>
+
+        <!-- PROC Alta ASP (pronto) -->
+        <div class="doc-card" style="opacity:0.65;">
+          <div class="doc-card-stripe" style="background:linear-gradient(90deg,#2E6DA4,#00C896);"></div>
+          <div class="doc-card-body">
+            <div class="doc-card-type" style="background:#EEF3FC;color:#2E6DA4;">📋 Procedimiento</div>
+            <div class="doc-card-title">Alta de Cliente Nuevo en ASP</div>
+            <div class="doc-card-desc">Proceso de creación, configuración inicial y onboarding de clientes nuevos en modalidad ASP desde cero.</div>
+            <div class="doc-card-meta">
+              <span class="doc-status status-pronto">En preparación</span>
+            </div>
+          </div>
+          <div class="doc-card-footer">
+            <div class="doc-card-code">PRO-ALTA-ASP-001</div>
+            <span class="doc-card-link doc-card-link-disabled">Próximamente</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- GUÍAS TÉCNICAS -->
+      <div class="sec-title">Guías Técnicas</div>
+      <div class="docs-grid">
+
+        <!-- GUI-GO -->
+        <div class="doc-card">
+          <div class="doc-card-stripe" style="background:linear-gradient(90deg,#0A6A42,#00C896);"></div>
+          <div class="doc-card-body">
+            <div class="doc-card-type" style="background:#E8F4EE;color:#1A6B42;">📗 Guía Técnica</div>
+            <div class="doc-card-title">Manager GO – Punto de Venta</div>
+            <div class="doc-card-desc">Guía completa de implementación del módulo POS: instalación, configuración, impresoras, folios, corrección KNA y operación diaria.</div>
+            <div class="doc-card-meta">
+              <span class="doc-status status-vigente">● Vigente</span>
+              <span class="doc-meta-pill">Instalación + KNA</span>
+              <span class="doc-meta-pill">Para consultores</span>
+            </div>
+          </div>
+          <div class="doc-card-footer">
+            <div class="doc-card-code">GUI-GO-001</div>
+            <a href="Guia_ManagerGO_v4.html" target="_blank" class="doc-card-link">Abrir →</a>
+          </div>
+        </div>
+
+        <!-- GUI Soporte (pronto) -->
+        <div class="doc-card" style="opacity:0.65;">
+          <div class="doc-card-stripe" style="background:linear-gradient(90deg,#7B3F00,#E8932A);"></div>
+          <div class="doc-card-body">
+            <div class="doc-card-type" style="background:#FEF0E6;color:#7B3F00;">📗 Guía Técnica</div>
+            <div class="doc-card-title">Protocolo de Soporte Nivel 1</div>
+            <div class="doc-card-desc">Clasificación de incidencias, tiempos de respuesta, escalamiento y resolución de los problemas más frecuentes.</div>
+            <div class="doc-card-meta">
+              <span class="doc-status status-pronto">En preparación</span>
+            </div>
+          </div>
+          <div class="doc-card-footer">
+            <div class="doc-card-code">GUI-SUP-001</div>
+            <span class="doc-card-link doc-card-link-disabled">Próximamente</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TEMPLATES -->
+      <div class="sec-title">Plantillas y Formularios</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-bottom:36px;">
+        <div class="coming-soon-card">
+          <div class="cs-icon">📄</div>
+          <div><div class="cs-title">Acta de Cierre de Proyecto</div><div class="cs-desc">Plantilla formal para el cierre de proyectos de migración y onboarding.</div></div>
+        </div>
+        <div class="coming-soon-card">
+          <div class="cs-icon">✅</div>
+          <div><div class="cs-title">Checklist Comercial PDF</div><div class="cs-desc">Formulario de levantamiento para el área Comercial y GEX.</div></div>
+        </div>
+        <div class="coming-soon-card">
+          <div class="cs-icon">📋</div>
+          <div><div class="cs-title">Acta de Reunión de Proyecto</div><div class="cs-desc">Template estándar para registrar acuerdos y compromisos con el cliente.</div></div>
+        </div>
+      </div>
+
+    </div><!-- /view-home -->
+
+    <!-- ═══ AREAS VIEW ═══ -->
+    <div class="view" id="view-areas">
+      <div style="margin-bottom:24px;">
+        <h2 style="font-size:20px;font-weight:600;color:var(--text);margin-bottom:6px;">Áreas y Responsabilidades</h2>
+        <p style="color:var(--text-2);font-size:14px;">Rol de cada área en los procedimientos documentados.</p>
+      </div>
+      <table class="areas-table">
+        <thead>
+          <tr><th style="width:160px;">Área</th><th style="width:80px;">Código</th><th>Rol en los Procedimientos</th><th style="width:120px;">Docs Relacionados</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="area-name" style="color:#1F3864;">Comercial / GEX</div></td>
+            <td><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-3);">COM / GEX</span></td>
+            <td class="area-role">Origina la OT, completa el Checklist de levantamiento y entrega los datos del cliente a Proyectos/Onboarding. El área Comercial atiende clientes fidelizados; GEX gestiona la expansión de clientes existentes.</td>
+            <td><span style="font-family:var(--font-mono);font-size:10px;color:var(--navy);">PRO-MIG-ASP-001</span></td>
+          </tr>
+          <tr>
+            <td><div class="area-name" style="color:#2E6DA4;">Proyectos / Onboarding</div></td>
+            <td><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-3);">PRY / ONB</span></td>
+            <td class="area-role">Recibe la OT, coordina el proyecto con el cliente, verifica la BD migrada en el entorno ASP (maestros, tablas, bodegas, formatos, usuarios), coordina Ramaflex y conduce las pruebas con el cliente.</td>
+            <td><span style="font-family:var(--font-mono);font-size:10px;color:var(--navy);">PRO-MIG-ASP-001</span></td>
+          </tr>
+          <tr>
+            <td><div class="area-name" style="color:#1A6B42;">Consultoría Técnica</div></td>
+            <td><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-3);">CTO</span></td>
+            <td class="area-role">Proporciona el sitio para el respaldo del cliente, valida la integridad del backup (viernes AM) y traspasa a IT. También apoya en formatos personalizados que requieran ajuste en el entorno ASP.</td>
+            <td><span style="font-family:var(--font-mono);font-size:10px;color:var(--navy);">PRO-MIG-ASP-001</span></td>
+          </tr>
+          <tr>
+            <td><div class="area-name" style="color:#7B3F00;">IT Manager</div></td>
+            <td><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-3);">IT</span></td>
+            <td class="area-role">Al recibir la OT, crea el ambiente ASP, la BD y los usuarios. Mesa de Ayuda emite el correo de bienvenida al cliente. En la etapa de migración, recibe el backup de Consultoría Técnica y lo carga en la BD ASP ya creada.</td>
+            <td><span style="font-family:var(--font-mono);font-size:10px;color:var(--navy);">PRO-MIG-ASP-001</span></td>
+          </tr>
+          <tr>
+            <td><div class="area-name" style="color:#9B1B30;">DTE</div></td>
+            <td><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-3);">DTE</span></td>
+            <td class="area-role">Participa solo cuando el cliente tiene contratado el servicio Acepta. Revisa certificados digitales, cesiones de factoring, rutas y parámetros web. Prueba la emisión de un documento electrónico y su aceptación en el SII.</td>
+            <td><span style="font-family:var(--font-mono);font-size:10px;color:var(--navy);">PRO-MIG-ASP-001<br>PRO-DTE-001 (pronto)</span></td>
+          </tr>
+          <tr>
+            <td><div class="area-name" style="color:#4A5878;">Líder de Proyecto</div></td>
+            <td><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-3);">LP</span></td>
+            <td class="area-role">Responsable de la coordinación general, seguimiento del cronograma y firma del acta de cierre. Punto de contacto principal entre Manager y el cliente durante todo el proceso.</td>
+            <td><span style="font-family:var(--font-mono);font-size:10px;color:var(--navy);">PRO-MIG-ASP-001</span></td>
+          </tr>
+          <tr>
+            <td><div class="area-name" style="color:#0A6A42;">Consultor GO</div></td>
+            <td><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-3);">GO</span></td>
+            <td class="area-role">Implementa y configura el módulo Manager GO (POS), gestiona impresoras, folios, corrección KNA y capacita al cliente en la operación diaria del punto de venta.</td>
+            <td><span style="font-family:var(--font-mono);font-size:10px;color:var(--navy);">GUI-GO-001</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div><!-- /view-areas -->
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+function showView(viewId, el) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + viewId).classList.add('active');
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  window.scrollTo({ top: 0 });
+}
+
+window.addEventListener('scroll', () => {
+  document.getElementById('back-top').classList.toggle('visible', window.scrollY > 300);
+}, { passive: true });
+</script>
+</body>
+</html>

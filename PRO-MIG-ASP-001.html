@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-MIG-ASP-001 · Migración Local → ASP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:      #1F3864;
+  --blue:      #2E6DA4;
+  --sky:       #00B0F0;
+  --sky-dim:   #0090C8;
+  --red:       #C0001A;
+  --bg:        #F3F5F9;
+  --card:      #FFFFFF;
+  --border:    #DDE4EE;
+  --border-hi: #B4C6E7;
+
+  --text:      #18243C;
+  --text-2:    #4A5A78;
+  --text-3:    #8898B8;
+
+  --c-comercial:   #1F3864;
+  --c-proyectos:   #2E6DA4;
+  --c-consultoria: #1A6B42;
+  --c-it:          #7B3F00;
+  --c-onboarding:  #5B2C8D;
+  --c-dte:         #9B1B30;
+
+  --sidebar-w: 252px;
+  --font:     'DM Sans', sans-serif;
+  --font-mono:'DM Mono', monospace;
+  --font-disp:'Fraunces', Georgia, serif;
+  --r: 8px;
+  --r-lg: 12px;
+  --shadow: 0 1px 3px rgba(30,50,100,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(30,50,100,0.10);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--text);
+  background: var(--bg);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ══════════ SIDEBAR ══════════ */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--navy);
+  position: fixed;
+  inset: 0 auto 0 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 200;
+}
+
+.sb-brand {
+  padding: 22px 18px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.sb-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  margin-bottom: 12px;
+  letter-spacing: 0.06em;
+  transition: color 0.15s;
+}
+.sb-back:hover { color: var(--sky); }
+.sb-back::before { content: '←'; }
+
+.sb-doc-type {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--sky);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.sb-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.25;
+}
+
+.sb-code {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 5px;
+}
+
+.sb-meta {
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.sb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0,176,240,0.15);
+  color: var(--sky);
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,176,240,0.25);
+}
+
+.sb-section {
+  padding: 16px 18px 6px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.28);
+  text-transform: uppercase;
+}
+
+.sb-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 18px;
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  font-size: 12.5px;
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.sb-nav-item:hover {
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.85);
+  border-left-color: rgba(0,176,240,0.4);
+}
+.sb-nav-item.active {
+  background: rgba(0,176,240,0.12);
+  color: #fff;
+  border-left-color: var(--sky);
+}
+
+.sb-nav-num {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  font-size: 9px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+}
+.sb-nav-item.active .sb-nav-num {
+  background: var(--sky);
+  color: var(--navy);
+}
+
+.sb-footer {
+  margin-top: auto;
+  padding: 14px 18px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.sb-footer-text {
+  font-size: 10px;
+  color: rgba(255,255,255,0.25);
+  line-height: 1.5;
+}
+
+/* ══════════ MAIN ══════════ */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TOPBAR */
+.topbar {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tb-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+.tb-breadcrumb span { color: var(--text-2); }
+.tb-breadcrumb .sep { opacity: 0.4; }
+
+.tb-actions { display: flex; gap: 8px; align-items: center; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+  font-family: var(--font);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text-2);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { background: var(--bg); border-color: var(--border-hi); color: var(--text); }
+.btn-primary {
+  background: var(--navy);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--blue); }
+
+/* CONTENT */
+.content {
+  padding: 36px 40px 80px;
+  max-width: 1100px;
+}
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, var(--navy) 0%, #2E5490 55%, #3A72B0 100%);
+  border-radius: var(--r-lg);
+  padding: 36px 40px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  right: -40px; top: -40px;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: rgba(0,176,240,0.08);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  right: 60px; bottom: -60px;
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--sky);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.hero-title {
+  font-family: var(--font-disp);
+  font-size: 32px;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+.hero-title em {
+  font-style: italic;
+  color: rgba(255,255,255,0.6);
+}
+
+.hero-desc {
+  color: rgba(255,255,255,0.65);
+  font-size: 14px;
+  max-width: 540px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.hero-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.chip {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.8);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.chip-accent {
+  background: rgba(0,176,240,0.2);
+  border-color: rgba(0,176,240,0.35);
+  color: var(--sky);
+}
+
+/* SECTION */
+.section { margin-bottom: 40px; scroll-margin-top: 72px; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-num {
+  width: 32px; height: 32px;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.section-desc {
+  color: var(--text-2);
+  font-size: 14px;
+  line-height: 1.65;
+  margin-bottom: 18px;
+}
+
+/* TIMELINE */
+.timeline { position: relative; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 22px;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--navy), var(--border));
+}
+
+.tl-item {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.tl-dot {
+  width: 46px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 14px;
+}
+
+.tl-num {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  font-family: var(--font-mono);
+  z-index: 1;
+  box-shadow: 0 0 0 3px var(--bg);
+}
+
+.tl-card {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+.tl-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.tl-card-head {
+  padding: 14px 18px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tl-area-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.tl-time-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-3);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tl-card-body { padding: 0 18px 16px; }
+
+.tl-activity {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.tl-desc {
+  font-size: 13.5px;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+.tl-result {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border-radius: 6px;
+  border-left: 3px solid var(--border-hi);
+  font-size: 12px;
+  color: var(--text-2);
+}
+.tl-result::before {
+  content: '→ ';
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+.tl-card-expand {
+  display: none;
+  padding: 0 18px 16px;
+  border-top: 1px solid var(--bg);
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.65;
+  animation: fadeIn 0.2s ease;
+}
+.tl-card.open .tl-card-expand { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* DTE special card */
+.dte-note {
+  background: #FFF8F0;
+  border: 1px solid #F5D9A0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  color: #7A4A00;
+  margin-bottom: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+/* FLOW TIMELINE HORIZONTAL */
+.flow-bar {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.flow-col {
+  padding: 14px 12px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.flow-col:last-child { border-right: none; }
+
+.flow-day {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.flow-area {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.flow-action {
+  font-size: 11px;
+  color: var(--text-2);
+  line-height: 1.4;
+}
+
+.flow-arrow {
+  grid-column: span 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--border-hi);
+}
+
+.flow-note {
+  background: #EAF7F0;
+  border: 1px solid #A8DCBC;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 12.5px;
+  color: #0A5A30;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.flow-note::before { content: '★'; font-size: 14px; }
+
+/* CHECKLIST */
+.checklist-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.cl-group {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.cl-group-head {
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+}
+
+.cl-items { padding: 8px 0; }
+
+.cl-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.cl-item:hover { background: var(--bg); }
+
+.cl-cb {
+  width: 16px; height: 16px;
+  border: 2px solid var(--border-hi);
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.cl-item.checked .cl-cb {
+  background: var(--navy);
+  border-color: var(--navy);
+}
+.cl-item.checked .cl-cb::after {
+  content: '✓';
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+}
+.cl-item.checked .cl-text {
+  text-decoration: line-through;
+  color: var(--text-3);
+}
+
+.cl-text { font-size: 13px; color: var(--text-2); line-height: 1.45; }
+
+.cl-progress {
+  padding: 10px 16px 12px;
+  border-top: 1px solid var(--border);
+}
+.cl-prog-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-3);
+  margin-bottom: 5px;
+}
+.cl-prog-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.cl-prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--navy), var(--sky));
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* RESPONSIBILITY MATRIX */
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  font-size: 12.5px;
+}
+.matrix-table th {
+  background: var(--navy);
+  color: rgba(255,255,255,0.85);
+  font-weight: 500;
+  font-size: 11px;
+  padding: 10px 10px;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+.matrix-table th:first-child { text-align: left; padding-left: 14px; }
+.matrix-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  text-align: center;
+  vertical-align: middle;
+}
+.matrix-table td:first-child { text-align: left; padding-left: 14px; font-size: 12px; color: var(--text-2); }
+.matrix-table td.activity-col { font-weight: 500; color: var(--text); }
+.matrix-table tr:nth-child(even) td { background: #FAFBFD; }
+.matrix-table tr:hover td { background: #F0F4FC; }
+.matrix-check { color: var(--navy); font-size: 14px; font-weight: 700; }
+
+/* EMAIL TEMPLATE */
+.email-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 14px;
+}
+
+.email-header-strip {
+  height: 4px;
+  background: linear-gradient(90deg, var(--navy), var(--sky));
+}
+
+.email-meta {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--bg);
+  background: var(--bg);
+}
+
+.email-meta-row {
+  display: flex;
+  gap: 8px;
+  font-size: 12.5px;
+  margin-bottom: 3px;
+}
+.email-meta-label {
+  color: var(--text-3);
+  font-weight: 500;
+  width: 52px;
+  flex-shrink: 0;
+}
+.email-meta-val { color: var(--text-2); }
+
+.email-body {
+  padding: 18px 18px 16px;
+  font-size: 13.5px;
+  color: var(--text-2);
+  line-height: 1.65;
+}
+
+.email-greeting { margin-bottom: 10px; }
+
+.email-table {
+  width: auto;
+  min-width: 340px;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 13px;
+}
+.email-table th {
+  background: var(--navy);
+  color: #fff;
+  padding: 8px 14px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+}
+.email-table td {
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.email-table tr:nth-child(even) td { background: var(--bg); }
+
+.email-note {
+  font-size: 12px;
+  color: var(--text-3);
+  font-style: italic;
+  margin-top: 8px;
+}
+
+/* GLOSARIO */
+.glos-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.glos-table th {
+  background: var(--navy);
+  color: rgba(255,255,255,0.8);
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+.glos-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+  vertical-align: top;
+}
+.glos-table tr:last-child td { border-bottom: none; }
+.glos-table tr:nth-child(even) td { background: #FAFBFD; }
+.glos-term { font-weight: 600; color: var(--navy); font-family: var(--font-mono); font-size: 12px; }
+.glos-def { color: var(--text-2); line-height: 1.55; }
+
+/* CONSIDERACIONES */
+.consid-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.consid-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  border-top: 3px solid var(--navy);
+}
+.consid-card.warn { border-top-color: #C47A10; }
+.consid-card.info { border-top-color: var(--sky); }
+.consid-card.purple { border-top-color: var(--c-onboarding); }
+.consid-card.green { border-top-color: var(--c-consultoria); }
+.consid-card.red { border-top-color: var(--c-dte); }
+
+.consid-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.consid-body {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+/* FICHA */
+.ficha-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  max-width: 560px;
+}
+.ficha-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+}
+.ficha-table tr:last-child td { border-bottom: none; }
+.ficha-label { background: var(--bg); font-weight: 600; color: var(--text-2); width: 200px; font-size: 12.5px; }
+.ficha-val { color: var(--text); }
+.ficha-vigente {
+  display: inline-block;
+  background: #E6F4EC;
+  color: #0A6A32;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 10px;
+  border: 1px solid #A8DCBC;
+}
+
+/* APROBACIONES */
+.aprov-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.aprov-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px 18px 16px;
+  text-align: center;
+}
+.aprov-role {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+}
+.aprov-line {
+  border: none;
+  border-top: 1px solid var(--border-hi);
+  margin-bottom: 8px;
+}
+.aprov-name { font-size: 12px; color: var(--text-3); font-style: italic; }
+.aprov-area { font-size: 11.5px; color: var(--text-2); margin-top: 3px; }
+
+/* BACK TO TOP */
+#back-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 36px;
+  height: 36px;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-size: 16px;
+  box-shadow: var(--shadow-md);
+  z-index: 300;
+  text-decoration: none;
+  border: none;
+}
+#back-top.visible { opacity: 1; }
+#back-top:hover { background: var(--blue); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-brand">
+    <a class="sb-back" href="portal.html">Volver al Portal</a>
+    <div class="sb-doc-type">Procedimiento Operativo</div>
+    <div class="sb-title">Migración Local → ASP</div>
+    <div class="sb-code">PRO-MIG-ASP-001 · v1.0 · Mayo 2026</div>
+  </div>
+  <div class="sb-meta">
+    <span class="sb-badge">● VIGENTE</span>
+  </div>
+
+  <div class="sb-section">Contenido</div>
+  <a class="sb-nav-item active" href="#s0" onclick="setActive(this)"><div class="sb-nav-num">—</div> Ficha del Documento</a>
+  <a class="sb-nav-item" href="#s1" onclick="setActive(this)"><div class="sb-nav-num">1</div> Objetivo</a>
+  <a class="sb-nav-item" href="#s2" onclick="setActive(this)"><div class="sb-nav-num">2</div> Alcance</a>
+  <a class="sb-nav-item" href="#s3" onclick="setActive(this)"><div class="sb-nav-num">3</div> Glosario</a>
+  <a class="sb-nav-item" href="#s4" onclick="setActive(this)"><div class="sb-nav-num">4</div> Flujo del Proceso</a>
+  <a class="sb-nav-item" href="#s5" onclick="setActive(this)"><div class="sb-nav-num">5</div> Etapas Detalladas</a>
+  <a class="sb-nav-item" href="#s6" onclick="setActive(this)"><div class="sb-nav-num">6</div> Checklist Comercial</a>
+  <a class="sb-nav-item" href="#s7" onclick="setActive(this)"><div class="sb-nav-num">7</div> Comunicaciones Clave</a>
+  <a class="sb-nav-item" href="#s8" onclick="setActive(this)"><div class="sb-nav-num">8</div> Checklist Onboarding</a>
+  <a class="sb-nav-item" href="#s9" onclick="setActive(this)"><div class="sb-nav-num">9</div> Matriz Responsabilidades</a>
+  <a class="sb-nav-item" href="#s10" onclick="setActive(this)"><div class="sb-nav-num">10</div> Consideraciones</a>
+  <a class="sb-nav-item" href="#s11" onclick="setActive(this)"><div class="sb-nav-num">11</div> Aprobaciones</a>
+
+  <div class="sb-footer">
+    <div class="sb-footer-text">Manager · Control de Gestión<br>Uso interno · Confidencial</div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="tb-breadcrumb">
+      <span>Portal</span><span class="sep">/</span>
+      <span>Procedimientos</span><span class="sep">/</span>
+      <span>Migración Local → ASP</span>
+    </div>
+    <div class="tb-actions">
+      <button class="btn btn-ghost" onclick="window.print()">⎙ Imprimir</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="hero" id="s0">
+      <div class="hero-eyebrow">PRO-MIG-ASP-001 · Procedimiento Operativo · v1.0</div>
+      <div class="hero-title">Migración de Cliente<br><em>Local Manager Time → ASP</em></div>
+      <div class="hero-desc">Procedimiento formal para la migración de clientes desde instalación local a la nube ASP de Manager. Define responsabilidades, tiempos y entregables para todas las áreas involucradas.</div>
+      <div class="hero-chips">
+        <span class="chip">12 etapas</span>
+        <span class="chip">5 áreas involucradas</span>
+        <span class="chip chip-accent">El cliente pierde solo el viernes</span>
+        <span class="chip">Mayo 2026</span>
+      </div>
+    </div>
+
+    <!-- FICHA -->
+    <div class="section" style="margin-bottom:28px;">
+      <table class="ficha-table">
+        <tr><td class="ficha-label">Código</td><td class="ficha-val">PRO-MIG-ASP-001</td></tr>
+        <tr><td class="ficha-label">Versión</td><td class="ficha-val">1.0</td></tr>
+        <tr><td class="ficha-label">Fecha de Emisión</td><td class="ficha-val">Mayo 2026</td></tr>
+        <tr><td class="ficha-label">Área Propietaria</td><td class="ficha-val">Proyectos / Onboarding</td></tr>
+        <tr><td class="ficha-label">Áreas Involucradas</td><td class="ficha-val">Comercial, GEX, Consultoría Técnica, IT, Onboarding, DTE</td></tr>
+        <tr><td class="ficha-label">Estado</td><td class="ficha-val"><span class="ficha-vigente">VIGENTE</span></td></tr>
+      </table>
+    </div>
+
+    <!-- OBJETIVO -->
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-title">Objetivo</div>
+      </div>
+      <div class="section-desc">Establecer el procedimiento formal y actualizado para la migración de clientes fidelizados desde la modalidad Local Manager Time hacia la modalidad ASP (Application Service Provider), definiendo las responsabilidades de cada área involucrada, los tiempos de ejecución y los entregables esperados en cada etapa.<br><br>Al migrar a ASP, Manager se hace cargo de las actualizaciones de versión y el equipo de soporte puede revisar en línea la base de datos del cliente o bajar respaldos cuando corresponda. El objetivo operativo es que <strong>el cliente pierda únicamente el día viernes para el ingreso de documentos al sistema</strong>.</div>
+    </div>
+
+    <!-- ALCANCE -->
+    <div class="section" id="s2">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-title">Alcance</div>
+      </div>
+      <div class="section-desc">Aplica a todos los proyectos de migración Local → ASP iniciados a partir de la fecha de vigencia. La OT puede originarse desde el Área Comercial (clientes fidelizados) o el Área GEX. Áreas participantes:</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+        <span style="background:#EEF3FC;color:#1F3864;font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid #C4D4EC;">Comercial / GEX</span>
+        <span style="background:#EEF3FC;color:#2E6DA4;font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid #C4D4EC;">Proyectos / Onboarding</span>
+        <span style="background:#E8F4EE;color:#1A6B42;font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid #A8D4B8;">Consultoría Técnica</span>
+        <span style="background:#FEF0E6;color:#7B3F00;font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid #F0C898;">IT Manager</span>
+        <span style="background:#F4EEF8;color:#5B2C8D;font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid #D4B8EC;">Onboarding</span>
+        <span style="background:#FEE8EC;color:#9B1B30;font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid #F0B4BC;">DTE (si aplica Acepta)</span>
+        <span style="background:#F0F0F0;color:#4A5878;font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid #D4D8E0;">Cliente</span>
+      </div>
+    </div>
+
+    <!-- GLOSARIO -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-title">Glosario</div>
+      </div>
+      <table class="glos-table">
+        <tr><th style="width:160px;">Término</th><th>Definición</th></tr>
+        <tr><td class="ficha-label glos-term">ASP</td><td class="glos-def">Application Service Provider. Modalidad en que el sistema opera en servidores remotos gestionados por Manager.</td></tr>
+        <tr><td class="ficha-label glos-term">Local Manager Time</td><td class="glos-def">Modalidad donde el software y la BD operan en los servidores del propio cliente.</td></tr>
+        <tr><td class="ficha-label glos-term">BD / Base de Datos</td><td class="glos-def">Conjunto de datos estructurados con la información operativa del cliente.</td></tr>
+        <tr><td class="ficha-label glos-term">OT</td><td class="glos-def">Orden de Trabajo. Documento interno que formaliza el inicio del proyecto.</td></tr>
+        <tr><td class="ficha-label glos-term">Onboarding</td><td class="glos-def">Proceso de configuración y validación inicial del cliente en la plataforma ASP.</td></tr>
+        <tr><td class="ficha-label glos-term">Ramaflex</td><td class="glos-def">Sistema de acceso web para ingresar al entorno ASP desde el navegador.</td></tr>
+        <tr><td class="ficha-label glos-term">Maestros</td><td class="glos-def">Tablas base del ERP: clientes, proveedores, artículos, centros de costo, etc.</td></tr>
+        <tr><td class="ficha-label glos-term">Backup / Respaldo</td><td class="glos-def">Copia de seguridad de la BD en una fecha de corte determinada.</td></tr>
+        <tr><td class="ficha-label glos-term">GEX</td><td class="glos-def">Gestor de Expansión. Área encargada de la expansión de clientes con BD de Manager Time instalada.</td></tr>
+        <tr><td class="ficha-label glos-term">Mesa de Ayuda</td><td class="glos-def">Equipo de IT de Manager que crea la BD en ASP y emite el correo de bienvenida al cliente.</td></tr>
+        <tr><td class="ficha-label glos-term">Fecha de corte</td><td class="glos-def">Fecha y hora exacta en que se genera el backup de la BD, acordada entre el cliente y Onboarding. Idealmente un jueves en la tarde.</td></tr>
+      </table>
+    </div>
+
+    <!-- FLUJO -->
+    <div class="section" id="s4">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <div class="section-title">Flujo General del Proceso</div>
+      </div>
+      <div class="flow-bar">
+        <div class="flow-col">
+          <div class="flow-day" style="background:#EEF3FC;color:#1F3864;">Inicio del proceso</div>
+          <div class="flow-area" style="color:#1F3864;">Comercial / GEX</div>
+          <div class="flow-action">OT + Checklist</div>
+          <div style="height:8px;"></div>
+          <div class="flow-area" style="color:#7B3F00;">IT Manager</div>
+          <div class="flow-action">Crea BD, ambiente y usuarios → correo bienvenida al cliente</div>
+          <div style="height:8px;"></div>
+          <div class="flow-area" style="color:#1A6B42;">Cto. Técnico</div>
+          <div class="flow-action">Entrega sitio al cliente para respaldo</div>
+        </div>
+        <div class="flow-col">
+          <div class="flow-day" style="background:#E8F4EE;color:#1A6B42;">Jueves PM</div>
+          <div class="flow-area" style="color:#4A5878;">IT del cliente</div>
+          <div class="flow-action">Deposita backup en sitio de Cto. Técnico</div>
+        </div>
+        <div class="flow-col">
+          <div class="flow-day" style="background:#E8F4EE;color:#1A6B42;">Viernes AM</div>
+          <div class="flow-area" style="color:#1A6B42;">Cto. Técnico</div>
+          <div class="flow-action">Valida backup → traspasa a IT Manager</div>
+        </div>
+        <div class="flow-col">
+          <div class="flow-day" style="background:#FEF0E6;color:#7B3F00;">Viernes PM</div>
+          <div class="flow-area" style="color:#7B3F00;">IT Manager</div>
+          <div class="flow-action">Sube backup a BD ASP (ya creada) → BD queda idéntica al sistema local → avisa a Onboarding</div>
+        </div>
+        <div class="flow-col">
+          <div class="flow-day" style="background:#F4EEF8;color:#5B2C8D;">Viernes PM / Lunes AM</div>
+          <div class="flow-area" style="color:#5B2C8D;">Onboarding</div>
+          <div class="flow-action">Verifica BD, formatos, usuarios · Coordina Ramaflex y DTE con cliente</div>
+        </div>
+        <div class="flow-col">
+          <div class="flow-day" style="background:#FEE8EC;color:#9B1B30;">Lunes</div>
+          <div class="flow-area" style="color:#2E6DA4;">Onboarding + Cliente</div>
+          <div class="flow-action">Pruebas funcionales, DTE si aplica → Cierre</div>
+        </div>
+      </div>
+      <div class="flow-note">El cliente pierde únicamente el día viernes para el ingreso de documentos al sistema.</div>
+    </div>
+
+    <!-- ETAPAS DETALLADAS -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <div class="section-title">Etapas Detalladas</div>
+      </div>
+      <div class="section-desc">Haz clic en cada tarjeta para ver la descripción completa.</div>
+      <div class="timeline" id="timeline-container"></div>
+    </div>
+
+    <!-- CHECKLIST COMERCIAL -->
+    <div class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <div class="section-title">Checklist Área Comercial / GEX</div>
+      </div>
+      <div class="section-desc">Debe completarse antes de traspasar el proyecto a Proyectos/Onboarding. Sin este checklist completo, no puede iniciarse el proceso.</div>
+      <div class="checklist-grid">
+        <div class="cl-group" id="clg-datos">
+          <div class="cl-group-head" style="background:#1F3864;">📋 Datos del Cliente</div>
+          <div class="cl-items">
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Área de origen (Comercial / GEX)</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Razón social del cliente</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">RUT de la empresa</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Nombre y cargo del contacto principal</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Correo electrónico del contacto</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Teléfono del contacto</div></div>
+          </div>
+          <div class="cl-progress">
+            <div class="cl-prog-label"><span>Progreso</span><span class="cl-prog-pct">0%</span></div>
+            <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="cl-group" id="clg-bd">
+          <div class="cl-group-head" style="background:#2E6DA4;">🗄 Base de Datos y Ambiente</div>
+          <div class="cl-items">
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Nombre de la BD a migrar</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">¿Hay más de una BD? (indicar cuántas y nombres)</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Ruta del ambiente actual (\\servidor\ruta)</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">¿Las BD comparten el mismo ambiente en ASP?</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Versión actual del sistema</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Módulos contratados en modalidad ASP</div></div>
+          </div>
+          <div class="cl-progress">
+            <div class="cl-prog-label"><span>Progreso</span><span class="cl-prog-pct">0%</span></div>
+            <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="cl-group" id="clg-logistica">
+          <div class="cl-group-head" style="background:#1A6B42;">📅 Logística y Condiciones</div>
+          <div class="cl-items">
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Fecha estimada de inicio del proceso</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">¿El cliente tiene IT interno para entrega del respaldo?</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">¿El cliente factura con Acepta?</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Observaciones adicionales completadas</div></div>
+          </div>
+          <div class="cl-progress">
+            <div class="cl-prog-label"><span>Progreso</span><span class="cl-prog-pct">0%</span></div>
+            <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="cl-group" id="clg-validacion">
+          <div class="cl-group-head" style="background:#5B2C8D;">✅ Validación Onboarding</div>
+          <div class="cl-items">
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Checklist revisado por Proyectos/Onboarding</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Reunión de verificación con cliente agendada</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Fecha de corte (jueves) acordada y registrada</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Sitio de respaldo informado al cliente</div></div>
+          </div>
+          <div class="cl-progress">
+            <div class="cl-prog-label"><span>Progreso</span><span class="cl-prog-pct">0%</span></div>
+            <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMUNICACIONES -->
+    <div class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <div class="section-title">Comunicaciones Clave del Proceso</div>
+      </div>
+
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:10px;">7.1 · Correo de Bienvenida al Cliente (automático desde IT)</div>
+      <div class="section-desc" style="margin-bottom:14px;">Al generarse la OT, IT crea el ambiente, la BD y los usuarios en ASP. Mesa de Ayuda envía automáticamente al cliente el siguiente correo con sus credenciales. A partir de este momento se coordinan los plazos de migración.</div>
+      <div class="email-card">
+        <div class="email-header-strip"></div>
+        <div class="email-meta">
+          <div class="email-meta-row"><span class="email-meta-label">De:</span><span class="email-meta-val">Mesa Ayuda &lt;ayuda@manager.cl&gt;</span></div>
+          <div class="email-meta-row"><span class="email-meta-label">Para:</span><span class="email-meta-val">[Contacto principal del cliente]</span></div>
+          <div class="email-meta-row"><span class="email-meta-label">CC:</span><span class="email-meta-val">comercial@manager.cl · Líder de Proyectos ERP · jp@manager.cl · ventas@manager.cl</span></div>
+          <div class="email-meta-row"><span class="email-meta-label">Asunto:</span><span class="email-meta-val">Bienvenido a Manager Time ERP, [NOMBRE COMPLETO CLIENTE]</span></div>
+        </div>
+        <div class="email-body">
+          <div class="email-greeting">¡Bienvenido a Manager Time ERP, <strong>[NOMBRE COMPLETO CLIENTE]</strong>!</div>
+          <div>Nos alegra acompañarte en esta nueva etapa. Con Manager Time ERP, podrás optimizar y simplificar la gestión de tus procesos de forma más eficiente.</div>
+          <div style="margin-top:10px;">A continuación, tus accesos para comenzar:</div>
+          <table class="email-table">
+            <tr><th>Campo</th><th>Valor</th></tr>
+            <tr><td>URL</td><td>time.manager.cl (acceso vía Navegador Web)</td></tr>
+            <tr><td>Usuario</td><td>[usuario_asignado]</td></tr>
+            <tr><td>Clave</td><td>[clave_asignada]</td></tr>
+            <tr><td>Usuario FTP</td><td>[usuario_ftp]</td></tr>
+            <tr><td>Clave FTP</td><td>[clave_ftp]</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin:20px 0 10px;">7.2 · Aviso de IT a Onboarding (BD lista con respaldo cargado)</div>
+      <div class="section-desc" style="margin-bottom:14px;">Una vez que IT sube el backup y la BD ASP queda cargada con toda la información del cliente, IT avisa a Onboarding para que comience la verificación.</div>
+      <div class="email-card">
+        <div class="email-header-strip" style="background:linear-gradient(90deg,var(--c-it),#C47A10);"></div>
+        <div class="email-meta">
+          <div class="email-meta-row"><span class="email-meta-label">De:</span><span class="email-meta-val">IT Manager &lt;it@manager.cl&gt;</span></div>
+          <div class="email-meta-row"><span class="email-meta-label">Para:</span><span class="email-meta-val">[Consultor/a Onboarding asignado/a]</span></div>
+          <div class="email-meta-row"><span class="email-meta-label">CC:</span><span class="email-meta-val">Líder de Proyectos ERP</span></div>
+          <div class="email-meta-row"><span class="email-meta-label">Asunto:</span><span class="email-meta-val">BD lista en ASP – [Nombre cliente] – [Nombre BD]</span></div>
+        </div>
+        <div class="email-body">
+          <div class="email-greeting">Hola [Nombre consultor/a],</div>
+          <div>La base de datos del cliente <strong>[Nombre cliente]</strong> fue cargada correctamente en el entorno ASP con el respaldo validado.</div>
+          <table class="email-table" style="margin-top:12px;">
+            <tr><th>Campo</th><th>Detalle</th></tr>
+            <tr><td>Nombre BD</td><td>[Nombre BD]</td></tr>
+            <tr><td>Ambiente</td><td>\\[ruta del ambiente ASP]</td></tr>
+          </table>
+          <div class="email-note">Puedes proceder con la validación. Saludos.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHECKLIST ONBOARDING -->
+    <div class="section" id="s8">
+      <div class="section-header">
+        <div class="section-num">8</div>
+        <div class="section-title">Checklist de Verificación – Onboarding</div>
+      </div>
+      <div class="section-desc">Al recibir el aviso de IT, el consultor de Onboarding debe verificar cada punto antes de citar al cliente.</div>
+      <div class="checklist-grid">
+        <div class="cl-group">
+          <div class="cl-group-head" style="background:#1F3864;">📦 Maestros</div>
+          <div class="cl-items">
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Clientes cargados</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Proveedores cargados</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Artículos / productos cargados</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Centros de costo configurados</div></div>
+          </div>
+          <div class="cl-progress">
+            <div class="cl-prog-label"><span>Progreso</span><span class="cl-prog-pct">0%</span></div>
+            <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="cl-group">
+          <div class="cl-group-head" style="background:#2E6DA4;">📊 Tablas y Bodegas</div>
+          <div class="cl-items">
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Tablas de precios y listas</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Tablas de impuestos y retenciones</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Tabla de tipos de documento (TIDOC_DB)</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Bodegas configuradas y habilitadas</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Saldos iniciales de inventario</div></div>
+          </div>
+          <div class="cl-progress">
+            <div class="cl-prog-label"><span>Progreso</span><span class="cl-prog-pct">0%</span></div>
+            <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="cl-group">
+          <div class="cl-group-head" style="background:#1A6B42;">🖨 Formatos y Parámetros</div>
+          <div class="cl-items">
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Formato de factura validado</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Formato de guía de despacho</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Formato de orden de compra</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Otros formatos personalizados</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">PARAM_DB y PARAMAPP_DB validados</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Contabilidad configurada (CONTA_DB / PLAN_DB)</div></div>
+          </div>
+          <div class="cl-progress">
+            <div class="cl-prog-label"><span>Progreso</span><span class="cl-prog-pct">0%</span></div>
+            <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="cl-group">
+          <div class="cl-group-head" style="background:#5B2C8D;">👤 Usuarios y Acceso</div>
+          <div class="cl-items">
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Usuarios creados en el sistema</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Correos electrónicos vigentes asociados</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Perfiles y permisos asignados</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-cb"></div><div class="cl-text">Acceso confirmado vía Ramaflex (al menos 1 usuario)</div></div>
+          </div>
+          <div class="cl-progress">
+            <div class="cl-prog-label"><span>Progreso</span><span class="cl-prog-pct">0%</span></div>
+            <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MATRIZ -->
+    <div class="section" id="s9">
+      <div class="section-header">
+        <div class="section-num">9</div>
+        <div class="section-title">Matriz de Responsabilidades</div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th style="width:28px;">N°</th>
+              <th style="text-align:left;min-width:200px;">Actividad</th>
+              <th>Comercial / GEX</th>
+              <th>Proyectos / Onboarding</th>
+              <th>Cto. Técnica</th>
+              <th>IT Manager</th>
+              <th>Cliente</th>
+              <th>DTE (Acepta)</th>
+              <th>Líder de Proyecto</th>
+            </tr>
+          </thead>
+          <tbody id="matrix-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CONSIDERACIONES -->
+    <div class="section" id="s10">
+      <div class="section-header">
+        <div class="section-num">10</div>
+        <div class="section-title">Consideraciones Importantes</div>
+      </div>
+      <div class="consid-grid">
+        <div class="consid-card">
+          <div class="consid-title">📅 Fecha de Corte y Backup</div>
+          <div class="consid-body">La fecha de corte debe acordarse oportunamente con el cliente. El backup debe ser entregado por el IT del cliente en la ruta indicada por Consultoría Técnica, idealmente el <strong>jueves PM</strong>. Debe quedar registrado por escrito. Consultoría puede apoyar al cliente si se requiere.</div>
+        </div>
+        <div class="consid-card warn">
+          <div class="consid-title">🗄 Más de una Base de Datos</div>
+          <div class="consid-body">Si el cliente tiene más de una BD, se debe indicar en el Checklist Comercial si las BD compartirán el mismo ambiente ASP. Todas las bases deben tratarse en el mismo proceso.</div>
+        </div>
+        <div class="consid-card green">
+          <div class="consid-title">🔍 Validación de Consultoría Técnica</div>
+          <div class="consid-body">Cualquier inconsistencia detectada en la BD respaldada debe resolverse antes de avanzar a IT. No se carga el backup con datos inconsistentes o incompletos.</div>
+        </div>
+        <div class="consid-card info">
+          <div class="consid-title">🔑 Usuarios y Ramaflex</div>
+          <div class="consid-body">Es obligatorio verificar que cada usuario tenga correo electrónico válido y vigente. Se debe probar el acceso vía Ramaflex con al menos un usuario por empresa antes de citar al cliente.</div>
+        </div>
+        <div class="consid-card purple">
+          <div class="consid-title">🖨 Formatos Personalizados</div>
+          <div class="consid-body">Los formatos personalizados deben revisarse y adaptarse al entorno ASP en coordinación con Consultoría Técnica. No se puede cerrar el proyecto sin que los formatos estén validados por el cliente.</div>
+        </div>
+        <div class="consid-card red">
+          <div class="consid-title">📄 DTE / Acepta (condicional)</div>
+          <div class="consid-body">Solo aplica si el cliente tiene contratado Acepta. DTE debe revisar certificados digitales, cesiones de factoring, rutas y parámetros web. Debe participar en la reunión con el cliente y probar la emisión de un documento electrónico en el SII. Si factura con otra entidad, este paso no aplica.</div>
+        </div>
+        <div class="consid-card" style="grid-column:1/-1;">
+          <div class="consid-title">📬 Comunicación con el Cliente</div>
+          <div class="consid-body">Toda comunicación relevante del proceso (fechas, validaciones, accesos, acuerdos) debe quedar registrada por escrito. El área de Proyectos/Onboarding es la responsable de mantener al cliente informado en todo momento.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- APROBACIONES -->
+    <div class="section" id="s11">
+      <div class="section-header">
+        <div class="section-num">11</div>
+        <div class="section-title">Aprobaciones</div>
+      </div>
+      <div class="aprov-grid">
+        <div class="aprov-card">
+          <div class="aprov-role">Elaborado por</div>
+          <hr class="aprov-line">
+          <div class="aprov-name">Nombre y Cargo</div>
+          <div class="aprov-area">Proyectos / Onboarding</div>
+        </div>
+        <div class="aprov-card">
+          <div class="aprov-role">Revisado por</div>
+          <hr class="aprov-line">
+          <div class="aprov-name">Nombre y Cargo</div>
+          <div class="aprov-area">Área responsable</div>
+        </div>
+        <div class="aprov-card">
+          <div class="aprov-role">Aprobado por</div>
+          <hr class="aprov-line">
+          <div class="aprov-name">Nombre y Cargo</div>
+          <div class="aprov-area">Gerencia / Dirección</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ── STEPS DATA ──
+const STEPS = [
+  { n:'1', area:'Comercial / GEX', color:'#1F3864', activity:'Levantamiento, cotización y generación de OT', time:'INICIO DEL PROCESO',
+    desc:'La OT puede originarse desde dos fuentes: (1) Área Comercial, para clientes fidelizados que actualmente operan con su BD en servidores propios y migran a la nube ASP de Manager, de modo que Manager se hace cargo de las actualizaciones de versión y el equipo de soporte puede revisar en línea su BD o bajar respaldos cuando corresponda; (2) Área GEX (Gestor de Expansión), para clientes con BD instalada de Manager Time que amplían su contratación.',
+    result:'OT + Checklist de datos del cliente' },
+  { n:'2', area:'Proyectos / Onboarding', color:'#2E6DA4', activity:'Recepción de OT y apertura de proyecto', time:'INICIO DEL PROCESO',
+    desc:'El área de Proyectos/Onboarding recibe la OT y el Checklist. Revisa que los datos estén completos y registra el inicio formal del proyecto.',
+    result:'Registro de proyecto' },
+  { n:'3', area:'IT (Manager)', color:'#7B3F00', activity:'Creación de ambiente, BD y usuarios en ASP', time:'INICIO · al recibir OT',
+    desc:'Una vez generada la OT, IT crea el ambiente ASP, la base de datos y los usuarios del cliente en el sistema. Mesa de Ayuda envía automáticamente al cliente el correo de bienvenida con sus credenciales de acceso (URL, usuario, clave y FTP). A partir de aquí se acuerdan los plazos del proceso de migración con el cliente.',
+    result:'Correo de bienvenida enviado al cliente + plazos acordados' },
+  { n:'4', area:'Consultoría Técnica', color:'#1A6B42', activity:'Provisión de sitio y recepción del respaldo', time:'PREVIO + JUEVES PM',
+    desc:'Consultoría Técnica proporciona al cliente el sitio/ruta donde debe depositar el respaldo (backup) de su BD local. La entrega del backup es responsabilidad del IT del cliente, idealmente el día jueves en horario de tarde. El consultor técnico puede apoyar si se requiere. Esta coordinación debe quedar registrada por escrito.',
+    result:'Sitio entregado + backup recibido el jueves PM' },
+  { n:'5', area:'Consultoría Técnica', color:'#1A6B42', activity:'Validación del respaldo y traspaso a IT', time:'VIERNES – AM',
+    desc:'El equipo de Consultoría Técnica valida la integridad del respaldo recibido: estructura de tablas, datos críticos, consistencia referencial y versión del sistema. Cualquier inconsistencia debe resolverse antes de avanzar. Una vez validado, traspasa el backup a IT para que lo suban al entorno ASP.',
+    result:'Informe de validación aprobado + backup traspasado a IT' },
+  { n:'6', area:'IT (Manager)', color:'#7B3F00', activity:'Carga del respaldo en la BD ASP', time:'VIERNES – PM',
+    desc:'IT recibe el backup desde Consultoría Técnica y lo sube a la BD ASP que ellos mismos habían creado al inicio del proceso. Al cargar el respaldo, la BD queda con la misma información que tenía el cliente en su sistema local: maestros, plan de cuentas, documentos, formatos de impresión, parámetros, etc. Una vez finalizado, IT notifica a Onboarding que la BD está lista.',
+    result:'BD ASP cargada con datos del cliente + notificación a Onboarding' },
+  { n:'7', area:'Onboarding (verificación)', color:'#5B2C8D', activity:'Recepción de confirmación IT y verificación de BD', time:'VIERNES PM / LUNES AM',
+    desc:'El consultor de Onboarding recibe la confirmación de IT indicando que el respaldo fue cargado correctamente en la BD ASP. Con las credenciales del correo de bienvenida accede al entorno ASP y verifica que todo esté correctamente cargado: maestros, tablas, bodegas, centros de costo, plan de cuentas, formatos y parámetros del ERP. Completa el Checklist de Verificación.',
+    result:'Checklist de verificación completado' },
+  { n:'8', area:'Onboarding (verificación)', color:'#5B2C8D', activity:'Verificación de formatos de impresión', time:'LUNES – AM',
+    desc:'Se validan todos los formatos de impresión: facturas, guías de despacho, órdenes de compra y otros documentos del cliente. Los formatos personalizados deben coordinarse con Consultoría Técnica si requieren ajustes.',
+    result:'Formatos validados' },
+  { n:'9', area:'Onboarding (verificación)', color:'#5B2C8D', activity:'Verificación de usuarios y acceso Ramaflex con cliente', time:'LUNES – AM',
+    desc:'Se verifica que todos los usuarios estén creados con sus correos electrónicos correctos y vigentes. Onboarding coordina con el cliente una sesión para verificar en conjunto los accesos vía Ramaflex y confirmar que cada usuario pueda ingresar correctamente al sistema ASP.',
+    result:'Usuarios y accesos confirmados con el cliente' },
+  { n:'10', area:'Área DTE (si usa Acepta)', color:'#9B1B30', activity:'Verificación de rutas y configuraciones DTE', time:'LUNES (si aplica)',
+    desc:'Si el cliente factura con Acepta o comenzará a hacerlo, el área de DTE debe revisar todas las configuraciones propias de su área: certificados digitales, cesiones de factoring, rutas y parámetros web. DTE participa en la reunión con el cliente para verificar rutas, probar la emisión de un documento electrónico y confirmar su aceptación en el SII. Este paso solo aplica si el cliente tiene contratado el servicio de Acepta.',
+    result:'Emisión de documento DTE probada y aceptada en SII' },
+  { n:'11', area:'Proyectos / Onboarding', color:'#2E6DA4', activity:'Pruebas con el cliente', time:'LUNES',
+    desc:'Se realizan pruebas funcionales en conjunto con el cliente para validar la operativa general del sistema en modalidad ASP. El cliente ingresa y opera el sistema, perdiendo únicamente el día viernes para el ingreso de documentos.',
+    result:'Acta de pruebas firmada' },
+  { n:'12', area:'Proyectos / Onboarding', color:'#2E6DA4', activity:'Cierre y conformidad', time:'AL FINALIZAR',
+    desc:'Se emite el acta de conformidad de la migración. El cliente firma la recepción conforme y se cierra formalmente el proyecto.',
+    result:'Acta de cierre firmada' },
+];
+
+// ── MATRIX DATA ──
+const MATRIX = [
+  ['1','Generación de OT (Comercial / GEX)',           '✓','','','','','',''],
+  ['2','Entrega Checklist con datos del cliente',       '✓','','','','','',''],
+  ['3','Recepción OT y apertura proyecto',              '','✓','','','','',''],
+  ['4','IT crea ambiente, BD y usuarios en ASP',        '','','','✓','','',''],
+  ['5','Correo bienvenida al cliente + acuerdo plazos', '','✓','','✓','✓','',''],
+  ['6','Provisión de sitio / recepción backup (jue PM)','','','✓','','✓','',''],
+  ['7','Validación del respaldo (viernes AM)',           '','','✓','','','',''],
+  ['8','Carga backup en BD ASP + notifica Onboarding',  '','','','✓','','',''],
+  ['9','Verificación BD: maestros, tablas, formatos',   '','✓','','','','',''],
+  ['10','Verificación usuarios + Ramaflex con cliente', '','✓','','','✓','',''],
+  ['11','Verif. rutas, parámetros y prueba DTE (Acepta)','','✓','','','✓','✓',''],
+  ['12','Pruebas funcionales con el cliente',           '','✓','','','✓','',''],
+  ['13','Cierre y acta de conformidad',                 '','✓','','','✓','','✓'],
+];
+
+// ── RENDER TIMELINE ──
+function renderTimeline() {
+  const c = document.getElementById('timeline-container');
+  c.innerHTML = STEPS.map((s, i) => {
+    const isDTE = s.area.includes('DTE');
+    return `
+    <div class="tl-item">
+      <div class="tl-dot">
+        <div class="tl-num" style="background:${s.color};">${s.n}</div>
+      </div>
+      <div class="tl-card" onclick="toggleCard(this)">
+        <div class="tl-card-head">
+          <div>
+            <span class="tl-area-badge" style="background:${s.color}18;color:${s.color};border:1px solid ${s.color}30;">${s.area}</span>
+          </div>
+          <div class="tl-time-badge">${s.time.replace('\n',' ')}</div>
+        </div>
+        <div class="tl-card-body">
+          ${isDTE ? '<div class="dte-note">⚠ Solo aplica si el cliente tiene contratado Acepta</div>' : ''}
+          <div class="tl-activity">${s.activity}</div>
+          <div class="tl-result">${s.result}</div>
+        </div>
+        <div class="tl-card-expand">${s.desc}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCard(el) {
+  el.classList.toggle('open');
+}
+
+// ── RENDER MATRIX ──
+function renderMatrix() {
+  const tbody = document.getElementById('matrix-body');
+  tbody.innerHTML = MATRIX.map((row, i) => {
+    const shade = i % 2 === 1 ? 'background:#FAFBFD;' : '';
+    const cells = row.slice(2).map(v =>
+      `<td style="${shade}">${v === '✓' ? '<span class="matrix-check">✓</span>' : ''}</td>`
+    ).join('');
+    return `<tr><td style="${shade};font-family:var(--font-mono);font-size:11px;color:var(--text-3);">${row[0]}</td><td class="activity-col" style="${shade}">${row[1]}</td>${cells}</tr>`;
+  }).join('');
+}
+
+// ── CHECKLISTS ──
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  updateGroupProgress(el.closest('.cl-group'));
+}
+
+function updateGroupProgress(group) {
+  const items = group.querySelectorAll('.cl-item');
+  const checked = group.querySelectorAll('.cl-item.checked').length;
+  const pct = Math.round((checked / items.length) * 100);
+  group.querySelector('.cl-prog-fill').style.width = pct + '%';
+  group.querySelector('.cl-prog-pct').textContent = pct + '%';
+}
+
+// ── SIDEBAR NAV ──
+function setActive(el) {
+  document.querySelectorAll('.sb-nav-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── BACK TO TOP ──
+window.addEventListener('scroll', () => {
+  document.getElementById('back-top').classList.toggle('visible', window.scrollY > 300);
+}, { passive: true });
+
+// ── INIT ──
+renderTimeline();
+renderMatrix();
+</script>
+</body>
+</html>

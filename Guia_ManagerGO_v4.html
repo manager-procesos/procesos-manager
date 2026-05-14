@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manager GO — Guía de Implementación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --m-blue:    #003287;
+  --m-mid:     #2F5496;
+  --m-sky:     #00B0F0;
+  --m-red:     #E3001B;
+  --m-light:   #EEF3FC;
+
+  --bg:        #F4F6FA;
+  --bg-card:   #FFFFFF;
+  --bg-hover:  #F0F4FC;
+  --border:    #E0E7F0;
+  --border-hi: #B4C6E7;
+
+  --text:      #1A2340;
+  --text-2:    #4A5878;
+  --text-3:    #8A96B0;
+
+  --success:   #0A8A5A;
+  --warn:      #C47A10;
+  --danger:    #C0001A;
+  --info:      #1A6AB0;
+
+  --sidebar-w: 248px;
+  --font:      'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --r:         8px;
+  --r-lg:      12px;
+  --shadow:    0 1px 3px rgba(0,50,135,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,50,135,0.10), 0 2px 4px rgba(0,0,0,0.04);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--bg);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── TOPBAR (solo mobile) ── */
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: #1E3A5F;
+  border-right: none;
+  position: fixed;
+  inset: 0 auto 0 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sb-brand {
+  padding: 1.25rem 1.25rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+
+.sb-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.sb-mark {
+  width: 34px; height: 34px;
+  background: var(--m-blue);
+  border-radius: var(--r);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.sb-mark svg { width: 17px; height: 17px; fill: white; }
+
+.sb-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #FFFFFF;
+  line-height: 1.15;
+}
+
+.sb-name span { color: #00B0F0; }
+
+.sb-tagline { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 1px; }
+
+.sb-pill {
+  display: inline-block;
+  background: rgba(0,176,240,0.15);
+  color: #00B0F0;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+}
+
+.sb-group {
+  padding: 1rem 1.25rem 0.25rem;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.40);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 1.25rem;
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 400;
+  border-left: 3px solid transparent;
+  transition: all 0.13s;
+  border-radius: 0;
+}
+
+.nav-item:hover {
+  color: #FFFFFF;
+  background: rgba(255,255,255,0.10);
+}
+
+.nav-item.active {
+  color: #00B0F0;
+  border-left-color: #00B0F0;
+  background: rgba(0,176,240,0.12);
+  font-weight: 500;
+}
+
+.nav-icon {
+  width: 20px; height: 20px;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.10);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  color: rgba(255,255,255,0.50);
+  flex-shrink: 0;
+}
+
+.nav-item.active .nav-icon,
+.nav-item:hover .nav-icon {
+  background: rgba(0,176,240,0.20);
+  color: #00B0F0;
+}
+
+.sb-footer {
+  margin-top: auto;
+  padding: 0.875rem 1.25rem;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+}
+
+/* ── MAIN ── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  max-width: 880px;
+  padding: 2rem 2.5rem 4rem;
+}
+
+/* ── HERO ── */
+.hero {
+  background: #1E3A5F;
+  border: none;
+  border-radius: var(--r-lg);
+  padding: 2rem 2.25rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 220px; height: 100%;
+  background: linear-gradient(135deg, transparent 40%, rgba(0,176,240,0.08) 100%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,176,240,0.20);
+  color: #00B0F0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.hero-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+
+.hero-title em { font-style: normal; color: #00B0F0; }
+
+.hero-desc {
+  color: rgba(255,255,255,0.80);
+  font-size: 13.5px;
+  font-weight: 400;
+  max-width: 500px;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.hero-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.hero-tag {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.20);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  color: rgba(255,255,255,0.85);
+  font-weight: 500;
+}
+
+/* ── SECTION ── */
+.section { margin-bottom: 2.5rem; scroll-margin-top: 1.5rem; }
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.sec-num {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: var(--m-blue);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+
+.sec-meta { flex: 1; }
+
+.sec-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--m-sky);
+  margin-bottom: 2px;
+}
+
+.sec-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.sec-intro {
+  color: var(--text-2);
+  font-size: 13.5px;
+  max-width: 620px;
+  margin-bottom: 1rem;
+}
+
+.sec-divider {
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 1.25rem;
+}
+
+/* ── CARD WRAPPER ── */
+.card-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+/* ── STEPS ── */
+.steps { display: flex; flex-direction: column; }
+
+.step {
+  display: flex;
+  gap: 14px;
+  padding: 13px 1.25rem;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+}
+
+.step:last-child { border-bottom: none; }
+.step:hover { background: var(--bg-hover); }
+
+.step-num {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--m-light);
+  border: 1.5px solid var(--border-hi);
+  color: var(--m-blue);
+  font-size: 11px;
+  font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-family: var(--font-mono);
+}
+
+.step-body { flex: 1; min-width: 0; }
+.step-title { font-size: 13.5px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.step-desc { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+
+.step-note {
+  margin-top: 8px;
+  background: #EEF3FC;
+  border-left: 3px solid var(--m-mid);
+  border-radius: 0 4px 4px 0;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--m-mid);
+}
+
+/* ── ALERTS ── */
+.alert {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--r);
+  margin: 1rem 0;
+  font-size: 13px;
+  line-height: 1.6;
+  border: 1px solid;
+}
+
+.alert-icon { flex-shrink: 0; margin-top: 1px; font-size: 15px; }
+.alert-body { flex: 1; }
+.alert-title { font-weight: 600; margin-bottom: 2px; font-size: 13px; }
+
+.alert-warn   { background: #FFFBF0; border-color: #F0D080; }
+.alert-warn   .alert-title { color: var(--warn); }
+.alert-warn   .alert-text  { color: #7A5800; }
+
+.alert-danger { background: #FFF0F0; border-color: #F0B0B0; }
+.alert-danger .alert-title { color: var(--danger); }
+.alert-danger .alert-text  { color: #800010; }
+
+.alert-info   { background: #F0F6FF; border-color: #B0CCEA; }
+.alert-info   .alert-title { color: var(--info); }
+.alert-info   .alert-text  { color: #1A4A80; }
+
+.alert-success { background: #F0FBF5; border-color: #80CCA8; }
+.alert-success .alert-title { color: var(--success); }
+.alert-success .alert-text  { color: #0A5A38; }
+
+/* ── CARDS GRID ── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+  gap: 10px;
+}
+
+.feat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 12px 14px;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.14s, border-color 0.14s;
+}
+
+.feat-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-hi);
+}
+
+.feat-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--m-blue);
+  margin-bottom: 10px;
+}
+
+.feat-title { font-size: 12.5px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.feat-desc  { font-size: 11.5px; color: var(--text-3); line-height: 1.45; }
+
+/* ── DATA TABLE ── */
+.table-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 1rem;
+}
+
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+.data-table th {
+  background: var(--m-blue);
+  color: rgba(255,255,255,0.92);
+  padding: 9px 14px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-2);
+  vertical-align: top;
+  line-height: 1.55;
+}
+
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:nth-child(even) td { background: #FAFBFD; }
+.data-table td:first-child { color: var(--text); font-weight: 500; }
+
+/* ── ERROR TABLE ── */
+.err-wrap {
+  border: 1px solid #F0B0B0;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 1rem;
+}
+
+.err-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+.err-table th {
+  background: var(--danger);
+  color: white;
+  padding: 9px 12px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+}
+
+.err-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+  color: var(--text-2);
+}
+
+.err-table tr:nth-child(even) td { background: #FFF8F8; }
+.err-table tr:last-child td { border-bottom: none; }
+
+/* ── CODE ── */
+.code-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--m-blue);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.code-block {
+  background: #F8F9FC;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--m-blue);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: 12px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #1A2A50;
+  line-height: 1.75;
+  margin: 0.5rem 0 1rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* ── SUB-TITLES ── */
+.sub-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--m-blue);
+  margin: 1.5rem 0 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sub-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.sub-title-mono {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--m-sky);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 1rem 0 0.4rem;
+}
+
+/* ── CHECKLIST ── */
+.chk-section { margin-bottom: 10px; }
+
+.chk-header {
+  background: var(--m-blue);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: var(--r) var(--r) 0 0;
+}
+
+.chk-body {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--r) var(--r);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.chk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.1s;
+  user-select: none;
+}
+
+.chk-item:last-child { border-bottom: none; }
+.chk-item:hover { background: var(--bg-hover); }
+.chk-item.done { opacity: 0.55; }
+
+.chk-box {
+  width: 15px; height: 15px;
+  border: 1.5px solid var(--border-hi);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-size: 10px;
+  color: white;
+  transition: all 0.15s;
+}
+
+.chk-item.done .chk-box { background: var(--m-blue); border-color: var(--m-blue); }
+.chk-text { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+.chk-item.done .chk-text { text-decoration: line-through; color: var(--text-3); }
+
+/* ── PROGRESS ── */
+.progress-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+.prog-info { flex: 1; }
+.prog-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); margin-bottom: 6px; }
+.prog-track { background: var(--bg); border: 1px solid var(--border); height: 6px; border-radius: 99px; overflow: hidden; }
+.prog-fill { height: 100%; background: linear-gradient(90deg, var(--m-blue), var(--m-sky)); border-radius: 99px; transition: width 0.4s ease; }
+.prog-count { font-size: 22px; font-weight: 600; color: var(--m-blue); white-space: nowrap; }
+.prog-count span { font-size: 13px; color: var(--text-3); font-weight: 400; }
+.reset-btn { font-size: 11.5px; color: var(--text-3); background: none; border: 1px solid var(--border); border-radius: var(--r); padding: 5px 12px; cursor: pointer; font-family: var(--font); transition: all 0.13s; }
+.reset-btn:hover { background: var(--bg-hover); color: var(--text-2); border-color: var(--border-hi); }
+
+/* ── FAQ ── */
+.faq-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-item:last-child { border-bottom: none; }
+
+.faq-q {
+  width: 100%; background: none; border: none;
+  padding: 12px 14px;
+  font-size: 13.5px; font-weight: 500; color: var(--text);
+  text-align: left; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  font-family: var(--font);
+  transition: background 0.12s;
+}
+
+.faq-q:hover { background: var(--bg-hover); color: var(--m-blue); }
+
+.faq-arrow {
+  width: 20px; height: 20px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--text-3);
+  flex-shrink: 0;
+  transition: transform 0.2s, background 0.15s;
+}
+
+.faq-item.open .faq-arrow { transform: rotate(180deg); background: var(--m-blue); border-color: var(--m-blue); color: white; }
+.faq-a { font-size: 13px; color: var(--text-2); line-height: 1.7; padding: 0 14px 12px; display: none; }
+.faq-item.open .faq-a { display: block; }
+
+/* ── KNA TABLE ── */
+.kna-table-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.kna-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+
+.kna-table th {
+  background: var(--m-deep, #1F3864);
+  background: #1F3864;
+  color: #A8C8F0;
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+
+.kna-table td {
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-2);
+  vertical-align: top;
+}
+
+.kna-table tr:last-child td { border-bottom: none; }
+.kna-table tr:nth-child(even) td { background: #FAFBFD; }
+.kna-table .ok  { color: var(--success); font-weight: 500; }
+.kna-table .bad { color: var(--warn); font-weight: 500; }
+
+/* ── SCROLL TOP ── */
+.top-btn {
+  position: fixed; bottom: 1.5rem; right: 1.5rem;
+  background: #1E3A5F; color: white;
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; text-decoration: none; box-shadow: var(--shadow-md);
+  opacity: 0; transition: opacity 0.25s;
+  z-index: 200;
+}
+.top-btn.show { opacity: 1; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 800px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 1.25rem; }
+}
+
+@media print {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 1rem; }
+  .code-block { background: #f5f5f5; }
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">
+      <div class="sb-mark">
+        <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3V3zm11 0h7v7h-7V3zM3 14h7v7H3v-7zm14 0a3.5 3.5 0 110 7 3.5 3.5 0 010-7z"/></svg>
+      </div>
+      <div>
+        <div class="sb-name">Manager <span>GO</span></div>
+        <div class="sb-tagline">Punto de Venta</div>
+      </div>
+    </div>
+    <div class="sb-pill">PROC-MANAGERGO-001 · v1.0</div>
+  </div>
+
+  <div class="sb-group">Implementación</div>
+  <a href="#s0" class="nav-item active"><span class="nav-icon">⬡</span> Inicio</a>
+  <a href="#s1" class="nav-item"><span class="nav-icon">⚙</span> Config. ERP</a>
+  <a href="#s2" class="nav-item"><span class="nav-icon">↓</span> Instalación GO</a>
+  <a href="#s3" class="nav-item"><span class="nav-icon">▤</span> Impresoras</a>
+  <a href="#s4" class="nav-item"><span class="nav-icon">◈</span> Config. POS</a>
+  <a href="#s5" class="nav-item"><span class="nav-icon">◻</span> Folios DTE</a>
+  <a href="#s6" class="nav-item"><span class="nav-icon">▷</span> Operación diaria</a>
+
+  <div class="sb-group">Referencia</div>
+  <a href="#s7" class="nav-item"><span class="nav-icon">✓</span> Funcionalidades</a>
+  <a href="#s8" class="nav-item"><span class="nav-icon">!</span> Errores</a>
+  <a href="#s9" class="nav-item"><span class="nav-icon">☰</span> Checklist</a>
+  <a href="#s10" class="nav-item"><span class="nav-icon">?</span> FAQ</a>
+
+  <div class="sb-group">Soporte técnico</div>
+  <a href="#s11" class="nav-item"><span class="nav-icon">⌗</span> Corrección KNA</a>
+
+  <div class="sb-footer">Manager ERP · Mayo 2026</div>
+</nav>
+
+<a href="#s0" class="top-btn" id="tpill">↑</a>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero" id="s0">
+    <div class="hero-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M3 3h7v7H3V3zm11 0h7v7h-7V3zM3 14h7v7H3v-7zm14 0a3.5 3.5 0 110 7 3.5 3.5 0 010-7z"/></svg>
+      Manager ERP
+    </div>
+    <div class="hero-title">Manager <em>GO</em><br>Guía de Implementación</div>
+    <div class="hero-desc">Procedimiento completo para consultores. Cubre prerequisitos en ERP, instalación, impresoras, folios DTE, operación diaria y corrección técnica de KNA.</div>
+    <div class="hero-tags">
+      <div class="hero-tag">PROC-MANAGERGO-001</div>
+      <div class="hero-tag">v1.0 · Mayo 2026</div>
+      <div class="hero-tag">PC / Notebook Windows</div>
+      <div class="hero-tag">Uso exclusivo consultores</div>
+    </div>
+  </div>
+
+  <!-- S1 -->
+  <section class="section" id="s1">
+    <div class="section-header">
+      <div class="sec-num">1</div>
+      <div class="sec-meta">
+        <div class="sec-eyebrow">Previo a la sesión con el cliente</div>
+        <div class="sec-title">Configuración en Manager ERP</div>
+      </div>
+    </div>
+    <p class="sec-intro">Responsabilidad exclusiva del consultor. Completar antes de llegar donde el cliente. Cada punto es requisito para el siguiente.</p>
+    <div class="sec-divider"></div>
+
+    <div class="alert alert-info">
+      <div class="alert-icon">ℹ</div>
+      <div class="alert-body">
+        <div class="alert-title">Tipos de documento FAE y BOE</div>
+        <div class="alert-text">Se recomienda verificar que existan los tipos de documento FAE (Factura Electrónica) y BOE (Boleta Electrónica) en el ERP antes de la sesión, junto con los tipos de documento de cada forma de pago. No son bloqueantes para la parametrización, pero sí necesarios para emitir documentos electrónicos.</div>
+      </div>
+    </div>
+
+    <div class="card-wrap">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Crear grupos de usuarios</div><div class="step-desc">ERP › Usuarios › Grupos. Crear según roles: Caja, Ventas, Administrador. Los permisos de descuento del vendedor en GO dependen de este grupo.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Crear usuarios ERP</div><div class="step-desc">Asociar cada usuario a su grupo. El usuario GO lo crea el equipo de IT de Manager de forma independiente.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Verificar tipos de documento FAE y BOE</div><div class="step-desc">Verificar que existan FAE y BOE junto con los tipos de documento de cada forma de pago. Son necesarios para emitir documentos electrónicos, pero no impiden realizar la parametrización del POS.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Crear formas de pago de ventas</div><div class="step-desc">Módulo Ventas › Tablas › Formas de pago. Cada una debe tener tipo de documento contable asociado, incluyendo el crédito de clientes. Máximo 8 formas de pago.</div></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><div class="step-title">Crear sucursales con datos completos</div><div class="step-desc">Manager › Tablas Generales › Sucursales. Completar todos los campos: RUT, N° Resolución, Fecha Resolución, Razón Social, Dirección, Comuna, Ciudad y Giro. Datos incompletos bloquean el funcionamiento.</div></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-body"><div class="step-title">Crear al menos un centro de costo</div><div class="step-desc">Requerido para poder crear terminales en GO. Módulo Finanzas › Centros de costo.</div></div></div>
+        <div class="step"><div class="step-num">7</div><div class="step-body"><div class="step-title">Crear vendedores en tabla de personal</div><div class="step-desc">Módulo Ventas › Personal. Asignar sucursal, bodega y lista de precios a cada vendedor. Las listas deben estar con IVA incluido.</div></div></div>
+        <div class="step"><div class="step-num">8</div><div class="step-body"><div class="step-title">Solicitar usuarios Manager GO a mesa de ayuda</div><div class="step-desc">Solicitar al equipo de IT la creación de los usuarios GO. Ellos crean el acceso de forma independiente y entregan las credenciales.</div><div class="step-note">Para parametrizaciones usar la clave master disponible con soporte o solicitar un usuario administrador.</div></div></div>
+      </div>
+    </div>
+
+    <div class="alert alert-info">
+      <div class="alert-icon">ℹ</div>
+      <div class="alert-body">
+        <div class="alert-title">RUT genérico para boletas</div>
+        <div class="alert-text">Crear en ERP un cliente con RUT <strong>66.666.666-6</strong>. Debe estar creado antes de la implementación.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S2 -->
+  <section class="section" id="s2">
+    <div class="section-header">
+      <div class="sec-num">2</div>
+      <div class="sec-meta">
+        <div class="sec-eyebrow">En el equipo del cliente</div>
+        <div class="sec-title">Instalación de Manager GO</div>
+      </div>
+    </div>
+    <p class="sec-intro">Compatible con PC y Notebook con Windows. En Mac requiere Oracle VirtualBox con imagen Windows 7.</p>
+    <div class="sec-divider"></div>
+
+    <div class="card-wrap">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Ingresar por primera vez</div><div class="step-desc">Abrir Manager GO, ingresar email y contraseña. Si hay actualización disponible, el sistema la notifica automáticamente.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Ejecutar la actualización</div><div class="step-desc">Clic en <strong>Next</strong>. El progreso se muestra en porcentaje. Al finalizar se abre automáticamente el asistente de instalación.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Seguir el asistente de instalación</div><div class="step-desc">Clic en Siguiente. Puede solicitar clave de administrador del equipo (ej: <code style="font-family:var(--font-mono);font-size:11.5px;background:#EEF3FC;padding:1px 5px;border-radius:3px;color:var(--m-blue)">Adm1n</code>). Todas las actualizaciones requieren permisos de administrador.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Verificar versión instalada</div><div class="step-desc">Login › <strong>CONFIG</strong> (esquina superior izquierda). La barra muestra la versión, ej: <em>Aplicaciones - v3.6.250</em>. Para volver al login clic en "Manager Producción".</div></div></div>
+      </div>
+    </div>
+
+    <div class="alert alert-warn">
+      <div class="alert-icon">⚠</div>
+      <div class="alert-body">
+        <div class="alert-title">La actualización debe ejecutarse en cada equipo por separado</div>
+        <div class="alert-text">No es automática en todos los terminales. Todas requieren permisos de Administrador en el equipo.</div>
+      </div>
+    </div>
+
+    <div class="sub-title">Instalación en Mac (caso especial · VirtualBox)</div>
+    <div class="card-wrap">
+      <div class="steps">
+        <div class="step"><div class="step-num">A</div><div class="step-body"><div class="step-title">Instalar Oracle VirtualBox 4.3.12</div><div class="step-desc">Descargar instalador para Mac. Ejecutar VirtualBox.pkg y seguir el asistente. Abrir VirtualBox desde la carpeta Aplicaciones.</div></div></div>
+        <div class="step"><div class="step-num">B</div><div class="step-body"><div class="step-title">Importar imagen Windows 7</div><div class="step-desc">Archivo › Importar servicio virtualizado. Indicar la ruta del archivo <code style="font-family:var(--font-mono);font-size:11.5px;background:#EEF3FC;padding:1px 5px;border-radius:3px;color:var(--m-blue)">windows7.ova</code>. Marcar "Reinicializar dirección MAC". Puede tardar 30+ minutos.</div></div></div>
+        <div class="step"><div class="step-num">C</div><div class="step-body"><div class="step-title">Ejecutar Manager GO desde la VM</div><div class="step-desc">La barra de tareas de Windows se oculta en el borde izquierdo. Acercar el mouse al borde izquierdo para mostrarla. Clic en el icono de Manager GO.</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S3 -->
+  <section class="section" id="s3">
+    <div class="section-header">
+      <div class="sec-num">3</div>
+      <div class="sec-meta">
+        <div class="sec-eyebrow">Hardware</div>
+        <div class="sec-title">Impresora Epson TM-T20</div>
+      </div>
+    </div>
+    <p class="sec-intro">Impresora recomendada por Manager GO. Los modelos TM-T20iii y TM-T30 se conectan exclusivamente por red (RJ45), no por USB.</p>
+    <div class="sec-divider"></div>
+
+    <div class="alert alert-warn">
+      <div class="alert-icon">⚠</div>
+      <div class="alert-body">
+        <div class="alert-title">Cable de red RJ45 — el cliente debe proveerlo</div>
+        <div class="alert-text">Los nuevos modelos incluyen solo el cable de corriente. Confirmar disponibilidad antes de la visita.</div>
+      </div>
+    </div>
+
+    <div class="sub-title">Etapa 1 · Configuración de red</div>
+    <div class="card-wrap">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Conectar y encender</div><div class="step-desc">Cable RJ45 al router o switch. Instalar rollo de papel y verificar que avanza.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Detectar IP con Advanced IP Scanner</div><div class="step-desc">Descargar de <strong>advanced-ip-scanner.com/es</strong>. Explorar la red. Buscar "SEIKO EPSON". Anotar la IP.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Acceder a configuración web</div><div class="step-desc">Ingresar la IP en el navegador. Pasar el aviso de seguridad. Usuario: <strong>epson</strong> / Contraseña: <strong>epson</strong>.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Fijar IP estática y configurar Ethernet</div><div class="step-desc">Ethernet › 100Base-Tx Full Duplex › Send › Reset › Go Home. Luego TCP/IP › Manual › Send › Reset › Go Home.</div><div class="step-note">Si la IP no se fija como estática, el router puede reasignarla y la impresión falla sin razón aparente.</div></div></div>
+      </div>
+    </div>
+
+    <div class="sub-title">Etapa 2 · Instalación de drivers</div>
+    <div class="card-wrap">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Descargar desde epson.cl</div><div class="step-desc">Soporte › Punto de venta › TM-T20II. Descargar "Driver de puerto virtual" (v8.6 o 8.7).</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Instalar APDMANE_U</div><div class="step-desc">Ejecutar. Aceptar términos. Dejar "Manual English" y "Samples English". Install › Finish.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Instalar APD_455aE</div><div class="step-desc">Ejecutar. Aceptar. Seleccionar <strong>Minimum</strong>. Clic en <strong>Add</strong>. Seleccionar driver <strong>TM-T20 Receipt</strong>. Next › Finish.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Agregar impresora por TCP/IP en Windows</div><div class="step-desc">Panel de Control › Dispositivos e Impresoras › Agregar impresora › "No está en la lista" › Agregar por TCP/IP. Ingresar la IP. Si no la reconoce: Estándar › Generic Network Card.</div></div></div>
+      </div>
+    </div>
+
+    <div class="sub-title">Etapa 3 · Parametrización del layout</div>
+    <div class="card-wrap">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Abrir preferencias de impresión</div><div class="step-desc">Clic derecho sobre Epson TM-T20 › Preferencias de impresión › pestaña Layout (o Diseño).</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Crear tamaño de papel personalizado</div><div class="step-desc">Paper Size › User Defined Paper Size. Nombre: <strong>Boleta</strong>. Ancho: <strong>90.0 mm</strong>. Longitud: <strong>310.0 mm</strong>. Save Paper Size › OK.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Configurar Layout</div><div class="step-desc">Paper Size: seleccionar "Boleta". Output Paper: <strong>80mm Roll Paper</strong>. Horizontal Direction: <strong>-5.0 mm</strong>. Custom Scale: <strong>91.50%</strong>.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Configurar Código 2D (timbre electrónico)</div><div class="step-desc">Pestaña Código 2D › Tipo: <strong>PDF417</strong> › Configuración avanzada. Ancho módulo: <strong>5 pts</strong>. Alto módulo: <strong>5 pts</strong>. Nivel corrección: <strong>Nivel 0</strong>. Aceptar.</div></div></div>
+      </div>
+    </div>
+
+    <div class="alert alert-info">
+      <div class="alert-icon">ℹ</div>
+      <div class="alert-body">
+        <div class="alert-title">Configurar también en Manager GO</div>
+        <div class="alert-text">Parámetros Generales › Parametrización de Boleta › activar <strong>Papel rollo</strong>. Tamaño papel Alto <strong>279</strong>, Ancho <strong>80</strong>. Líneas por documento: <strong>20</strong>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S4 -->
+  <section class="section" id="s4">
+    <div class="section-header">
+      <div class="sec-num">4</div>
+      <div class="sec-meta">
+        <div class="sec-eyebrow">Junto al cliente</div>
+        <div class="sec-title">Configuración del Punto de Venta GO</div>
+      </div>
+    </div>
+    <p class="sec-intro">Ingresar con usuario administrador. Ir al módulo Punto de Venta.</p>
+    <div class="sec-divider"></div>
+
+    <div class="card-wrap">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Crear terminales</div><div class="step-desc">Parámetros PV › Terminales. Un terminal por caja o punto de venta. Por cada uno: nombre, centro de costo, sucursal, cantidad de folios y mínimo de reabastecimiento.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Asignar terminal al equipo (Locales)</div><div class="step-desc">Pantalla principal › Locales › "Nombre terminal". Seleccionar el terminal del equipo actual. Esto vincula el terminal al PC por ID de dispositivo.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Asignar folios manuales</div><div class="step-desc">En Locales, ingresar rangos para documentos no electrónicos (Cotizaciones, NV): Desde, Actual y Hasta. Los campos Desde y Actual deben comenzar iguales.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Definir documentos a emitir</div><div class="step-desc">Parámetros Generales. Seleccionar documentos y si son electrónicos o pre-impresos. Factura y Boleta Exenta pueden marcarse como pre-impreso si no se usan.</div></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><div class="step-title">Configurar formas de pago</div><div class="step-desc">Sección Medios de pago. Columna izquierda: nombre visible en el POS. Columna derecha: forma de pago del ERP. Máximo 8 + pago con nota de crédito.</div></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-body"><div class="step-title">Opciones adicionales</div><div class="step-desc"><strong>Envío en línea</strong> (obligatorio para facturadores electrónicos) · <strong>Ticket de cambio</strong> (solo BOV) · <strong>Puntos de fidelización</strong> · <strong>Documentos XL</strong> · <strong>Maneja lotes</strong>.</div></div></div>
+        <div class="step"><div class="step-num">7</div><div class="step-body"><div class="step-title">Parametrizar coordenadas de documentos</div><div class="step-desc">Parámetros Generales › Menú. Configurar posición de campos en cada tipo de documento impreso. Los parámetros se centralizan en el servidor.</div></div></div>
+      </div>
+    </div>
+
+    <!-- COORDENADAS DE REFERENCIA -->
+    <div class="sub-title">Coordenadas estándar de referencia — Boleta</div>
+    <p style="font-size:13px;color:var(--text-2);margin-bottom:1rem;line-height:1.6">Dentro de <strong>Parámetros Generales › Menú › Parametrización de Boleta</strong> ingresar los siguientes valores. Están divididos en dos pantallas: Encabezado/Detalle y Área de totales/Parámetros generales.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+
+      <!-- TABLA ENCABEZADO -->
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th colspan="5" style="text-align:center;letter-spacing:.04em">ENCABEZADO — Boleta</th></tr>
+          <tr><th>Campo</th><th>Pos H</th><th>Pos V</th><th>Largo ch</th><th>Largo mm</th></tr></thead>
+          <tbody>
+            <tr><td>Sucursal</td><td>6</td><td>8</td><td>60</td><td>66</td></tr>
+            <tr><td>Hora</td><td>12</td><td>13</td><td>50</td><td>66</td></tr>
+            <tr><td>Vendedor</td><td>6</td><td>18</td><td>50</td><td>66</td></tr>
+            <tr><td>Forma de pago</td><td>6</td><td>23</td><td>50</td><td>66</td></tr>
+            <tr><td colspan="5" style="color:var(--text-3);font-style:italic;font-size:11.5px">Área de detalle: Pos H 6 / Pos V 30</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- TABLA DETALLE -->
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th colspan="4" style="text-align:center;letter-spacing:.04em">DETALLE — Boleta</th></tr>
+          <tr><th>Campo</th><th>Col.</th><th>Largo ch</th><th>Largo mm</th></tr></thead>
+          <tbody>
+            <tr><td>Código</td><td>N° 1</td><td>15</td><td>15</td></tr>
+            <tr><td>Descripción</td><td>N° 2</td><td>45</td><td>25</td></tr>
+            <tr><td>Cantidad</td><td>N° 3</td><td>5</td><td>10</td></tr>
+            <tr><td>Total</td><td>N° 4</td><td>9</td><td>13</td></tr>
+            <tr><td>N° 5 al N° 9</td><td>—</td><td>0</td><td>0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- TABLA ÁREA DE TOTALES -->
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th colspan="3" style="text-align:center;letter-spacing:.04em">ÁREA DE TOTALES — Boleta</th></tr>
+          <tr><th>Campo</th><th>Pos H</th><th>Pos V</th></tr></thead>
+          <tbody>
+            <tr><td>Subtotal</td><td>65</td><td>40</td></tr>
+            <tr><td>Descuento</td><td>65</td><td>45</td></tr>
+            <tr><td>Total</td><td>65</td><td>50</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PARÁMETROS GENERALES BOLETA -->
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th colspan="3" style="text-align:center;letter-spacing:.04em">PARÁMETROS GENERALES — Boleta</th></tr>
+          <tr><th>Parámetro</th><th>Alto</th><th>Ancho</th></tr></thead>
+          <tbody>
+            <tr><td>Tamaño del papel</td><td>999</td><td>75</td></tr>
+            <tr><td>Líneas por documento</td><td>999</td><td>—</td></tr>
+            <tr><td>Imprimir títulos</td><td colspan="2">✓ Activado</td></tr>
+            <tr><td>Papel rollo</td><td colspan="2">✓ Activado</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="alert alert-info" style="margin-bottom:1rem">
+      <div class="alert-icon">ℹ</div>
+      <div class="alert-body">
+        <div class="alert-title">Para Factura, Nota de Crédito y Guía de Despacho</div>
+        <div class="alert-text">Las coordenadas de factura incluyen campos adicionales en el encabezado: Cliente razón social (Pos H 6, Pos V 25), Cliente RUT (Pos H 6, Pos V 30), Cliente giro (Pos H 6, Pos V 35), Cliente dirección (Pos H 6, Pos V 40), Cliente comuna (Pos H 6, Pos V 45), Cliente ciudad (Pos H 6, Pos V 50), Vendedor (Pos H 6, Pos V 55). Área de detalle: Pos H 6, Pos V 76. Los campos de detalle (Código, Descripción, Cantidad, Total) mantienen los mismos valores que la boleta.</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- S5 -->
+
+  <!-- S5 -->
+  <section class="section" id="s5">
+    <div class="section-header">
+      <div class="sec-num">5</div>
+      <div class="sec-meta">
+        <div class="sec-eyebrow">DTE</div>
+        <div class="sec-title">Carga de folios electrónicos</div>
+      </div>
+    </div>
+    <p class="sec-intro">Los folios son la autorización del SII para emitir documentos tributarios. Deben cargarse antes de operar.</p>
+    <div class="sec-divider"></div>
+
+    <div class="card-wrap">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Descargar XML desde sii.cl</div><div class="step-desc">El cliente descarga los archivos XML de folios. Un archivo por tipo de documento: boletas, facturas, notas de crédito.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Enviar a mesa de ayuda para conversión</div><div class="step-desc">Mesa de ayuda transforma el XML al formato AES compatible con Manager GO.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Cargar archivo AES en GO</div><div class="step-desc">Parámetros Generales › <strong>Cargar Archivo ACEPTA</strong>. Cargar un archivo a la vez. El archivo AES puede editarse con Notepad++ para seleccionar el rango antes de cargarlo.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Verificar distribución entre terminales</div><div class="step-desc">Los folios quedan en el PC donde se cargaron. Al conectarse, cada terminal toma automáticamente el rango configurado.</div></div></div>
+      </div>
+    </div>
+
+    <div class="alert alert-danger">
+      <div class="alert-icon">⛔</div>
+      <div class="alert-body">
+        <div class="alert-title">Restricciones críticas</div>
+        <div class="alert-text">No se puede cargar un archivo AES ya cargado ni uno con folios en un rango existente. Si los folios se agotan sin internet, el sistema no permite guardar documentos. Siempre mantener folios de repuesto.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S6 -->
+  <section class="section" id="s6">
+    <div class="section-header">
+      <div class="sec-num">6</div>
+      <div class="sec-meta">
+        <div class="sec-eyebrow">Operación diaria</div>
+        <div class="sec-title">Uso del sistema</div>
+      </div>
+    </div>
+    <p class="sec-intro">Flujo completo desde la apertura hasta el cierre de caja.</p>
+    <div class="sec-divider"></div>
+
+    <div class="sub-title">Apertura de caja</div>
+    <div class="card-wrap">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Primera sincronización</div><div class="step-desc">Al ingresar por primera vez en un equipo, el sistema sincroniza la base local: productos, clientes, tablas. Puede tardar varios minutos.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Apertura de caja</div><div class="step-desc">Menú › <strong>Apertura de caja</strong>. Ingresar usuario y monto inicial en efectivo. Aparece en el informe de cierre como "monto de apertura".</div></div></div>
+      </div>
+    </div>
+
+    <div class="sub-title">Emisión de documentos</div>
+    <div class="card-wrap">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Seleccionar tipo de documento y datos del cliente</div><div class="step-desc">Elegir: Boleta, Factura, Cotización, NV o Guía. Ingresar vendedor y cliente (ambos obligatorios). Para boletas sin identificar usar el RUT genérico.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Agregar productos</div><div class="step-desc">Buscar por código, código de barras o descripción. ENTER o clic en el carro. Se puede aplicar descuento por ítem o global. Para ver stock multisucursal, clic en el ícono de caja al buscar.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Registrar forma de pago</div><div class="step-desc">Clic en <strong>Forma de pago</strong>. Admite pago mixto. Para efectivo, ingresar el monto recibido y el sistema calcula el vuelto.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Guardar e imprimir</div><div class="step-desc">Clic en <strong>Guardar</strong>. El documento se emite e imprime. El sistema pregunta si reimprimir o continuar.</div></div></div>
+      </div>
+    </div>
+
+    <div class="sub-title">Cierre de caja</div>
+    <div class="card-wrap">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Ciclo documentario</div><div class="step-desc">Desde una Nota de Venta se puede generar Boleta o Factura usando el botón <strong>Ciclo de documentos</strong>.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Cierre de caja</div><div class="step-desc">Menú › <strong>Cierre de caja</strong>. Genera informes de arqueo con resumen de ventas por forma de pago.</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S7 -->
+  <section class="section" id="s7">
+    <div class="section-header">
+      <div class="sec-num">7</div>
+      <div class="sec-meta">
+        <div class="sec-eyebrow">Referencia</div>
+        <div class="sec-title">Funcionalidades disponibles</div>
+      </div>
+    </div>
+    <p class="sec-intro">Solo se listan funcionalidades confirmadas y disponibles en Manager GO.</p>
+    <div class="sec-divider"></div>
+
+    <div class="cards-grid">
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Boleta electrónica</div><div class="feat-desc">Con timbre SII y código PDF417</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Factura electrónica</div><div class="feat-desc">Envío en línea obligatorio para facturadores</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Boleta exenta electrónica</div><div class="feat-desc">Para productos y servicios exentos</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Guía de despacho</div><div class="feat-desc">Independiente o desde ciclo documentario</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Nota de crédito</div><div class="feat-desc">Para anular o modificar documentos previos</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Cotización</div><div class="feat-desc">No electrónica, folios manuales</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Nota de venta</div><div class="feat-desc">No electrónica, folios manuales</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Ciclo documentario</div><div class="feat-desc">NV → Boleta o Factura</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Pago mixto</div><div class="feat-desc">Hasta 8 formas de pago combinadas</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">NC como medio de pago</div><div class="feat-desc">Nota de crédito aplicada al cobrar</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Ticket de cambio</div><div class="feat-desc">Solo BOV electrónicas + internet</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Stock multisucursal</div><div class="feat-desc">Ver disponibilidad en todas las sucursales</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Puntos de fidelización</div><div class="feat-desc">Acumulación y descuento configurable</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Informe de arqueo</div><div class="feat-desc">Resumen de ventas por forma de pago</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Operación offline</div><div class="feat-desc">Opera sin internet durante la jornada</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Documentos XL</div><div class="feat-desc">Mayor cantidad de líneas de detalle</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Actualización automática</div><div class="feat-desc">Detecta nuevas versiones al iniciar sesión</div></div>
+      <div class="feat-card"><div class="feat-dot"></div><div class="feat-title">Descuentos por ítem y global</div><div class="feat-desc">Según permisos del vendedor en ERP</div></div>
+    </div>
+  </section>
+
+  <!-- S8 -->
+  <section class="section" id="s8">
+    <div class="section-header">
+      <div class="sec-num">8</div>
+      <div class="sec-meta">
+        <div class="sec-eyebrow">Soporte</div>
+        <div class="sec-title">Mensajes de error y soluciones</div>
+      </div>
+    </div>
+    <p class="sec-intro">Referencia rápida para los errores más frecuentes.</p>
+    <div class="sec-divider"></div>
+
+    <div class="err-wrap">
+      <table class="err-table">
+        <thead><tr><th style="width:33%">Mensaje / Síntoma</th><th style="width:27%">Causa</th><th>Solución</th></tr></thead>
+        <tbody>
+          <tr><td>No se pudo asignar número de documento</td><td>Folios agotados o no configurados</td><td>Parámetros Locales › asignar nuevos folios</td></tr>
+          <tr><td>Error al obtener la firma electrónica</td><td>Archivo AES no cargado o impresora mal parametrizada</td><td>Verificar carga AES y parametrización de impresora</td></tr>
+          <tr><td>Error al enviar: forma de pago obligatoria</td><td>No se seleccionó forma de pago</td><td>Ingresar forma de pago antes de guardar</td></tr>
+          <tr><td>No autorizado a ingresar comprobantes</td><td>Permisos de grupo insuficientes</td><td>Autorizar al grupo en ERP para comprobantes contables</td></tr>
+          <tr><td>El producto no tiene precio asociado</td><td>Sin lista de precios en ERP</td><td>Administrador actualiza precio en Manager ERP</td></tr>
+          <tr><td>Error de conexión al entrar a parámetros</td><td>Sin internet</td><td>Parámetros Generales requiere internet. Esperar y reintentar.</td></tr>
+          <tr><td>Folio en uso por otro terminal</td><td>Rango duplicado entre terminales</td><td>Corrección técnica en BD (ver sección KNA ↓)</td></tr>
+          <tr><td>Terminal disponible cuando debería estar en uso</td><td>KNA desincronizada</td><td>Respaldar KNA, cerrar GO, reabrir, reasociar terminal</td></tr>
+          <tr><td>Error al guardar con dos FP del mismo tipo</td><td>Dos FP con mismo tipo de documento contable</td><td>Revisar y separar tipos de documento en ERP</td></tr>
+          <tr><td>Impresora deja de imprimir sin razón aparente</td><td>Router reasignó la IP de la impresora</td><td>Verificar IP en navegador (epson/epson). Fijar en modo Manual.</td></tr>
+          <tr><td>Nombre terminal / CC / Sucursal obligatorio</td><td>Campos sin completar al crear terminal</td><td>Completar todos los campos marcados con * antes de guardar</td></tr>
+          <tr><td>No quedan folios / folios a punto de agotarse</td><td>Rango agotado o próximo al límite</td><td>Cargar nuevo archivo AES con folios vigentes</td></tr>
+          <tr><td>Cuenta contable debe ingresarse obligatoriamente</td><td>Producto sin cuenta contable en su ficha</td><td>Revisar ficha del producto en Manager ERP</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- S9 -->
+  <section class="section" id="s9">
+    <div class="section-header">
+      <div class="sec-num">9</div>
+      <div class="sec-meta">
+        <div class="sec-eyebrow">Validación</div>
+        <div class="sec-title">Checklist de pre-implementación</div>
+      </div>
+    </div>
+    <p class="sec-intro">Completar antes de iniciar la sesión con el cliente.</p>
+    <div class="sec-divider"></div>
+
+    <div class="progress-wrap">
+      <div class="prog-info">
+        <div class="prog-label">Avance total</div>
+        <div class="prog-track"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
+      </div>
+      <div class="prog-count" id="pcount">0 <span>/ 32</span></div>
+      <button class="reset-btn" onclick="resetAll()">Reiniciar</button>
+    </div>
+
+    <div id="chk-container"></div>
+  </section>
+
+  <!-- S10 -->
+  <section class="section" id="s10">
+    <div class="section-header">
+      <div class="sec-num">10</div>
+      <div class="sec-meta">
+        <div class="sec-eyebrow">Referencia</div>
+        <div class="sec-title">Preguntas frecuentes</div>
+      </div>
+    </div>
+    <p class="sec-intro">Basadas en implementaciones reales y casos de soporte.</p>
+    <div class="sec-divider"></div>
+    <div class="faq-wrap" id="faq-container"></div>
+  </section>
+
+  <!-- S11 KNA -->
+  <section class="section" id="s11">
+    <div class="section-header">
+      <div class="sec-num" style="background:var(--m-red)">!</div>
+      <div class="sec-meta">
+        <div class="sec-eyebrow">Soporte técnico avanzado</div>
+        <div class="sec-title">Corrección de Folios y KNA</div>
+      </div>
+    </div>
+    <p class="sec-intro">Procedimiento derivado de la sesión del 8 de mayo de 2026 (Gabriel Clavijo). Aplica cuando hay inconsistencias en la asignación de rangos de folios electrónicos.</p>
+    <div class="sec-divider"></div>
+
+    <div class="alert alert-warn">
+      <div class="alert-icon">⚠</div>
+      <div class="alert-body">
+        <div class="alert-title">Causa raíz más frecuente</div>
+        <div class="alert-text">Usar el mismo usuario Go en múltiples equipos simultáneamente puede generar colisiones en la asignación de folios. Cada terminal debe tener su propio usuario Go.</div>
+      </div>
+    </div>
+
+    <div class="sub-title">Las 3 tablas involucradas</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Tabla</th><th>Nombre en BD</th><th>Qué contiene</th><th>Cuándo revisarla</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>T1 · Pool total</td>
+            <td><code style="font-family:var(--font-mono);font-size:11px;color:var(--m-blue);background:var(--m-light);padding:1px 5px;border-radius:3px">ACEPTA_DB</code></td>
+            <td>Folios descargados del SII. Registra rango desde/hasta, tipo de documento y último usado. Si "último usado" = "hasta", el sistema considera el rango agotado.</td>
+            <td>Siempre primero.</td>
+          </tr>
+          <tr>
+            <td>T2 · Terminales</td>
+            <td><code style="font-family:var(--font-mono);font-size:11px;color:var(--m-blue);background:var(--m-light);padding:1px 5px;border-radius:3px">TERMINAL_DB</code></td>
+            <td>Nombre, sucursal, centro de costo, estado e ID del dispositivo (identificador único del equipo Windows).</td>
+            <td>Para obtener el ID interno de los terminales con problemas.</td>
+          </tr>
+          <tr>
+            <td>T3 · Rangos</td>
+            <td><code style="font-family:var(--font-mono);font-size:11px;color:var(--m-blue);background:var(--m-light);padding:1px 5px;border-radius:3px">RANGOS_ELECT</code></td>
+            <td>Rangos de folios asignados a cada terminal: desde/hasta, último usado y estado. Aquí ocurren la mayoría de los errores.</td>
+            <td>Diagnóstico de secuencia y duplicados.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-title">Procedimiento de diagnóstico</div>
+    <div class="card-wrap">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Revisar tabla ACEPTA — estado del pool</div>
+            <div class="step-desc">Verificar que "último asignado" no haya llegado al valor "hasta". Si son iguales, el sistema bloquea la asignación de nuevos folios.</div>
+            <div class="code-label" style="margin-top:8px">SQL</div>
+            <div class="code-block">SELECT * FROM acepta_db
+-- Verificar campos: desde, hasta, ultimo_asignado, estado
+-- Si ultimo_asignado = hasta → rango considerado agotado</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Identificar terminales con problemas en tabla TERMINAL</div>
+            <div class="step-desc">Anotar el ID interno de cada terminal afectado.</div>
+            <div class="code-label" style="margin-top:8px">SQL</div>
+            <div class="code-block">SELECT * FROM terminal_db ORDER BY id_terminal</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Revisar tabla RANGOS_ELECT — secuencia completa</div>
+            <div class="step-desc">Ordenar por rango_d. Verificar: rango corresponde al lote actual, "último usado" es coherente, rangos consecutivos sin huecos ni solapamientos.</div>
+            <div class="code-label" style="margin-top:8px">SQL</div>
+            <div class="code-block">SELECT * FROM rangos_elect ORDER BY rango_d</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-title">Distribución correcta — caso Le Creuset (2.000 folios por terminal)</div>
+    <div class="kna-table-wrap">
+      <table class="kna-table">
+        <thead><tr><th>Terminal (ID)</th><th>Rango desde</th><th>Rango hasta</th><th>Último usado</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td>T21 — Bazar 3</td><td>73.051</td><td>75.050</td><td class="ok">73.051</td><td class="ok">✓ Correcto</td></tr>
+          <tr><td>T23 — Bazar 5</td><td>75.051</td><td>77.050</td><td class="ok">75.051</td><td class="ok">✓ Correcto</td></tr>
+          <tr><td>T24 — Bazar 6</td><td>77.051</td><td>79.050</td><td class="ok">77.051</td><td class="ok">✓ Correcto</td></tr>
+          <tr><td>T25 — Bazar 7</td><td>79.051</td><td>81.050</td><td class="ok">79.051</td><td class="ok">✓ Correcto</td></tr>
+          <tr><td>T22* — Bazar 8</td><td>81.051</td><td>83.050</td><td class="ok">81.051</td><td class="ok">✓ Correcto</td></tr>
+          <tr><td>T22* — Bazar 4</td><td>83.051</td><td>85.050</td><td class="ok">83.051</td><td class="ok">✓ Correcto</td></tr>
+          <tr><td>T19 — Bazar 1</td><td>85.051</td><td>87.050</td><td class="bad">85.051 (dup. KNA)</td><td class="bad">⚠ Requería corrección</td></tr>
+          <tr><td>T20 — Bazar 2</td><td>87.051</td><td>89.050</td><td class="bad">87.050 (valor errado)</td><td class="bad">⚠ Requería corrección</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-title">Corrección Terminal 19 — registro duplicado en KNA</div>
+    <p style="color:var(--text-2);font-size:13px;line-height:1.65;margin-bottom:.5rem">La KNA tenía dos registros en estado "en uso" para el mismo terminal. Al reimprimir, el sistema no actualizaba el puntero y el folio quedaba bloqueado. Solución: eliminar el registro duplicado.</p>
+    <div class="code-label">SQL</div>
+    <div class="code-block">-- Eliminar registro duplicado (id_rango del registro incorrecto)
+DELETE FROM rangos_elect
+WHERE id_rango = 1552
+
+-- Verificar que quedó solo un registro en uso
+SELECT * FROM rangos_elect
+WHERE id_terminal = 19 AND estado = 'en uso'</div>
+
+    <div class="alert alert-success">
+      <div class="alert-icon">✓</div>
+      <div class="alert-body">
+        <div class="alert-title">Resultado esperado</div>
+        <div class="alert-text">El terminal toma el folio 85.051 correctamente y la secuencia continúa sin problemas.</div>
+      </div>
+    </div>
+
+    <div class="sub-title">Corrección Terminal 20 — valor incorrecto en "último usado"</div>
+    <p style="color:var(--text-2);font-size:13px;line-height:1.65;margin-bottom:.5rem">El campo "último usado" apuntaba a 87.050 en lugar de 73.050 (el "hasta" del rango antiguo). Esto impedía que el sistema asignara el rango 87.051–89.050 porque lo consideraba ya ocupado. Solución: actualizar el campo al valor correcto.</p>
+    <div class="code-label">SQL</div>
+    <div class="code-block">-- Corregir último_usado al valor del rango antiguo
+UPDATE rangos_elect
+SET ultimo_usado = 73050
+WHERE id_rango = 1537
+
+-- Verificar resultado
+SELECT id_rango, id_terminal, rango_d, rango_h, ultimo_usado, estado
+FROM rangos_elect
+WHERE id_terminal = 20
+ORDER BY rango_d</div>
+
+    <div class="alert alert-success">
+      <div class="alert-icon">✓</div>
+      <div class="alert-body">
+        <div class="alert-title">Resultado esperado</div>
+        <div class="alert-text">El sistema reconoce el rango 72.051–73.050 como agotado y asigna automáticamente el siguiente: 87.051–89.050.</div>
+      </div>
+    </div>
+
+    <div class="sub-title">KNA local — cómo corregirla</div>
+    <div class="alert alert-info" style="margin-bottom:1rem">
+      <div class="alert-icon">ℹ</div>
+      <div class="alert-body">
+        <div class="alert-title">Servidor vs. KNA local</div>
+        <div class="alert-text">Error en <strong>todos los equipos</strong> para el mismo terminal → problema en el servidor. Error en <strong>un solo equipo</strong> → problema en la KNA local de ese equipo.</div>
+      </div>
+    </div>
+
+    <div class="card-wrap">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Respaldar la KNA</div><div class="step-desc">Copiar el archivo <code style="font-family:var(--font-mono);font-size:11.5px;background:#EEF3FC;padding:1px 5px;border-radius:3px;color:var(--m-blue)">webManMov_XXXX.db</code> desde la carpeta Documentos del equipo antes de cualquier modificación.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Cerrar Manager GO completamente y reabrir</div><div class="step-desc">Al reiniciar la sesión, el sistema sincroniza la KNA con el servidor. Si los datos del servidor están corregidos, esto puede resolver el problema sin edición manual.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Editar la KNA con DB Browser for SQLite (si persiste)</div><div class="step-desc">Abrir el archivo .db. Navegar a la tabla equivalente a RANGOS_ELECT. Corregir "último usado" o eliminar el duplicado. Guardar y cerrar antes de reconectar.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Reasociar el terminal y validar</div><div class="step-desc">Parámetros Locales › reasociar el terminal. Verificar que aparece "En Uso". Reingresar folios manuales si corresponde. Emitir documento de prueba y confirmar el número de folio.</div></div></div>
+      </div>
+    </div>
+
+    <div class="sub-title">Recomendaciones para futuras implementaciones</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th style="width:30%">Recomendación</th><th>Descripción</th></tr></thead>
+        <tbody>
+          <tr><td>Un usuario Go por terminal</td><td>Evitar el mismo correo en múltiples equipos simultáneamente. Previene colisiones en la asignación de folios.</td></tr>
+          <tr><td>Cargar folios antes de crear terminales</td><td>El pool en ACEPTA debe estar completamente cargado antes de asignar rangos. Así el sistema toma del lote correcto.</td></tr>
+          <tr><td>Verificar antes de la prueba masiva</td><td>Ejecutar los scripts de verificación para confirmar rangos correctos y sin duplicados antes de la prueba simultánea.</td></tr>
+          <tr><td>Respaldar KNA antes de corregir</td><td>Siempre copiar el archivo KNA antes de modificar la base de datos del servidor o la KNA local.</td></tr>
+          <tr><td>Salir y entrar de GO tras correcciones</td><td>El cliente debe cerrar GO completamente y volver a ingresar para sincronizar la KNA local con los datos corregidos.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+const chkData = [
+  { title: 'TI / Infraestructura', items: [
+    'Equipo con Windows (PC o Notebook)',
+    'Conexión a internet estable en el punto de venta',
+    'Impresora Epson TM-T20 disponible',
+    'Cable de red RJ45 para la impresora (el cliente debe proveerlo)',
+    'Permisos de administrador en el equipo',
+    'Si usa Mac: VirtualBox instalado con imagen Windows 7',
+  ]},
+  { title: 'Manager ERP — previo a la sesión', items: [
+    'Grupos de usuarios creados según roles',
+    'Usuarios con correo electrónico válido, enlazados a grupos',
+    'Tipos de documento FAE y BOE existentes en ERP',
+    'Tipos de documento para cada forma de pago existentes',
+    'Formas de pago con tipo de documento asociado (máx. 8)',
+    'Sucursales con todos los datos de identificación completos',
+    'Al menos un centro de costo creado',
+    'Vendedores con sucursal y bodega asignadas',
+    'Listas de precios configuradas con IVA incluido',
+    'RUT genérico para boletas definido (ej: 66.666.666-6)',
+  ]},
+  { title: 'Manager GO — configuración', items: [
+    'Usuarios GO creados por mesa de ayuda con credenciales recibidas',
+    'Terminales creados (nombre, CC, sucursal, folios)',
+    'Terminal asignado a cada equipo en Parámetros Locales',
+    'Folios AES cargados para boletas y facturas',
+    'Folios manuales para cotizaciones y notas de venta',
+    'Tipos de documento a emitir configurados',
+    'Formas de pago vinculadas GO ↔ ERP',
+    'Envío en línea activo (si es facturador electrónico)',
+    'Opciones adicionales configuradas',
+    'Coordenadas de documentos parametrizadas',
+    'Impresora con tamaño de papel personalizado creado',
+    'Papel rollo activado en Parametrización de Boleta',
+    'Primera sincronización completada',
+    'Apertura de caja y documento de prueba validados',
+    'Prueba de impresión con timbre electrónico correcta',
+    'Scripts de verificación de folios ejecutados (pre-prueba masiva)',
+  ]},
+];
+
+let state = {};
+
+function renderChk() {
+  const c = document.getElementById('chk-container');
+  let total = 0, done = 0;
+  chkData.forEach(s => { total += s.items.length; });
+  c.innerHTML = chkData.map((sec, si) => `
+    <div class="chk-section">
+      <div class="chk-header">${sec.title}</div>
+      <div class="chk-body">
+        ${sec.items.map((item, ii) => {
+          const k = `${si}-${ii}`;
+          const isDone = !!state[k];
+          if (isDone) done++;
+          return `<div class="chk-item${isDone?' done':''}" onclick="tgl('${k}')">
+            <div class="chk-box">${isDone?'✓':''}</div>
+            <div class="chk-text">${item}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('pfill').style.width = pct + '%';
+  document.getElementById('pcount').innerHTML = `${done} <span>/ ${total}</span>`;
+}
+
+function tgl(k) { state[k] = !state[k]; renderChk(); }
+function resetAll() { state = {}; renderChk(); }
+
+const faqs = [
+  ['¿Puede GO funcionar sin internet?','Sí, puede operar offline durante la jornada. Sin embargo, es indispensable tener conexión al momento de ingresar. El ticket de cambio también requiere internet.'],
+  ['¿En qué dispositivos funciona Manager GO?','Cualquier PC o Notebook con Windows. En Mac se requiere Oracle VirtualBox con imagen de Windows 7.'],
+  ['¿El vendedor puede modificar precios?','No. Solo puede otorgar descuentos según los permisos definidos en el ERP. Los precios se modifican exclusivamente desde Manager ERP.'],
+  ['¿Cuántas formas de pago se pueden usar?','Máximo 8 formas de pago más el pago con nota de crédito. Se pueden combinar en una misma venta (pago mixto).'],
+  ['¿Cómo cargo nuevos folios electrónicos?','Descargar XML del SII → enviarlo a mesa de ayuda para conversión a AES → cargar en GO desde Parámetros Generales → Cargar Archivo ACEPTA. Un tipo de documento a la vez.'],
+  ['¿Qué hacer si la impresora deja de imprimir?','Verificar que la IP sigue siendo la misma accediendo a ella desde el navegador (usuario/clave: epson). Si cambió, fijarla en modo Manual en TCP/IP.'],
+  ['¿El stock se rebaja en todas las sucursales?','No. Solo en la sucursal y bodega asociada al terminal. No es posible vender desde otra sucursal distinta a la del terminal.'],
+  ['¿Cómo verifico la versión instalada?','Login › CONFIG (esquina superior izquierda). La barra muestra la versión, ej: Aplicaciones - v3.6.250.'],
+  ['¿Qué RUT usar para boletas sin identificar al cliente?','Se recomienda 66.666.666-6. Debe estar creado como cliente en Manager ERP antes de la implementación.'],
+  ['¿El ticket de cambio funciona sin internet?','No. Requiere conexión porque busca el documento en la base de datos del servidor. Solo disponible con boletas electrónicas.'],
+  ['¿Qué pasa si dos terminales usan el mismo usuario Go?','Puede generar colisiones en la asignación de folios. Cada terminal debe tener su propio usuario Go.'],
+  ['¿Cómo sé si el problema de folios es en el servidor o en la KNA?','Error en todos los equipos para el mismo terminal → problema en el servidor. Error en un solo equipo → KNA local de ese equipo.'],
+];
+
+function renderFaq() {
+  document.getElementById('faq-container').innerHTML = faqs.map((f, i) => `
+    <div class="faq-item" id="fq${i}">
+      <button class="faq-q" onclick="document.getElementById('fq${i}').classList.toggle('open')">
+        <span>${f[0]}</span>
+        <div class="faq-arrow">&#8964;</div>
+      </button>
+      <div class="faq-a">${f[1]}</div>
+    </div>`).join('');
+}
+
+function updateNav() {
+  const sections = document.querySelectorAll('.section, .hero');
+  const items = document.querySelectorAll('.nav-item');
+  let cur = 's0';
+  sections.forEach(s => { if (window.scrollY + 100 >= s.offsetTop) cur = s.id; });
+  items.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+  document.getElementById('tpill').classList.toggle('show', window.scrollY > 200);
+}
+
+window.addEventListener('scroll', updateNav, { passive: true });
+renderChk();
+renderFaq();
+updateNav();
+</script>
+</body>
+</html>
