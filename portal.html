@@ -187,16 +187,16 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
     Procedimientos
     <span class="sb-section-add" title="Agregar procedimiento">+</span>
   </div>
-  <a class="sb-item" href="PRO-MIG-ASP-001.html" target="_blank">
+  <div class="sb-item" onclick="openDoc('PRO-MIG-ASP-001.html','Migración Local → ASP',this)">
     <div class="sb-dot" style="background:#00B0F0;"></div>
     Migración Local → ASP
     <span class="sb-item-badge">v1.0</span>
-  </a>
-  <a class="sb-item" href="PRO-IT-BD-001.html" target="_blank">
+  </div>
+  <div class="sb-item" onclick="openDoc('PRO-IT-BD-001.html','Solicitud Creación BD',this)">
     <div class="sb-dot" style="background:#C47A10;"></div>
     Solicitud Creación BD
     <span class="sb-item-badge">v1.0</span>
-  </a>
+  </div>
   <div class="sb-item sb-soon">
     <div class="sb-dot" style="background:rgba(255,255,255,0.2);"></div>
     POS Móvil – App Random
@@ -207,11 +207,11 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
     Guías Técnicas
     <span class="sb-section-add" title="Agregar guía">+</span>
   </div>
-  <a class="sb-item" href="Guia_ManagerGO_v4.html" target="_blank">
+  <div class="sb-item" onclick="openDoc('Guia_ManagerGO_v4.html','Manager GO – Punto de Venta',this)">
     <div class="sb-dot" style="background:#00C896;"></div>
     Manager GO – Punto de Venta
     <span class="sb-item-badge">v4</span>
-  </a>
+  </div>
   <div class="sb-section">Áreas</div>
   <div class="sb-item" onclick="showView('areas',this)">
     <div class="sb-dot" style="background:rgba(255,255,255,0.3);"></div>
@@ -231,15 +231,19 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 <div class="main">
   <div class="topbar">
     <div class="tb-left">
-      <div class="tb-title">Portal de Gestión de Procesos</div>
+      <div class="tb-title" id="tb-title">Portal de Gestión de Procesos</div>
       <div class="tb-badge">Control de Gestión · v1.0</div>
     </div>
-    <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-3);">
-      Mayo 2026
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button id="btn-volver" onclick="volverHome()" style="display:none;padding:5px 12px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border-hi);background:var(--card);color:var(--navy);font-family:var(--font);transition:all 0.15s;">← Volver al Inicio</button>
+      <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-3);">Mayo 2026</div>
     </div>
   </div>
 
-  <div class="content">
+  <!-- IFRAME para documentos -->
+  <iframe id="doc-frame" src="" style="display:none;flex:1;width:100%;border:none;height:calc(100vh - 52px);" allowfullscreen></iframe>
+
+  <div class="content" id="portal-content">
 
     <!-- ═══ HOME VIEW ═══ -->
     <div class="view active" id="view-home">
@@ -329,7 +333,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
           </div>
           <div class="doc-card-footer">
             <div class="doc-card-code">PRO-MIG-ASP-001</div>
-            <a href="PRO-MIG-ASP-001.html" target="_blank" class="doc-card-link">Abrir →</a>
+            <a href="#" onclick="openDoc('PRO-MIG-ASP-001.html','Migración Local → ASP',null);return false;" class="doc-card-link">Abrir →</a>
           </div>
         </div>
 
@@ -349,7 +353,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
           </div>
           <div class="doc-card-footer">
             <div class="doc-card-code">FOR-IT-BD-001</div>
-            <a href="PRO-IT-BD-001.html" target="_blank" class="doc-card-link">Abrir →</a>
+            <a href="#" onclick="openDoc('PRO-IT-BD-001.html','Solicitud Creación BD',null);return false;" class="doc-card-link">Abrir →</a>
           </div>
         </div>
 
@@ -391,7 +395,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
           </div>
           <div class="doc-card-footer">
             <div class="doc-card-code">GUI-GO-001</div>
-            <a href="Guia_ManagerGO_v4.html" target="_blank" class="doc-card-link">Abrir →</a>
+            <a href="#" onclick="openDoc('Guia_ManagerGO_v4.html','Manager GO – Punto de Venta',null);return false;" class="doc-card-link">Abrir →</a>
           </div>
         </div>
 
@@ -462,7 +466,39 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
+function openDoc(url, title, el) {
+  // Sidebar active state
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+
+  // Show iframe, hide content
+  document.getElementById('doc-frame').src = url;
+  document.getElementById('doc-frame').style.display = 'block';
+  document.getElementById('portal-content').style.display = 'none';
+  document.getElementById('tb-title').textContent = title;
+  document.getElementById('btn-volver').style.display = 'inline-flex';
+}
+
+function volverHome() {
+  document.getElementById('doc-frame').style.display = 'none';
+  document.getElementById('doc-frame').src = '';
+  document.getElementById('portal-content').style.display = 'block';
+  document.getElementById('tb-title').textContent = 'Portal de Gestión de Procesos';
+  document.getElementById('btn-volver').style.display = 'none';
+
+  // Reset sidebar active
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  document.querySelector('.sb-item[onclick*="home"]').classList.add('active');
+}
+
 function showView(viewId, el) {
+  // If a doc is open, close it first
+  document.getElementById('doc-frame').style.display = 'none';
+  document.getElementById('doc-frame').src = '';
+  document.getElementById('portal-content').style.display = 'block';
+  document.getElementById('tb-title').textContent = 'Portal de Gestión de Procesos';
+  document.getElementById('btn-volver').style.display = 'none';
+
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-' + viewId).classList.add('active');
   document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
