@@ -1,351 +1,370 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FOR-IT-BD-001 – Réplica Nueva BD sin Movimientos</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PRO-IT-BD-001 · Creación Nueva BD (Réplica)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
 <style>
-  /* ── Reset & Base ── */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 13px;
-    color: #222;
-    background: #f4f6f9;
-    padding: 24px 16px 48px;
-  }
 
-  /* ── Page wrapper ── */
-  .page {
-    max-width: 960px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 6px;
-    box-shadow: 0 2px 12px rgba(0,0,0,.10);
-    overflow: hidden;
-  }
+:root{--navy:#1F3864;--blue:#2E6DA4;--sky:#00B0F0;--bg:#F3F5F9;--card:#FFFFFF;--border:#DDE4EE;--border-hi:#B4C6E7;--text:#18243C;--text-2:#4A5A78;--text-3:#8898B8;--green:#1A6B42;--red:#8B0000;--brown:#7B3F00;--purple:#5B2C8D;--sidebar-w:252px;--font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--disp:'Fraunces',Georgia,serif;--r:8px;--r-lg:12px;--shadow:0 1px 3px rgba(30,50,100,.07),0 1px 2px rgba(0,0,0,.04);--shadow-md:0 4px 16px rgba(30,50,100,.10);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);background:var(--bg);display:flex;min-height:100vh;}
+.sidebar{width:var(--sidebar-w);background:var(--navy);position:fixed;inset:0 auto 0 0;display:flex;flex-direction:column;overflow-y:auto;z-index:200;}
+.sb-brand{padding:22px 18px 16px;border-bottom:1px solid rgba(255,255,255,.08);}
+.sb-back{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:rgba(255,255,255,.4);text-decoration:none;margin-bottom:12px;letter-spacing:.06em;transition:color .15s;}
+.sb-back:hover{color:var(--sky);}
+.sb-back::before{content:'←';}
+.sb-doc-type{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--sky);text-transform:uppercase;margin-bottom:4px;}
+.sb-title{font-size:15px;font-weight:600;color:#fff;line-height:1.25;}
+.sb-code{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.35);margin-top:5px;}
+.sb-meta{padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06);}
+.sb-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(0,176,240,.15);color:var(--sky);font-size:10px;font-weight:500;padding:3px 8px;border-radius:10px;border:1px solid rgba(0,176,240,.25);}
+.sb-section{padding:16px 18px 6px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:rgba(255,255,255,.28);text-transform:uppercase;}
+.sb-nav{display:flex;align-items:center;gap:9px;padding:8px 18px;color:rgba(255,255,255,.55);text-decoration:none;font-size:12.5px;border-left:2px solid transparent;transition:all .15s;cursor:pointer;}
+.sb-nav:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.9);border-left-color:rgba(0,176,240,.4);}
+.sb-nav.active{background:rgba(0,176,240,.12);color:#fff;border-left-color:var(--sky);}
+.sb-nav-num{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.1);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);}
+.sb-nav.active .sb-nav-num{background:var(--sky);color:var(--navy);}
+.sb-footer{margin-top:auto;padding:14px 18px;border-top:1px solid rgba(255,255,255,.06);}
+.sb-footer-text{font-size:10px;color:rgba(255,255,255,.25);line-height:1.5;}
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:0 32px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.tb-bc{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-3);}
+.tb-bc span{color:var(--text-2);}
+.tb-bc .sep{opacity:.4;}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text-2);font-family:var(--font);transition:all .15s;}
+.btn:hover{border-color:var(--border-hi);color:var(--text);}
+.content{padding:36px 40px 80px;max-width:1100px;}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#2E5490 55%,#3A72B0 100%);border-radius:var(--r-lg);padding:36px 40px;margin-bottom:32px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;background:rgba(0,176,240,.08);}
+.hero-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--sky);text-transform:uppercase;margin-bottom:10px;}
+.hero-title{font-family:var(--disp);font-size:30px;color:#fff;line-height:1.15;margin-bottom:10px;}
+.hero-title em{font-style:italic;color:rgba(255,255,255,.6);}
+.hero-desc{color:rgba(255,255,255,.65);font-size:14px;max-width:540px;line-height:1.6;margin-bottom:20px;}
+.chips{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);font-size:11px;padding:4px 10px;border-radius:20px;font-weight:500;}
+.chip-sky{background:rgba(0,176,240,.2);border-color:rgba(0,176,240,.35);color:var(--sky);}
+.section{margin-bottom:40px;scroll-margin-top:72px;}
+.sec-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.sec-num{width:32px;height:32px;background:var(--navy);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:500;flex-shrink:0;}
+.sec-title{font-size:18px;font-weight:600;color:var(--text);}
+.sec-desc{color:var(--text-2);font-size:14px;line-height:1.65;margin-bottom:16px;}
+.sub-title{font-size:14px;font-weight:600;color:var(--navy);padding-left:10px;border-left:3px solid var(--sky);margin-bottom:12px;margin-top:20px;}
+.ficha{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;max-width:520px;margin-bottom:28px;box-shadow:var(--shadow);}
+.ficha-row{display:flex;border-bottom:1px solid var(--border);}
+.ficha-row:last-child{border-bottom:none;}
+.ficha-label{background:#F0F4FA;font-weight:600;color:var(--text-2);font-size:12.5px;padding:9px 14px;width:190px;flex-shrink:0;}
+.ficha-val{padding:9px 14px;font-size:13px;color:var(--text);}
+.badge-v{display:inline-block;background:#E6F4EC;color:#0A6A32;font-size:11px;font-weight:600;padding:2px 9px;border-radius:10px;border:1px solid #A8DCBC;}
+.alert{border-radius:var(--r);padding:14px 16px;font-size:13.5px;line-height:1.6;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;}
+.alert-blue{background:#EEF3FC;border-left:4px solid var(--blue);color:#1A3060;}
+.alert-orange{background:#FFF8F0;border-left:4px solid #C47A10;color:#7A4A00;}
+.alert-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.amb-box{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:var(--r);padding:14px 16px;font-family:var(--mono);box-shadow:var(--shadow);margin-bottom:16px;}
+.amb-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.amb-row:last-child{margin-bottom:0;}
+.amb-key{color:var(--text-3);font-size:11px;width:90px;flex-shrink:0;}
+.amb-input{flex:1;background:#F0F4FA;border:1px solid var(--border);border-radius:4px;padding:4px 10px;font-family:var(--mono);font-size:12.5px;color:var(--text);outline:none;transition:border .15s;max-width:440px;}
+.amb-input:focus{border-color:var(--sky);box-shadow:0 0 0 2px rgba(0,176,240,.12);}
+.tablas-wrap{overflow-x:auto;}
+.tablas-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);font-size:13px;margin-bottom:10px;}
+.tablas-table th{background:var(--navy);color:rgba(255,255,255,.85);font-weight:500;font-size:11px;padding:9px 10px;text-align:center;border-right:1px solid rgba(255,255,255,.08);}
+.tablas-table th.th-left{text-align:left;padding-left:14px;}
+.tablas-table th.th-ob{background:#C47A10;}
+.tablas-table th.th-si{background:var(--green);}
+.tablas-table th.th-no{background:var(--red);}
+.tablas-table td{padding:8px 10px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:middle;text-align:center;}
+.tablas-table td.td-left{text-align:left;}
+.tablas-table td.td-cod{font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--navy);text-align:left;}
+.tablas-table td.td-opc{color:#999;}
+.tablas-table td.td-cod.td-opc{color:#bbb;}
+.tablas-table tr:nth-child(even) td{background:#FAFBFD;}
+.tablas-table tr:hover td{background:#F0F4FC;}
+.ob-badge{display:inline-block;background:#FFF3E0;color:#C47A10;font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;border:1px solid #F0C898;}
+.cb-si,.cb-no{width:20px;height:20px;border-radius:4px;border:2px solid;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.cb-si{border-color:#A8D4B8;background:#F0FAF4;}
+.cb-si.on{background:var(--green);border-color:var(--green);}
+.cb-si.on::after{content:'✓';color:#fff;font-size:11px;font-weight:700;}
+.cb-no{border-color:#F0B4BC;background:#FFF0F2;}
+.cb-no.on{background:var(--red);border-color:var(--red);}
+.cb-no.on::after{content:'✗';color:#fff;font-size:11px;font-weight:700;}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--text-2);margin-top:8px;flex-wrap:wrap;}
+.legend-dot{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:4px;}
+.email-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);margin-top:12px;}
+.email-strip{height:4px;background:linear-gradient(90deg,var(--navy),var(--sky));}
+.email-meta{padding:12px 16px;background:#F8FAFD;border-bottom:1px solid var(--border);}
+.email-meta-row{display:flex;gap:8px;font-size:12.5px;margin-bottom:3px;}
+.email-lbl{color:var(--text-3);font-weight:500;width:120px;flex-shrink:0;}
+.email-body{padding:16px;font-size:13.5px;color:var(--text-2);line-height:1.65;}
+.email-env{font-family:var(--mono);font-size:12.5px;background:#F0F4FA;border-left:4px solid var(--blue);padding:10px 14px;border-radius:0 6px 6px 0;margin:10px 0;color:var(--navy);}
+.verif-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);font-size:13px;}
+.verif-table th{background:var(--navy);color:rgba(255,255,255,.85);font-weight:500;font-size:11px;padding:9px 12px;text-align:center;}
+.verif-table th:first-child{text-align:left;}
+.verif-table th.th-si{background:var(--green);}
+.verif-table th.th-no{background:var(--red);}
+.verif-table td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;text-align:center;}
+.verif-table td:first-child{text-align:left;color:var(--text-2);}
+.verif-table tr:nth-child(even) td{background:#FAFBFD;}
+.verif-table tr:hover td{background:#F0F4FC;}
+.sessions-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);font-size:13.5px;}
+.sessions-table th{background:var(--navy);color:#fff;font-weight:500;font-size:12px;padding:11px 16px;text-align:left;border-right:1px solid rgba(255,255,255,.08);}
+.sessions-table td{padding:11px 16px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:top;}
+.sessions-table tr:nth-child(even) td{background:#FAFBFD;}
+.sessions-table tr:hover td{background:#F0F4FC;}
+.sess-num{width:32px;height:32px;border-radius:50%;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:600;}
+.sess-name{font-weight:600;color:var(--text);}
+.sess-note{font-size:12px;color:var(--text-3);margin-top:3px;}
+.aprov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.aprov-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 18px 16px;text-align:center;box-shadow:var(--shadow);}
+.aprov-role{font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px;}
+.aprov-line{border:none;border-top:1px solid var(--border-hi);margin-bottom:8px;}
+.aprov-name{font-size:12px;color:var(--text-3);font-style:italic;}
+.aprov-area{font-size:11.5px;color:var(--text-2);margin-top:3px;}
+#back-top{position:fixed;bottom:24px;right:24px;width:36px;height:36px;background:var(--navy);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .2s;font-size:16px;box-shadow:var(--shadow-md);z-index:300;border:none;}
+#back-top.visible{opacity:1;}
+#back-top:hover{background:var(--blue);}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:3px;}
 
-  /* ── Header bar ── */
-  .doc-header {
-    background: #1F497D;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 28px;
-    font-size: 12px;
-  }
-  .doc-header .title { font-weight: bold; font-size: 13px; letter-spacing: .3px; }
-  .doc-header .area  { opacity: .85; }
-
-  /* ── Title block ── */
-  .title-block {
-    text-align: center;
-    padding: 28px 28px 18px;
-    border-bottom: 3px solid #1F497D;
-  }
-  .title-block h1 { font-size: 22px; color: #1F497D; font-weight: bold; margin-bottom: 6px; }
-  .title-block h2 { font-size: 15px; color: #444; font-weight: normal; margin-bottom: 4px; }
-  .title-block .subtitle { font-size: 12px; color: #777; font-style: italic; }
-
-  /* ── Body content ── */
-  .content { padding: 24px 28px 32px; }
-
-  /* ── Section headings ── */
-  h3.sec { font-size: 15px; color: #1F497D; font-weight: bold; margin: 28px 0 8px; border-left: 4px solid #1F497D; padding-left: 10px; }
-  h4.sub { font-size: 13px; color: #2E75B6; font-weight: bold; margin: 18px 0 6px; }
-
-  /* ── Paragraphs ── */
-  p { margin-bottom: 8px; line-height: 1.55; }
-
-  /* ── Warning box ── */
-  .warning {
-    background: #fff4f4;
-    border-left: 4px solid #C00000;
-    padding: 9px 14px;
-    margin: 10px 0 14px;
-    font-size: 12.5px;
-    border-radius: 0 4px 4px 0;
-  }
-  .warning strong { color: #C00000; }
-
-  /* ── Note box ── */
-  .note {
-    background: #f0f4f9;
-    border-left: 4px solid #2E75B6;
-    padding: 8px 14px;
-    margin: 10px 0 14px;
-    font-size: 12px;
-    font-style: italic;
-    border-radius: 0 4px 4px 0;
-  }
-
-  /* ── Env block ── */
-  .env-block {
-    background: #f7fafd;
-    border: 1px solid #d0dce8;
-    border-radius: 4px;
-    padding: 10px 16px;
-    margin: 10px 0 14px;
-    font-family: 'Courier New', monospace;
-    font-size: 12px;
-    line-height: 1.7;
-  }
-  .env-block .label { font-weight: bold; color: #1F497D; font-family: Arial, sans-serif; }
-
-  /* ── Tables ── */
-  table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: 12.5px; }
-  th {
-    background: #1F497D;
-    color: #fff;
-    padding: 8px 10px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 12px;
-    border: 1px solid #1F497D;
-  }
-  td { padding: 7px 10px; border: 1px solid #d0d0d0; vertical-align: middle; }
-  tr:nth-child(even) td { background: #f7fafd; }
-
-  /* obligatoria rows */
-  tr.ob td { background: #D6E4F0; }
-  tr.ob td.ob-badge { color: #1A4F72; font-weight: bold; text-align: center; }
-  td.ob-dash { color: #888; text-align: center; }
-
-  /* ficha table */
-  .ficha th { text-align: left; background: #1F497D; }
-  .ficha td.lbl { background: #D9E2F3; font-weight: bold; width: 30%; }
-  .ficha td.val { background: #fff; }
-  .ficha td.vigente { font-weight: bold; color: #1F497D; }
-
-  /* correo table */
-  .correo td.lbl { background: #D9E2F3; font-weight: bold; width: 22%; }
-  .correo td.val { background: #fff; }
-
-  /* check tables */
-  td.chk { text-align: center; width: 60px; font-size: 15px; }
-  td.obs { width: 120px; }
-
-  /* sessions table */
-  .sessions td.num { text-align: center; font-weight: bold; background: #D6E4F0; width: 60px; }
-  .sessions td.dur { text-align: center; width: 80px; background: #D6E4F0; }
-  .sessions td.name { font-weight: bold; background: #D6E4F0; width: 180px; }
-
-  /* legend */
-  .legend { font-size: 11.5px; color: #555; font-style: italic; margin: 4px 0 14px; }
-
-  /* email body */
-  .email-body {
-    background: #fafafa;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 14px 18px;
-    margin: 10px 0 16px;
-    line-height: 1.7;
-    font-size: 12.5px;
-  }
-  .email-body li { margin-left: 18px; margin-bottom: 6px; }
-
-  /* aprobaciones */
-  .aprob td { text-align: center; padding: 20px 10px; }
-  .aprob td .line { border-top: 1px solid #999; padding-top: 6px; margin-top: 30px; font-size: 11.5px; color: #555; font-style: italic; }
-
-  /* ── Footer ── */
-  .doc-footer {
-    border-top: 2px solid #1F497D;
-    padding: 8px 28px;
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: #888;
-    background: #fafafa;
-  }
-
-  @media print {
-    body { background: #fff; padding: 0; }
-    .page { box-shadow: none; border-radius: 0; }
-  }
 </style>
 </head>
 <body>
-<div class="page">
-
-  <!-- Header -->
-  <div class="doc-header">
-    <span class="title">SOLICITUD CREACIÓN BD – RÉPLICA SIN MOVIMIENTOS</span>
-    <span class="area">Comercial / GEX – Manager</span>
+<nav class="sidebar">
+  <div class="sb-brand">
+    <a class="sb-back" href="portal.html">Volver al Portal</a>
+    <div class="sb-doc-type">Formulario Operativo</div>
+    <div class="sb-title">Creación Nueva BD (Réplica)</div>
+    <div class="sb-code">PRO-IT-BD-001 · v1.0 · Mayo 2026</div>
   </div>
+  <div class="sb-meta"><span class="sb-badge">● VIGENTE</span></div>
+  <div class="sb-section">Contenido</div>
+  <a class="sb-nav active" href="#s0" onclick="setActive(this)"><div class="sb-nav-num">—</div> Ficha</a>
+  <a class="sb-nav" href="#s1" onclick="setActive(this)"><div class="sb-nav-num">1</div> Alcance</a>
+  <a class="sb-nav" href="#s2" onclick="setActive(this)"><div class="sb-nav-num">2</div> Ambiente y Tablas</a>
+  <a class="sb-nav" href="#s3" onclick="setActive(this)"><div class="sb-nav-num">3</div> Correo a IT</a>
+  <a class="sb-nav" href="#s4" onclick="setActive(this)"><div class="sb-nav-num">4</div> Verificación</a>
+  <a class="sb-nav" href="#s5" onclick="setActive(this)"><div class="sb-nav-num">5</div> Sesiones</a>
+  <a class="sb-nav" href="#s6" onclick="setActive(this)"><div class="sb-nav-num">6</div> Aprobaciones</a>
+  <div class="sb-footer"><div class="sb-footer-text">Manager · Control de Gestión<br>Uso interno · Confidencial</div></div>
+</nav>
 
-  <!-- Title block -->
-  <div class="title-block">
-    <h1>FORMULARIO OPERATIVO</h1>
-    <h2>Solicitud de Réplica de Base de Datos sin Movimientos</h2>
-    <p class="subtitle">Enviado a IT por el área de Comercial / GEX</p>
+<div class="main">
+  <div class="topbar">
+    <div class="tb-bc"><span>Portal</span><span class="sep">/</span><span>Procedimientos</span><span class="sep">/</span><span>Creación Nueva BD (Réplica)</span></div>
+    <button class="btn" onclick="window.print()">⎙ Imprimir</button>
   </div>
-
   <div class="content">
 
-    <!-- Ficha -->
-    <table class="ficha">
-      <tr><th colspan="2">FICHA DEL DOCUMENTO</th></tr>
-      <tr><td class="lbl">Código</td><td class="val">FOR-IT-BD-001</td></tr>
-      <tr><td class="lbl">Versión</td><td class="val">2.0</td></tr>
-      <tr><td class="lbl">Fecha de Emisión</td><td class="val">Mayo 2026</td></tr>
-      <tr><td class="lbl">Área Solicitante</td><td class="val">Comercial / GEX</td></tr>
-      <tr><td class="lbl">Destinatario</td><td class="val">IT Manager – it@manager.cl</td></tr>
-      <tr><td class="lbl">Estado</td><td class="val vigente">VIGENTE</td></tr>
-    </table>
-
-    <!-- Alcance -->
-    <h3 class="sec">Alcance y Descripción del Procedimiento</h3>
-    <p>Este procedimiento describe el proceso para crear una réplica de una base de datos (BD) existente, sin incluir movimientos (sin stock ni apertura contable). Se utiliza cuando un cliente necesita partir con una nueva BD, similar a la anterior, pero vacía (sin movimientos).</p>
-    <p>El proceso se inicia con un levantamiento realizado por Comercial o GEX junto al cliente, identificando qué tablas se traspasarán. Una vez acordado, se solicita a IT la creación de la nueva BD. Las tablas marcadas como OBLIGATORIAS se incluyen siempre; las demás, según acuerdo con el cliente.</p>
-    <div class="warning"><strong>⚠ Importante:</strong> Este procedimiento NO incluye carga de stock ni apertura contable.</div>
-
-    <!-- Sección 1 -->
-    <h3 class="sec">1. Levantamiento y Selección de Tablas</h3>
-    <p>Comercial o GEX, en conjunto con el cliente, revisa las tablas de la BD de origen y acuerda qué información se copiará a la nueva BD. Una vez definido, se solicita a IT la creación. Las tablas obligatorias se incluyen siempre, independientemente del tipo de réplica.</p>
-
-    <h4 class="sub">1.1 Datos del Ambiente ASP</h4>
-    <div class="env-block">
-      <span class="label">AMBIENTE :</span> \\MANAGER.LOCAL\MG\[código]\MANAGER8\COMUNES\<br>
-      <span class="label">BD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</span> [código BD]
+    <div class="hero" id="s0">
+      <div class="hero-eyebrow">PRO-IT-BD-001 · Formulario Operativo · v1.0</div>
+      <div class="hero-title">Creación Nueva BD<br><em>Réplica sin movimientos</em></div>
+      <div class="hero-desc">Proceso para crear una réplica de una BD existente sin incluir movimientos ni transacciones. Inicia en Comercial / GEX y termina con la verificación del Consultor Técnico.</div>
+      <div class="chips">
+        <span class="chip">Comercial / GEX → IT → Cto. Técnica</span>
+        <span class="chip">22 tablas</span>
+        <span class="chip chip-sky">1 sesión de verificación</span>
+      </div>
     </div>
 
-    <h4 class="sub">1.2 Tablas a Copiar</h4>
-    <p>Las tablas en azul son <strong>OBLIGATORIAS</strong> y se copian siempre. Las demás se marcan según lo acordado con el cliente.</p>
-
-    <table>
-      <tr><th>N°</th><th>Tabla</th><th>Contenido</th><th>OBLIGATORIA</th><th>SÍ</th><th>NO</th></tr>
-      <tr class="ob"><td>1</td><td><strong>ACCESS</strong></td><td>Control de acceso y permisos de usuarios</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr class="ob"><td>2</td><td><strong>AUTOR_DB</strong></td><td>Autorizaciones del sistema</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr class="ob"><td>3</td><td><strong>GRUPOS_DB</strong></td><td>Nombre de grupos de permisos de usuarios</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr class="ob"><td>4</td><td><strong>PARAM_DB</strong></td><td>Parámetros generales del sistema</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr class="ob"><td>5</td><td><strong>PARAMAPP_DB</strong></td><td>Parámetros web</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr class="ob"><td>6</td><td><strong>SQL_DB</strong></td><td>Consultas y reportes personalizados SQL</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr class="ob"><td>7</td><td><strong>EMP1_DB</strong></td><td>Datos generales de la empresa (parte 1)</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr class="ob"><td>8</td><td><strong>EMP2_DB</strong></td><td>Datos generales de la empresa (parte 2)</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr class="ob"><td>9</td><td><strong>EMP3_DB</strong></td><td>Datos generales de la empresa (parte 3)</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr class="ob"><td>10</td><td><strong>PLAN_DB</strong></td><td>Plan de cuentas contable</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr class="ob"><td>11</td><td><strong>TIDOC_DB</strong></td><td>Tipos de documentos del sistema</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr class="ob"><td>12</td><td><strong>CHOI_DB</strong></td><td>Comunas, ciudades, clases, nombre LP y otros</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr class="ob"><td>13</td><td><strong>USER_DB</strong></td><td>Usuarios y configuración de acceso</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr class="ob"><td>14</td><td><strong>PERSO_DB</strong></td><td>Tabla de personal</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr><td>15</td><td><strong>ART_DB</strong></td><td>Artículos / productos del catálogo</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr><td>16</td><td><strong>CENT_DB</strong></td><td>Centros de costo</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr><td>17</td><td><strong>CLASE_DB</strong></td><td>Direcciones de despacho y otros</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr><td>18</td><td><strong>CLIEN_DB</strong></td><td>Maestro de clientes y proveedores</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr><td>19</td><td><strong>COMUNAS_DB</strong></td><td>Tabla de comunas y regiones</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr><td>20</td><td><strong>CONTA_DB</strong></td><td>Contactos de clientes y proveedores</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr><td>21</td><td><strong>RECET_DB</strong></td><td>Recetas / fórmulas de producción</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-      <tr><td>22</td><td><strong>DESCT_DB</strong></td><td>Descuentos configurados y valor de la LP (incluir solo si aplica)</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
-    </table>
-    <p class="legend">✔ OBLIGATORIA = se copia siempre &nbsp;&nbsp; SÍ/NO = según acuerdo con cliente &nbsp;&nbsp; * = solo si aplica al cliente</p>
-
-    <!-- Sección 2 -->
-    <h3 class="sec">2. Solicitud de Creación de BD a IT</h3>
-    <p>Una vez definidas las tablas con el cliente, Comercial / GEX envía el siguiente correo a IT con el detalle de la solicitud.</p>
-
-    <table class="correo">
-      <tr><th colspan="2">MODELO DE CORREO A IT</th></tr>
-      <tr><td class="lbl">Para:</td><td class="val">it@manager.cl</td></tr>
-      <tr><td class="lbl">Asunto:</td><td class="val">Solicitud Creación BD – [NOMBRE CLIENTE] – [NOMBRE BD]</td></tr>
-      <tr><td class="lbl">Área Solicitante:</td><td class="val">Comercial / GEX</td></tr>
-    </table>
-
-    <div class="email-body">
-      <p>Estimados, muy buenas tardes,</p><br>
-      <p>Junto con saludar, solicito lo siguiente:</p><br>
-      <ol>
-        <li>Crear base denominada <strong>"[NOMBRE_BD]"</strong> y en el campo "Descripción" indicar: <em>[descripción — máx. 30 caracteres]</em></li>
-        <li>Copiar desde base <strong>"[BD_ORIGEN]"</strong> a <strong>"[NOMBRE_BD]"</strong> las siguientes tablas (importante: debe ser desde esa base, no otra):</li>
-      </ol>
+    <div class="ficha">
+      <div class="ficha-row"><div class="ficha-label">Código</div><div class="ficha-val">PRO-IT-BD-001</div></div>
+      <div class="ficha-row"><div class="ficha-label">Versión</div><div class="ficha-val">1.0</div></div>
+      <div class="ficha-row"><div class="ficha-label">Fecha de Emisión</div><div class="ficha-val">Mayo 2026</div></div>
+      <div class="ficha-row"><div class="ficha-label">Área Solicitante</div><div class="ficha-val">Comercial / GEX</div></div>
+      <div class="ficha-row"><div class="ficha-label">Destinatario</div><div class="ficha-val">IT Manager – it@manager.cl</div></div>
+      <div class="ficha-row"><div class="ficha-label">Estado</div><div class="ficha-val"><span class="badge-v">VIGENTE</span></div></div>
     </div>
 
-    <table>
-      <tr><th>N°</th><th>Tabla</th><th>Contenido</th></tr>
-      <tr class="ob"><td>1</td><td><strong>ACCESS</strong></td><td>Control de acceso y permisos de usuarios &nbsp;<em>(OBLIGATORIA)</em></td></tr>
-      <tr class="ob"><td>2</td><td><strong>AUTOR_DB</strong></td><td>Autorizaciones del sistema &nbsp;<em>(OBLIGATORIA)</em></td></tr>
-      <tr class="ob"><td>3</td><td><strong>GRUPOS_DB</strong></td><td>Nombre de grupos de permisos de usuarios &nbsp;<em>(OBLIGATORIA)</em></td></tr>
-      <tr class="ob"><td>4</td><td><strong>PARAM_DB</strong></td><td>Parámetros generales del sistema &nbsp;<em>(OBLIGATORIA)</em></td></tr>
-      <tr class="ob"><td>5</td><td><strong>PARAMAPP_DB</strong></td><td>Parámetros web &nbsp;<em>(OBLIGATORIA)</em></td></tr>
-      <tr class="ob"><td>6</td><td><strong>SQL_DB</strong></td><td>Consultas y reportes personalizados SQL &nbsp;<em>(OBLIGATORIA)</em></td></tr>
-      <tr class="ob"><td>7</td><td><strong>EMP1_DB</strong></td><td>Datos generales de la empresa (parte 1) &nbsp;<em>(OBLIGATORIA)</em></td></tr>
-      <tr class="ob"><td>8</td><td><strong>EMP2_DB</strong></td><td>Datos generales de la empresa (parte 2) &nbsp;<em>(OBLIGATORIA)</em></td></tr>
-      <tr class="ob"><td>9</td><td><strong>EMP3_DB</strong></td><td>Datos generales de la empresa (parte 3) &nbsp;<em>(OBLIGATORIA)</em></td></tr>
-      <tr class="ob"><td>10</td><td><strong>PLAN_DB</strong></td><td>Plan de cuentas contable &nbsp;<em>(OBLIGATORIA)</em></td></tr>
-      <tr class="ob"><td>11</td><td><strong>TIDOC_DB</strong></td><td>Tipos de documentos del sistema &nbsp;<em>(OBLIGATORIA)</em></td></tr>
-      <tr class="ob"><td>12</td><td><strong>CHOI_DB</strong></td><td>Comunas, ciudades, clases, nombre LP y otros &nbsp;<em>(OBLIGATORIA)</em></td></tr>
-      <tr class="ob"><td>13</td><td><strong>USER_DB</strong></td><td>Usuarios y configuración de acceso &nbsp;<em>(OBLIGATORIA)</em></td></tr>
-      <tr class="ob"><td>14</td><td><strong>PERSO_DB</strong></td><td>Tabla de personal &nbsp;<em>(OBLIGATORIA)</em></td></tr>
-      <tr><td>15</td><td><strong>ART_DB</strong></td><td>Artículos / productos del catálogo</td></tr>
-      <tr><td>16</td><td><strong>CENT_DB</strong></td><td>Centros de costo</td></tr>
-      <tr><td>17</td><td><strong>CLASE_DB</strong></td><td>Direcciones de despacho y otros</td></tr>
-      <tr><td>18</td><td><strong>CLIEN_DB</strong></td><td>Maestro de clientes y proveedores</td></tr>
-      <tr><td>19</td><td><strong>COMUNAS_DB</strong></td><td>Tabla de comunas y regiones</td></tr>
-      <tr><td>20</td><td><strong>CONTA_DB</strong></td><td>Contactos de clientes y proveedores</td></tr>
-      <tr><td>21</td><td><strong>RECET_DB</strong></td><td>Recetas / fórmulas de producción</td></tr>
-      <tr><td>22</td><td><strong>DESCT_DB</strong></td><td>Descuentos configurados y valor de la LP (incluir solo si aplica)</td></tr>
-    </table>
-
-    <div class="email-body">
-      <p><em>Nota: La base nueva debe quedar actualizada a la última versión disponible del sistema.</em></p><br>
-      <p>Estaré atenta a sus comentarios. Saludos cordiales.</p>
+    <!-- S1 ALCANCE -->
+    <div class="section" id="s1">
+      <div class="sec-header"><div class="sec-num">1</div><div class="sec-title">Alcance y Descripción</div></div>
+      <div class="sec-desc">Este procedimiento describe el proceso para crear una réplica de una nueva base de datos (BD) a partir de una BD existente. <strong>No incluye carga de stock ni apertura contable.</strong></div>
+      <div class="alert alert-blue">
+        <span class="alert-icon">ℹ</span>
+        <div>El proceso se inicia con un levantamiento realizado por Comercial o GEX en conjunto con el cliente. Durante este levantamiento se identifican las tablas que se traspasarán desde la BD de origen a la nueva BD. Una vez acordado, Comercial / GEX solicita a IT la creación indicando las tablas requeridas.</div>
+      </div>
     </div>
 
-    <!-- Sección 3 -->
-    <h3 class="sec">3. Verificación Post-Creación – Proyectos Onboarding</h3>
-    <p>Una vez que IT confirma la creación de la BD, el consultor de Onboarding recibe la tarea mediante la OT asignada. Antes de presentar la BD al cliente, debe validar los siguientes puntos:</p>
+    <!-- S2 AMBIENTE Y TABLAS -->
+    <div class="section" id="s2">
+      <div class="sec-header"><div class="sec-num">2</div><div class="sec-title">Datos del Ambiente y Tablas a Copiar</div></div>
+      <div class="sub-title">2.1 Datos del Ambiente ASP</div>
+      <div class="amb-box">
+        <div class="amb-row"><span class="amb-key">AMBIENTE</span><input class="amb-input" id="inp-amb" placeholder="\\MANAGER.LOCAL\MG\[código]\MANAGER8\COMUNES\"></div>
+        <div class="amb-row"><span class="amb-key">BD</span><input class="amb-input" id="inp-bd" placeholder="[código BD]"></div>
+      </div>
+      <div class="sub-title">2.2 Tablas a Copiar</div>
+      <div class="sec-desc">Marcar SÍ o NO según lo acordado con el cliente. Todas las tablas son opcionales en este tipo de réplica.</div>
+      <div class="tablas-wrap">
+        <table class="tablas-table">
+          <thead><tr>
+            <th style="width:44px;">N°</th>
+            <th class="th-left" style="width:140px;">Tabla</th>
+            <th class="th-left">Contenido</th>
+            <th class="th-si" style="width:60px;">SÍ</th>
+            <th class="th-no" style="width:60px;">NO</th>
+          </tr></thead>
+          <tbody id="tablas-body"></tbody>
+        </table>
+      </div>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:var(--green);"></span>SÍ = tabla incluida en esta solicitud</span>
+        <span><span class="legend-dot" style="background:var(--red);"></span>NO = no aplica para este cliente</span>
+        <span><span class="legend-dot" style="background:#bbb;"></span>* = opcional, solo si aplica al cliente</span>
+      </div>
+    </div>
 
-    <table>
-      <tr><th>Verificación</th><th>SÍ</th><th>NO</th><th>Obs.</th></tr>
-      <tr><td>BD creada con el nombre correcto en el ambiente indicado</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
-      <tr><td>Descripción correcta — verificar en Juegos de Datos del sistema</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
-      <tr><td>Todas las tablas solicitadas fueron copiadas desde la BD de origen correcta</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
-      <tr><td>Las tablas obligatorias están presentes en la nueva BD</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
-      <tr><td>BD actualizada a la última versión disponible del sistema</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
-      <tr><td>Acceso confirmado desde el entorno ASP y Ramaflex (ingresar con credenciales del cliente)</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
-      <tr><td>Formatos de impresión: verificar que estén configurados. Si no, habilitarlos antes de continuar.</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
-      <tr><td>Revisión de parámetros internos del sistema</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
-      <tr><td>Funcionamiento FTP (verificar configuración y conectividad)</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
-      <tr><td>Prueba de ciclos (validar flujo completo de operación)</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
-    </table>
-    <div class="note">Nota: Si el cliente tiene formatos personalizados (facturas, guías, órdenes de compra), comparar con la BD original y habilitar los formatos requeridos antes de avanzar.</div>
+    <!-- S3 CORREO -->
+    <div class="section" id="s3">
+      <div class="sec-header"><div class="sec-num">3</div><div class="sec-title">Solicitud a IT – Modelo de Correo</div></div>
+      <div class="sec-desc">Copiar y completar los campos entre corchetes antes de enviar. El correo debe contener toda la información necesaria para que IT ejecute la tarea sin consultas adicionales.</div>
+      <div class="email-card">
+        <div class="email-strip"></div>
+        <div class="email-meta">
+          <div class="email-meta-row"><span class="email-lbl">Para:</span><span>it@manager.cl</span></div>
+          <div class="email-meta-row"><span class="email-lbl">Asunto:</span><span>Solicitud Creación BD – [NOMBRE CLIENTE] – [NOMBRE BD]</span></div>
+          <div class="email-meta-row"><span class="email-lbl">Área Solicitante:</span><span>Comercial / GEX</span></div>
+        </div>
+        <div class="email-body">
+          <div style="margin-bottom:10px;">Estimados, muy buenas tardes,</div>
+          <div style="margin-bottom:10px;">Junto con saludar, solicito lo siguiente:</div>
+          <div style="margin-bottom:8px;"><strong>1.</strong> Crear base denominada <strong>"[NOMBRE_BD]"</strong> y en el campo "Descripción" indicar: <strong>[descripción — máx. 30 caracteres]</strong></div>
+          <div style="margin-bottom:10px;"><strong>2.</strong> Copiar desde base <strong>"[BD_ORIGEN]"</strong> a <strong>"[NOMBRE_BD]"</strong> las siguientes tablas <em>(importante: debe ser desde esa base, no otra)</em>:</div>
+          <table class="tablas-table" id="correo-tablas" style="margin-bottom:12px;">
+            <thead><tr>
+              <th style="width:44px;">N°</th>
+              <th class="th-left" style="width:140px;">Tabla</th>
+              <th class="th-left">Contenido</th>
+            </tr></thead>
+            <tbody id="correo-body"></tbody>
+          </table>
+          <div class="email-env" id="env-preview">AMBIENTE : \\MANAGER.LOCAL\MG\[código]\MANAGER8\COMUNES\<br>BD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [código BD]</div>
+          <div style="font-size:12px;color:var(--text-3);font-style:italic;margin-bottom:10px;">Nota: La base nueva debe quedar actualizada a la última versión disponible del sistema.</div>
+          <div>Estaré atenta a sus comentarios. Saludos cordiales.</div>
+        </div>
+      </div>
+    </div>
 
-    <!-- Sección 4 -->
-    <h3 class="sec">4. Sesiones Requeridas</h3>
-    <p>Para una réplica de BD sin movimientos, se requiere mínimo 1 sesión de verificación y configuración.</p>
+    <!-- S4 VERIFICACION -->
+    <div class="section" id="s4">
+      <div class="sec-header"><div class="sec-num">4</div><div class="sec-title">Verificación Post-Creación – Consultoría Técnica</div></div>
+      <div class="sec-desc">Una vez que IT confirma la creación de la BD, el Consultor Técnico verifica los siguientes puntos. Para esta revisión se requiere mínimo <strong>1 sesión</strong>.</div>
+      <table class="verif-table">
+        <thead><tr>
+          <th>Verificación</th>
+          <th class="th-si" style="width:70px;">SÍ</th>
+          <th class="th-no" style="width:70px;">NO</th>
+          <th style="width:160px;">Observaciones</th>
+        </tr></thead>
+        <tbody id="verif-body"></tbody>
+      </table>
+      <div class="alert alert-orange" style="margin-top:14px;">
+        <span class="alert-icon">⚠</span>
+        <div><strong>Formatos de impresión:</strong> si el cliente cuenta con formatos especiales (facturas, guías, órdenes de compra personalizadas), el consultor debe comparar el formato de la BD anterior con la nueva y activar los formatos requeridos antes de continuar.</div>
+      </div>
+    </div>
 
-    <table class="sessions">
-      <tr><th>Sesión</th><th>Nombre</th><th>Descripción</th><th>Duración</th></tr>
-      <tr>
-        <td class="num">1</td>
-        <td class="name">Verificación y Configuración</td>
-        <td>Revisión completa de la BD creada: tablas, parámetros, FTP, Ramaflex y prueba de ciclos.</td>
-        <td class="dur">2 hrs</td>
-      </tr>
-    </table>
-    <p>Si el cliente requiere capacitación de algún módulo, se deben agendar sesiones adicionales según el módulo a capacitar.</p>
+    <!-- S5 SESIONES -->
+    <div class="section" id="s5">
+      <div class="sec-header"><div class="sec-num">5</div><div class="sec-title">Sesiones Requeridas</div></div>
+      <div class="sec-desc">Sesiones mínimas para la creación de una réplica de BD (solo configuración y verificación). Si el cliente requiere capacitación de algún módulo, deben agendarse sesiones adicionales según el módulo correspondiente.</div>
+      <table class="sessions-table">
+        <thead><tr>
+          <th style="width:60px;text-align:center;">Sesión</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th style="width:160px;">Área Responsable</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td style="text-align:center;"><div class="sess-num">1</div></td>
+            <td><div class="sess-name">Verificación y Entrega BD</div></td>
+            <td>Verificación completa de la BD creada: tablas, parámetros, formatos, accesos FTP, Ramaflex y prueba de ciclos con el cliente.</td>
+            <td>Consultoría Técnica</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="alert alert-blue" style="margin-top:12px;">
+        <span class="alert-icon">ℹ</span>
+        <div>Si el cliente necesita capacitación de algún módulo, debe venir especificado en la OT y las sesiones de capacitación se agendan de forma separada según el módulo a capacitar.</div>
+      </div>
+    </div>
 
-    <!-- Sección 5 -->
-    <h3 class="sec">5. Aprobaciones</h3>
-    <table class="aprob">
-      <tr><th>Elaborado por</th><th>Revisado por</th><th>Aprobado por</th></tr>
-      <tr>
-        <td><div class="line">Nombre y Cargo</div></td>
-        <td><div class="line">Nombre y Cargo</div></td>
-        <td><div class="line">Nombre y Cargo</div></td>
-      </tr>
-    </table>
+    <!-- S6 APROBACIONES -->
+    <div class="section" id="s6">
+      <div class="sec-header"><div class="sec-num">6</div><div class="sec-title">Aprobaciones</div></div>
+      <div class="aprov-grid">
+        <div class="aprov-card"><div class="aprov-role">Elaborado por</div><hr class="aprov-line"><div class="aprov-name">Nombre y Cargo</div><div class="aprov-area">Comercial / GEX</div></div>
+        <div class="aprov-card"><div class="aprov-role">Revisado por</div><hr class="aprov-line"><div class="aprov-name">Nombre y Cargo</div><div class="aprov-area">Líder de Proyecto</div></div>
+        <div class="aprov-card"><div class="aprov-role">Aprobado por</div><hr class="aprov-line"><div class="aprov-name">Nombre y Cargo</div><div class="aprov-area">Gerencia / IT</div></div>
+      </div>
+    </div>
 
-  </div><!-- /content -->
-
-  <!-- Footer -->
-  <div class="doc-footer">
-    <span>FOR-IT-BD-001 | Uso Interno | Manager</span>
-    <span>Control de Gestión</span>
   </div>
-
-</div><!-- /page -->
+</div>
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+const TABLAS=[
+  ["1","ACCESS","Control de acceso y permisos de usuarios"],
+  ["2","ART_DB","Artículos / productos del catálogo"],
+  ["3","AUTOR_DB","Autorizaciones del sistema"],
+  ["4","CENT_DB","Centros de costo"],
+  ["5","CHOI_DB","Comunas, ciudades, clases, nombre LP y otros"],
+  ["6","CLASE_DB","Direcciones de despacho y otros"],
+  ["7","CLIEN_DB","Maestro de clientes y proveedores"],
+  ["8","COMUNAS_DB","Tabla de comunas y regiones"],
+  ["9","CONTA_DB","Contactos de clientes y proveedores"],
+  ["10","EMP1_DB","Datos generales de la empresa (parte 1)"],
+  ["11","EMP2_DB","Datos generales de la empresa (parte 2)"],
+  ["12","EMP3_DB","Datos generales de la empresa (parte 3)"],
+  ["13","GRUPOS_DB","Nombre de grupos de permisos de usuarios"],
+  ["14","PARAM_DB","Parámetros generales del sistema"],
+  ["15","PARAMAPP_DB","Parámetros web"],
+  ["16","PERSO_DB","Tabla de personal"],
+  ["17","PLAN_DB","Plan de cuentas contable"],
+  ["18","SQL_DB","Consultas y reportes personalizados SQL"],
+  ["19","TIDOC_DB","Tipos de documentos del sistema"],
+  ["20","USER_DB","Usuarios y configuración de acceso"],
+  ["21","RECET_DB","Recetas / fórmulas de producción"],
+  ["*","DESCT_DB","Descuentos y valor LP — solo si aplica al cliente"],
+];
+const VERIF=["BD creada con el nombre correcto en el ambiente indicado","Descripción correcta — verificar en Juegos de Datos del sistema","Todas las tablas solicitadas fueron copiadas desde la BD de origen correcta","Las tablas obligatorias están presentes en la nueva BD","BD actualizada a la última versión disponible del sistema","Acceso confirmado desde el entorno ASP (ingresar con credenciales del cliente)","Formatos de impresión especiales configurados correctamente (si aplica)","Revisión de parámetros internos del sistema","Funcionamiento FTP (verificar configuración y conectividad)","Accesos Ramaflex (verificar acceso y permisos)","Prueba de ciclos (validar flujo completo de operación)"];
+function cb(type){return `<div class="cb-${type}" onclick="toggleCb(this,'${type}')"></div>`;}
+function renderTablas(){
+  document.getElementById('tablas-body').innerHTML=TABLAS.map((r,i)=>{
+    const opc=r[0]==='*';
+    const shade=i%2===1?'background:#FAFBFD;':'';
+    return`<tr><td style="${shade};font-family:var(--mono);font-size:12px;font-weight:600;color:${opc?'#bbb':'var(--navy)'};text-align:center;">${r[0]}</td><td style="${shade}" class="td-cod ${opc?'td-opc':''}">${r[1]}</td><td style="${shade}" class="td-left ${opc?'td-opc':''}">${r[2]}</td><td style="${shade};background:${i%2===1?'#E4F3EA':'#F0FAF4'};">${cb('si')}</td><td style="${shade};background:${i%2===1?'#F8E8EA':'#FFF0F2'};">${cb('no')}</td></tr>`;
+  }).join('');
+  document.getElementById('correo-body').innerHTML=TABLAS.map((r,i)=>{
+    const opc=r[0]==='*';
+    const shade=i%2===1?'background:#FAFBFD;':'';
+    return`<tr><td style="${shade};text-align:center;font-family:var(--mono);font-size:11px;color:${opc?'#bbb':'var(--navy)'};">${r[0]}</td><td style="${shade}" class="td-cod ${opc?'td-opc':''}">${r[1]}</td><td style="${shade}" class="td-left ${opc?'td-opc':''}">${r[2]}</td></tr>`;
+  }).join('');
+}
+function renderVerif(){
+  document.getElementById('verif-body').innerHTML=VERIF.map((v,i)=>{
+    const shade=i%2===1?'background:#FAFBFD;':'';
+    return`<tr><td style="${shade}">${v}</td><td style="${shade};background:${i%2===1?'#E4F3EA':'#F0FAF4'};">${cb('si')}</td><td style="${shade};background:${i%2===1?'#F8E8EA':'#FFF0F2'};">${cb('no')}</td><td style="${shade}"></td></tr>`;
+  }).join('');
+}
+function toggleCb(el,type){
+  const row=el.closest('tr');
+  const opp=type==='si'?'no':'si';
+  row.querySelectorAll(`.cb-${opp}`).forEach(e=>e.classList.remove('on'));
+  el.classList.toggle('on');
+}
+function syncEnv(){
+  const a=document.getElementById('inp-amb').value||'\\\\MANAGER.LOCAL\\MG\\[código]\\MANAGER8\\COMUNES\\';
+  const b=document.getElementById('inp-bd').value||'[código BD]';
+  document.getElementById('env-preview').innerHTML=`AMBIENTE : ${a}<br>BD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${b}`;
+}
+document.getElementById('inp-amb').addEventListener('input',syncEnv);
+document.getElementById('inp-bd').addEventListener('input',syncEnv);
+function setActive(el){document.querySelectorAll('.sb-nav').forEach(i=>i.classList.remove('active'));el.classList.add('active');}
+window.addEventListener('scroll',()=>{document.getElementById('back-top').classList.toggle('visible',window.scrollY>300);},{passive:true});
+renderTablas();renderVerif();
+</script>
 </body>
 </html>
