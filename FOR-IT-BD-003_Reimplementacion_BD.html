@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FOR-IT-BD-003 – Reimplementación de Base de Datos</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    color: #222;
+    background: #f4f6f9;
+    padding: 24px 16px 48px;
+  }
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.10);
+    overflow: hidden;
+  }
+  .doc-header {
+    background: #1F497D;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 28px;
+    font-size: 12px;
+  }
+  .doc-header .title { font-weight: bold; font-size: 13px; letter-spacing: .3px; }
+  .doc-header .area  { opacity: .85; }
+  .title-block {
+    text-align: center;
+    padding: 28px 28px 18px;
+    border-bottom: 3px solid #1F497D;
+  }
+  .title-block h1 { font-size: 22px; color: #1F497D; font-weight: bold; margin-bottom: 6px; }
+  .title-block h2 { font-size: 15px; color: #444; font-weight: normal; margin-bottom: 4px; }
+  .title-block .subtitle { font-size: 12px; color: #777; font-style: italic; }
+  .content { padding: 24px 28px 32px; }
+  h3.sec { font-size: 15px; color: #1F497D; font-weight: bold; margin: 28px 0 8px; border-left: 4px solid #1F497D; padding-left: 10px; }
+  h4.sub { font-size: 13px; color: #2E75B6; font-weight: bold; margin: 18px 0 6px; }
+  p { margin-bottom: 8px; line-height: 1.55; }
+  ul.alcance { margin: 8px 0 12px 22px; line-height: 1.8; }
+  ul.alcance li { margin-bottom: 2px; }
+  .warning {
+    background: #fff4f4;
+    border-left: 4px solid #C00000;
+    padding: 9px 14px;
+    margin: 10px 0 14px;
+    font-size: 12.5px;
+    border-radius: 0 4px 4px 0;
+  }
+  .warning strong { color: #C00000; }
+  .note {
+    background: #f0f4f9;
+    border-left: 4px solid #2E75B6;
+    padding: 8px 14px;
+    margin: 10px 0 14px;
+    font-size: 12px;
+    font-style: italic;
+    border-radius: 0 4px 4px 0;
+  }
+  .env-block {
+    background: #f7fafd;
+    border: 1px solid #d0dce8;
+    border-radius: 4px;
+    padding: 10px 16px;
+    margin: 10px 0 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .env-block .label { font-weight: bold; color: #1F497D; font-family: Arial, sans-serif; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: 12.5px; }
+  th {
+    background: #1F497D;
+    color: #fff;
+    padding: 8px 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+    border: 1px solid #1F497D;
+  }
+  th.left { text-align: left; }
+  td { padding: 7px 10px; border: 1px solid #d0d0d0; vertical-align: middle; }
+  tr:nth-child(even) td { background: #f7fafd; }
+  tr.ob td { background: #D6E4F0; }
+  tr.ob td.ob-badge { color: #1A4F72; font-weight: bold; text-align: center; }
+  td.ob-dash { color: #888; text-align: center; }
+  .ficha th { text-align: left; }
+  .ficha td.lbl { background: #D9E2F3; font-weight: bold; width: 30%; }
+  .ficha td.val { background: #fff; }
+  .ficha td.vigente { font-weight: bold; color: #1F497D; }
+  .correo td.lbl { background: #D9E2F3; font-weight: bold; width: 22%; }
+  .correo td.val { background: #fff; }
+  td.chk { text-align: center; width: 60px; font-size: 15px; }
+  td.obs { width: 120px; }
+  .legend { font-size: 11.5px; color: #555; font-style: italic; margin: 4px 0 14px; }
+  .email-body {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 14px 18px;
+    margin: 10px 0 16px;
+    line-height: 1.7;
+    font-size: 12.5px;
+  }
+  .email-body ol { margin-left: 20px; }
+  .email-body li { margin-bottom: 6px; }
+
+  /* sessions */
+  .sessions td.num  { text-align: center; font-weight: bold; width: 60px; }
+  .sessions td.name { font-weight: bold; width: 180px; }
+  .sessions td.dur  { text-align: center; width: 80px; }
+  .sessions tr:nth-child(odd) td  { background: #D6E4F0; }
+  .sessions tr:nth-child(even) td { background: #EBF3FB; }
+  .sessions th { background: #1F497D; color: #fff; }
+
+  /* verific table header override */
+  th.verif-h { text-align: left; }
+
+  .aprob td { text-align: center; padding: 20px 10px; }
+  .aprob td .line { border-top: 1px solid #999; padding-top: 6px; margin-top: 30px; font-size: 11.5px; color: #555; font-style: italic; }
+  .doc-footer {
+    border-top: 2px solid #1F497D;
+    padding: 8px 28px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #888;
+    background: #fafafa;
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .page { box-shadow: none; border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="doc-header">
+    <span class="title">PROCEDIMIENTO DE REIMPLEMENTACIÓN DE BASE DE DATOS</span>
+    <span class="area">Proyectos Onboarding – Manager</span>
+  </div>
+
+  <!-- Title block -->
+  <div class="title-block">
+    <h1>FORMULARIO OPERATIVO</h1>
+    <h2>Reimplementación de Base de Datos Productiva</h2>
+    <p class="subtitle">Gestionado por el área de Proyectos Onboarding</p>
+  </div>
+
+  <div class="content">
+
+    <!-- Ficha -->
+    <table class="ficha">
+      <tr><th colspan="2">FICHA DEL DOCUMENTO</th></tr>
+      <tr><td class="lbl">Código</td><td class="val">FOR-IT-BD-003</td></tr>
+      <tr><td class="lbl">Versión</td><td class="val">1.0</td></tr>
+      <tr><td class="lbl">Fecha de Emisión</td><td class="val">Mayo 2026</td></tr>
+      <tr><td class="lbl">Área Solicitante</td><td class="val">Proyectos Onboarding</td></tr>
+      <tr><td class="lbl">Destinatario</td><td class="val">IT Manager – it@manager.cl</td></tr>
+      <tr><td class="lbl">Estado</td><td class="val vigente">VIGENTE</td></tr>
+    </table>
+
+    <!-- Alcance -->
+    <h3 class="sec">Alcance y Descripción del Procedimiento</h3>
+    <p>Este procedimiento describe el proceso de reimplementación de una base de datos (BD) productiva. Se aplica cuando un cliente que ya opera en el sistema requiere una reconfiguración completa de su BD: limpieza de datos históricos, carga de nueva información de maestros, inventario y contabilidad, dejando la BD lista para operar como si fuera una implementación nueva.</p>
+    <p>A diferencia de una réplica simple, la reimplementación incluye:</p>
+    <ul class="alcance">
+      <li>Levantamiento detallado de necesidades con el cliente</li>
+      <li>Creación de nueva BD a partir de tablas seleccionadas de la BD original</li>
+      <li>Configuración y verificación completa por parte de Proyectos Onboarding</li>
+      <li>Carga de inventario inicial y apertura contable</li>
+      <li>Apoyo DTE si el cliente utiliza Acepta</li>
+      <li>Acompañamiento en la puesta en marcha</li>
+    </ul>
+
+    <!-- Sección 1 -->
+    <h3 class="sec">1. Levantamiento Inicial</h3>
+    <p>El proceso se inicia con el levantamiento realizado por Comercial o GEX junto al cliente, recopilando sus necesidades mediante el checklist comercial. Una vez acordados los alcances, se genera la OT, la cual es enviada al área de Proyectos Onboarding, la cual programa el respectivo levantamiento de proyecto en base al checklist comercial.</p>
+
+    <!-- Sección 2 -->
+    <h3 class="sec">2. Selección de Tablas y Solicitud a IT</h3>
+    <p>Proyectos Onboarding, en conjunto con el cliente, revisa las tablas de la BD de origen y acuerda qué información se copiará a la nueva BD. Las tablas obligatorias se incluyen siempre.</p>
+
+    <h4 class="sub">2.1 Tablas a Copiar</h4>
+    <p>Las tablas en azul son <strong>OBLIGATORIAS</strong> y se copian siempre. Las demás se marcan según lo acordado con el cliente.</p>
+
+    <table>
+      <tr><th>N°</th><th>Tabla</th><th>Contenido</th><th>OBLIGATORIA</th><th>SÍ</th><th>NO</th></tr>
+      <tr class="ob"><td>1</td><td><strong>ACCESS</strong></td><td>Control de acceso y permisos de usuarios</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr class="ob"><td>2</td><td><strong>AUTOR_DB</strong></td><td>Autorizaciones del sistema</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr class="ob"><td>3</td><td><strong>GRUPOS_DB</strong></td><td>Nombre de grupos de permisos de usuarios</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr class="ob"><td>4</td><td><strong>PARAM_DB</strong></td><td>Parámetros generales del sistema</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr class="ob"><td>5</td><td><strong>PARAMAPP_DB</strong></td><td>Parámetros web</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr class="ob"><td>6</td><td><strong>SQL_DB</strong></td><td>Consultas y reportes personalizados SQL</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr class="ob"><td>7</td><td><strong>EMP1_DB</strong></td><td>Datos generales de la empresa (parte 1)</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr class="ob"><td>8</td><td><strong>EMP2_DB</strong></td><td>Datos generales de la empresa (parte 2)</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr class="ob"><td>9</td><td><strong>EMP3_DB</strong></td><td>Datos generales de la empresa (parte 3)</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr class="ob"><td>10</td><td><strong>PLAN_DB</strong></td><td>Plan de cuentas contable</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr class="ob"><td>11</td><td><strong>TIDOC_DB</strong></td><td>Tipos de documentos del sistema</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr class="ob"><td>12</td><td><strong>CHOI_DB</strong></td><td>Comunas, ciudades, clases, nombre LP y otros</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr class="ob"><td>13</td><td><strong>USER_DB</strong></td><td>Usuarios y configuración de acceso</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr class="ob"><td>14</td><td><strong>PERSO_DB</strong></td><td>Tabla de personal</td><td class="ob-badge">✔ SÍ</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr><td>15</td><td><strong>ART_DB</strong></td><td>Artículos / productos del catálogo</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr><td>16</td><td><strong>CENT_DB</strong></td><td>Centros de costo</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr><td>17</td><td><strong>CLASE_DB</strong></td><td>Direcciones de despacho y otros</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr><td>18</td><td><strong>CLIEN_DB</strong></td><td>Maestro de clientes y proveedores</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr><td>19</td><td><strong>COMUNAS_DB</strong></td><td>Tabla de comunas y regiones</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr><td>20</td><td><strong>CONTA_DB</strong></td><td>Contactos de clientes y proveedores</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr><td>21</td><td><strong>RECET_DB</strong></td><td>Recetas / fórmulas de producción</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+      <tr><td>22</td><td><strong>DESCT_DB</strong></td><td>Descuentos configurados y valor de la LP (incluir solo si aplica)</td><td class="ob-dash">—</td><td class="chk">☐</td><td class="chk">☐</td></tr>
+    </table>
+    <p class="legend">✔ OBLIGATORIA = se copia siempre &nbsp;&nbsp; SÍ/NO = según acuerdo con cliente &nbsp;&nbsp; * = solo si aplica al cliente</p>
+
+    <h4 class="sub">2.2 Solicitud de Creación de BD a IT</h4>
+    <p>Una vez definidas las tablas, Proyectos Onboarding envía el siguiente correo a IT.</p>
+
+    <table class="correo">
+      <tr><th colspan="2">MODELO DE CORREO A IT</th></tr>
+      <tr><td class="lbl">Para:</td><td class="val">it@manager.cl</td></tr>
+      <tr><td class="lbl">Asunto:</td><td class="val">Solicitud Creación BD – [NOMBRE CLIENTE] – [NOMBRE BD]</td></tr>
+      <tr><td class="lbl">Área Solicitante:</td><td class="val">Proyectos Onboarding</td></tr>
+    </table>
+
+    <div class="email-body">
+      <p>Estimados, muy buenas tardes,</p><br>
+      <p>Junto con saludar, solicito lo siguiente:</p><br>
+      <ol>
+        <li>Crear base denominada <strong>"[NOMBRE_BD]"</strong> y en el campo "Descripción" indicar: <em>[descripción — máx. 30 caracteres]</em></li>
+        <li>Copiar desde base <strong>"[BD_ORIGEN]"</strong> a <strong>"[NOMBRE_BD]"</strong> las siguientes tablas (importante: debe ser desde esa base, no otra):</li>
+      </ol>
+    </div>
+
+    <table>
+      <tr><th>N°</th><th>Tabla</th><th>Contenido</th></tr>
+      <tr class="ob"><td>1</td><td><strong>ACCESS</strong></td><td>Control de acceso y permisos de usuarios &nbsp;<em>(OBLIGATORIA)</em></td></tr>
+      <tr class="ob"><td>2</td><td><strong>AUTOR_DB</strong></td><td>Autorizaciones del sistema &nbsp;<em>(OBLIGATORIA)</em></td></tr>
+      <tr class="ob"><td>3</td><td><strong>GRUPOS_DB</strong></td><td>Nombre de grupos de permisos de usuarios &nbsp;<em>(OBLIGATORIA)</em></td></tr>
+      <tr class="ob"><td>4</td><td><strong>PARAM_DB</strong></td><td>Parámetros generales del sistema &nbsp;<em>(OBLIGATORIA)</em></td></tr>
+      <tr class="ob"><td>5</td><td><strong>PARAMAPP_DB</strong></td><td>Parámetros web &nbsp;<em>(OBLIGATORIA)</em></td></tr>
+      <tr class="ob"><td>6</td><td><strong>SQL_DB</strong></td><td>Consultas y reportes personalizados SQL &nbsp;<em>(OBLIGATORIA)</em></td></tr>
+      <tr class="ob"><td>7</td><td><strong>EMP1_DB</strong></td><td>Datos generales de la empresa (parte 1) &nbsp;<em>(OBLIGATORIA)</em></td></tr>
+      <tr class="ob"><td>8</td><td><strong>EMP2_DB</strong></td><td>Datos generales de la empresa (parte 2) &nbsp;<em>(OBLIGATORIA)</em></td></tr>
+      <tr class="ob"><td>9</td><td><strong>EMP3_DB</strong></td><td>Datos generales de la empresa (parte 3) &nbsp;<em>(OBLIGATORIA)</em></td></tr>
+      <tr class="ob"><td>10</td><td><strong>PLAN_DB</strong></td><td>Plan de cuentas contable &nbsp;<em>(OBLIGATORIA)</em></td></tr>
+      <tr class="ob"><td>11</td><td><strong>TIDOC_DB</strong></td><td>Tipos de documentos del sistema &nbsp;<em>(OBLIGATORIA)</em></td></tr>
+      <tr class="ob"><td>12</td><td><strong>CHOI_DB</strong></td><td>Comunas, ciudades, clases, nombre LP y otros &nbsp;<em>(OBLIGATORIA)</em></td></tr>
+      <tr class="ob"><td>13</td><td><strong>USER_DB</strong></td><td>Usuarios y configuración de acceso &nbsp;<em>(OBLIGATORIA)</em></td></tr>
+      <tr class="ob"><td>14</td><td><strong>PERSO_DB</strong></td><td>Tabla de personal &nbsp;<em>(OBLIGATORIA)</em></td></tr>
+      <tr><td>15</td><td><strong>ART_DB</strong></td><td>Artículos / productos del catálogo</td></tr>
+      <tr><td>16</td><td><strong>CENT_DB</strong></td><td>Centros de costo</td></tr>
+      <tr><td>17</td><td><strong>CLASE_DB</strong></td><td>Direcciones de despacho y otros</td></tr>
+      <tr><td>18</td><td><strong>CLIEN_DB</strong></td><td>Maestro de clientes y proveedores</td></tr>
+      <tr><td>19</td><td><strong>COMUNAS_DB</strong></td><td>Tabla de comunas y regiones</td></tr>
+      <tr><td>20</td><td><strong>CONTA_DB</strong></td><td>Contactos de clientes y proveedores</td></tr>
+      <tr><td>21</td><td><strong>RECET_DB</strong></td><td>Recetas / fórmulas de producción</td></tr>
+      <tr><td>22</td><td><strong>DESCT_DB</strong></td><td>Descuentos configurados y valor de la LP (incluir solo si aplica)</td></tr>
+    </table>
+
+    <div class="email-body">
+      <p><em>Nota: La base nueva debe quedar actualizada a la última versión disponible del sistema.</em></p><br>
+      <p>Estaré atenta a sus comentarios. Saludos cordiales.</p>
+    </div>
+
+    <!-- Sección 3 -->
+    <h3 class="sec">3. Verificación Post-Creación – Proyectos Onboarding</h3>
+    <p>Una vez que IT confirma la creación de la BD, el consultor de Onboarding debe verificar los siguientes puntos antes de presentar la BD al cliente.</p>
+
+    <table>
+      <tr><th class="verif-h">Verificación Proyectos Onboarding</th><th>SÍ</th><th>NO</th><th>Obs.</th></tr>
+      <tr><td>BD creada con el nombre correcto en el ambiente indicado</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
+      <tr><td>Descripción correcta — verificar en Juegos de Datos del sistema</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
+      <tr><td>Todas las tablas solicitadas fueron copiadas desde la BD de origen correcta</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
+      <tr><td>Las tablas obligatorias están presentes en la nueva BD</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
+      <tr><td>BD actualizada a la última versión disponible del sistema</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
+      <tr><td>Acceso confirmado desde el entorno ASP o Ramaflex (ingresar con credenciales del cliente)</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
+      <tr><td>Formatos de impresión: verificar que estén configurados. Si no, habilitarlos antes de continuar.</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
+      <tr><td>Revisión de parámetros internos del sistema</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
+      <tr><td>Funcionamiento FTP (verificar configuración y conectividad)</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
+      <tr><td>Prueba de ciclos (validar flujo completo de operación)</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
+    </table>
+    <div class="note">Nota: Si el cliente tiene formatos personalizados (facturas, guías, órdenes de compra), comparar con la BD original y habilitar los requeridos antes de avanzar.</div>
+
+    <table>
+      <tr><th class="verif-h">Puntos a Verificar con el Cliente</th><th>SÍ</th><th>NO</th><th>Obs.</th></tr>
+      <tr><td>Presentación de la nueva BD al cliente</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
+      <tr><td>Explicación de importadores al cliente (inventario, apertura contable, carga de documentos)</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
+      <tr><td>Carga de inventario valorizado</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
+      <tr><td>Apertura contable</td><td class="chk">☐</td><td class="chk">☐</td><td class="obs"></td></tr>
+    </table>
+
+    <!-- Sección 4 -->
+    <h3 class="sec">4. Sesiones Requeridas – Reimplementación</h3>
+    <p>A continuación, se detallan las sesiones mínimas para una reimplementación de BD (solo configuración, sin capacitación de módulos). Si el cliente requiere capacitación de algún módulo específico, se deben agendar sesiones adicionales según el módulo a capacitar.</p>
+
+    <table class="sessions">
+      <tr><th>Sesión</th><th>Nombre</th><th>Descripción</th><th>Duración</th></tr>
+      <tr>
+        <td class="num">1</td>
+        <td class="name">Levantamiento</td>
+        <td>Reunión inicial con el cliente para relevar sus necesidades, configuraciones actuales y definir el alcance de la reimplementación. Se completa el checklist comercial.</td>
+        <td class="dur">2 hrs</td>
+      </tr>
+      <tr>
+        <td class="num">2</td>
+        <td class="name">Revisión de BD</td>
+        <td>Proyectos Onboarding revisa la BD creada: tablas obligatorias, parámetros, formatos y accesos. Se verifica que la base esté correctamente configurada.</td>
+        <td class="dur">2 hrs</td>
+      </tr>
+      <tr>
+        <td class="num">3</td>
+        <td class="name">Presentación de Ciclo</td>
+        <td>Se presenta al cliente el flujo completo del sistema (ciclo de operación). Se realizan pruebas funcionales internas para validar el correcto funcionamiento de la BD.</td>
+        <td class="dur">2 hrs</td>
+      </tr>
+      <tr>
+        <td class="num">4</td>
+        <td class="name">Explicación Importadores</td>
+        <td>Se instruye al cliente sobre el uso de importadores para la carga masiva de datos: inventario, apertura contable y documentos en los distintos módulos.</td>
+        <td class="dur">2 hrs</td>
+      </tr>
+      <tr>
+        <td class="num">5</td>
+        <td class="name">Carga de Inventario</td>
+        <td>El cliente o el consultor realiza la carga del inventario inicial mediante el importador correspondiente. Se verifica la correcta recepción de los datos.</td>
+        <td class="dur">2 hrs</td>
+      </tr>
+      <tr>
+        <td class="num">6</td>
+        <td class="name">Carga Contable</td>
+        <td>Se realiza la apertura contable mediante el importador. Se validan los saldos iniciales y el plan de cuentas queda operativo.</td>
+        <td class="dur">2 hrs</td>
+      </tr>
+      <tr>
+        <td class="num">7</td>
+        <td class="name">Apoyo DTE (si aplica)</td>
+        <td>Solo si el cliente utiliza Acepta. Se configuran certificados digitales, rutas DTE y parámetros web. Se prueba la emisión de un documento electrónico en el SII.</td>
+        <td class="dur">2 hrs</td>
+      </tr>
+      <tr>
+        <td class="num">8</td>
+        <td class="name">Apoyo Puesta en Marcha</td>
+        <td>Acompañamiento al cliente en el inicio de operaciones en la nueva BD. Se resuelven dudas, se verifica el funcionamiento general y se cierra formalmente el proyecto.</td>
+        <td class="dur">2 hrs</td>
+      </tr>
+    </table>
+    <div class="warning"><strong>⚠ Nota:</strong> La sesión 7 (Apoyo DTE) aplica únicamente si el cliente utiliza Acepta para facturación electrónica.</div>
+
+    <!-- Sección 5 -->
+    <h3 class="sec">5. Aprobaciones</h3>
+    <table class="aprob">
+      <tr><th>Elaborado por</th><th>Revisado por</th><th>Aprobado por</th></tr>
+      <tr>
+        <td><div class="line">Nombre y Cargo</div></td>
+        <td><div class="line">Nombre y Cargo</div></td>
+        <td><div class="line">Nombre y Cargo</div></td>
+      </tr>
+    </table>
+
+  </div><!-- /content -->
+
+  <!-- Footer -->
+  <div class="doc-footer">
+    <span>FOR-IT-BD-003 | Uso Interno | Manager</span>
+    <span>Control de Gestión</span>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>
