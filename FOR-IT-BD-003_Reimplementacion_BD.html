@@ -2,19 +2,16 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>FOR-IT-BD-003 · Reimplementación BD</title>
+<title>FOR-IT-BD-003 · Reimplementación de Base de Datos</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
 <style>
-
-:root{--navy:#1F3864;--blue:#2E6DA4;--sky:#00B0F0;--bg:#F3F5F9;--card:#FFFFFF;--border:#DDE4EE;--border-hi:#B4C6E7;--text:#18243C;--text-2:#4A5A78;--text-3:#8898B8;--green:#1A6B42;--red:#8B0000;--brown:#7B3F00;--purple:#5B2C8D;--sidebar-w:252px;--font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--disp:'Fraunces',Georgia,serif;--r:8px;--r-lg:12px;--shadow:0 1px 3px rgba(30,50,100,.07),0 1px 2px rgba(0,0,0,.04);--shadow-md:0 4px 16px rgba(30,50,100,.10);}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
+:root{--navy:#1F3864;--blue:#2E6DA4;--sky:#00B0F0;--bg:#F3F5F9;--card:#FFFFFF;--border:#DDE4EE;--border-hi:#B4C6E7;--text:#18243C;--text-2:#4A5A78;--text-3:#8898B8;--green:#1A6B42;--red:#8B0000;--orange:#C47A10;--sidebar-w:252px;--font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--disp:'Fraunces',Georgia,serif;--r:8px;--r-lg:12px;--shadow:0 1px 3px rgba(30,50,100,.07),0 1px 2px rgba(0,0,0,.04);--shadow-md:0 4px 16px rgba(30,50,100,.10);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}html{scroll-behavior:smooth;}
 body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);background:var(--bg);display:flex;min-height:100vh;}
 .sidebar{width:var(--sidebar-w);background:var(--navy);position:fixed;inset:0 auto 0 0;display:flex;flex-direction:column;overflow-y:auto;z-index:200;}
 .sb-brand{padding:22px 18px 16px;border-bottom:1px solid rgba(255,255,255,.08);}
 .sb-back{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:rgba(255,255,255,.4);text-decoration:none;margin-bottom:12px;letter-spacing:.06em;transition:color .15s;}
-.sb-back:hover{color:var(--sky);}
-.sb-back::before{content:'←';}
+.sb-back:hover{color:var(--sky);}.sb-back::before{content:'←';}
 .sb-doc-type{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--sky);text-transform:uppercase;margin-bottom:4px;}
 .sb-title{font-size:15px;font-weight:600;color:#fff;line-height:1.25;}
 .sb-code{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.35);margin-top:5px;}
@@ -31,8 +28,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;}
 .topbar{background:var(--card);border-bottom:1px solid var(--border);padding:0 32px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .tb-bc{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-3);}
-.tb-bc span{color:var(--text-2);}
-.tb-bc .sep{opacity:.4;}
+.tb-bc span{color:var(--text-2);}.tb-bc .sep{opacity:.4;}
 .btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text-2);font-family:var(--font);transition:all .15s;}
 .btn:hover{border-color:var(--border-hi);color:var(--text);}
 .content{padding:36px 40px 80px;max-width:1100px;}
@@ -59,8 +55,10 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 .badge-v{display:inline-block;background:#E6F4EC;color:#0A6A32;font-size:11px;font-weight:600;padding:2px 9px;border-radius:10px;border:1px solid #A8DCBC;}
 .alert{border-radius:var(--r);padding:14px 16px;font-size:13.5px;line-height:1.6;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;}
 .alert-blue{background:#EEF3FC;border-left:4px solid var(--blue);color:#1A3060;}
-.alert-orange{background:#FFF8F0;border-left:4px solid #C47A10;color:#7A4A00;}
+.alert-orange{background:#FFF8F0;border-left:4px solid var(--orange);color:#7A4A00;}
+.alert-red{background:#FEE8E8;border-left:4px solid var(--red);color:#7A0010;}
 .alert-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.ul-list{margin:8px 0 14px 22px;color:var(--text-2);font-size:14px;line-height:1.9;}
 .amb-box{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:var(--r);padding:14px 16px;font-family:var(--mono);box-shadow:var(--shadow);margin-bottom:16px;}
 .amb-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
 .amb-row:last-child{margin-bottom:0;}
@@ -68,21 +66,20 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 .amb-input{flex:1;background:#F0F4FA;border:1px solid var(--border);border-radius:4px;padding:4px 10px;font-family:var(--mono);font-size:12.5px;color:var(--text);outline:none;transition:border .15s;max-width:440px;}
 .amb-input:focus{border-color:var(--sky);box-shadow:0 0 0 2px rgba(0,176,240,.12);}
 .tablas-wrap{overflow-x:auto;}
-.tablas-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);font-size:13px;margin-bottom:10px;}
-.tablas-table th{background:var(--navy);color:rgba(255,255,255,.85);font-weight:500;font-size:11px;padding:9px 10px;text-align:center;border-right:1px solid rgba(255,255,255,.08);}
-.tablas-table th.th-left{text-align:left;padding-left:14px;}
-.tablas-table th.th-ob{background:#C47A10;}
-.tablas-table th.th-si{background:var(--green);}
-.tablas-table th.th-no{background:var(--red);}
-.tablas-table td{padding:8px 10px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:middle;text-align:center;}
-.tablas-table td.td-left{text-align:left;}
-.tablas-table td.td-cod{font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--navy);text-align:left;}
-.tablas-table td.td-opc{color:#999;}
-.tablas-table td.td-cod.td-opc{color:#bbb;}
-.tablas-table tr:nth-child(even) td{background:#FAFBFD;}
-.tablas-table tr:hover td{background:#F0F4FC;}
-.ob-badge{display:inline-block;background:#FFF3E0;color:#C47A10;font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;border:1px solid #F0C898;}
-.cb-si,.cb-no{width:20px;height:20px;border-radius:4px;border:2px solid;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.t-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);font-size:13px;margin-bottom:10px;}
+.t-table th{background:var(--navy);color:rgba(255,255,255,.85);font-weight:500;font-size:11px;padding:9px 10px;text-align:center;border-right:1px solid rgba(255,255,255,.08);}
+.t-table th.thl{text-align:left;padding-left:14px;}
+.t-table th.th-ob{background:var(--orange);}
+.t-table th.th-si{background:var(--green);}
+.t-table th.th-no{background:var(--red);}
+.t-table td{padding:8px 10px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:middle;text-align:center;}
+.t-table td.tdl{text-align:left;}
+.t-table td.tdc{font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--navy);text-align:left;}
+.t-table tr.ob-row td{background:#EEF3FC;}
+.t-table tr:nth-child(even):not(.ob-row) td{background:#FAFBFD;}
+.t-table tr:hover td{background:#F0F4FC;}
+.ob-b{display:inline-block;background:#FFF3E0;color:var(--orange);font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;border:1px solid #F0C898;}
+.cb-si,.cb-no{width:20px;height:20px;border-radius:4px;border:2px solid;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;}
 .cb-si{border-color:#A8D4B8;background:#F0FAF4;}
 .cb-si.on{background:var(--green);border-color:var(--green);}
 .cb-si.on::after{content:'✓';color:#fff;font-size:11px;font-weight:700;}
@@ -90,15 +87,15 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 .cb-no.on{background:var(--red);border-color:var(--red);}
 .cb-no.on::after{content:'✗';color:#fff;font-size:11px;font-weight:700;}
 .legend{display:flex;gap:16px;font-size:12px;color:var(--text-2);margin-top:8px;flex-wrap:wrap;}
-.legend-dot{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:4px;}
+.ld{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:4px;vertical-align:middle;}
 .email-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);margin-top:12px;}
 .email-strip{height:4px;background:linear-gradient(90deg,var(--navy),var(--sky));}
 .email-meta{padding:12px 16px;background:#F8FAFD;border-bottom:1px solid var(--border);}
 .email-meta-row{display:flex;gap:8px;font-size:12.5px;margin-bottom:3px;}
-.email-lbl{color:var(--text-3);font-weight:500;width:120px;flex-shrink:0;}
+.em-lbl{color:var(--text-3);font-weight:500;width:130px;flex-shrink:0;}
 .email-body{padding:16px;font-size:13.5px;color:var(--text-2);line-height:1.65;}
 .email-env{font-family:var(--mono);font-size:12.5px;background:#F0F4FA;border-left:4px solid var(--blue);padding:10px 14px;border-radius:0 6px 6px 0;margin:10px 0;color:var(--navy);}
-.verif-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);font-size:13px;}
+.verif-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);font-size:13px;margin-bottom:14px;}
 .verif-table th{background:var(--navy);color:rgba(255,255,255,.85);font-weight:500;font-size:11px;padding:9px 12px;text-align:center;}
 .verif-table th:first-child{text-align:left;}
 .verif-table th.th-si{background:var(--green);}
@@ -107,29 +104,25 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 .verif-table td:first-child{text-align:left;color:var(--text-2);}
 .verif-table tr:nth-child(even) td{background:#FAFBFD;}
 .verif-table tr:hover td{background:#F0F4FC;}
-.sessions-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);font-size:13.5px;}
-.sessions-table th{background:var(--navy);color:#fff;font-weight:500;font-size:12px;padding:11px 16px;text-align:left;border-right:1px solid rgba(255,255,255,.08);}
-.sessions-table td{padding:11px 16px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:top;}
-.sessions-table tr:nth-child(even) td{background:#FAFBFD;}
-.sessions-table tr:hover td{background:#F0F4FC;}
-.sess-num{width:32px;height:32px;border-radius:50%;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:600;}
+.sess-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);font-size:13.5px;}
+.sess-table th{background:var(--navy);color:#fff;font-weight:500;font-size:12px;padding:11px 16px;text-align:left;border-right:1px solid rgba(255,255,255,.08);}
+.sess-table td{padding:13px 16px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:top;}
+.sess-table tr:nth-child(even) td{background:#FAFBFD;}
+.sess-num{width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:600;}
 .sess-name{font-weight:600;color:var(--text);}
-.sess-note{font-size:12px;color:var(--text-3);margin-top:3px;}
+.sess-note{font-size:11.5px;color:var(--text-3);margin-top:3px;font-style:italic;}
 .aprov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
 .aprov-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 18px 16px;text-align:center;box-shadow:var(--shadow);}
 .aprov-role{font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px;}
 .aprov-line{border:none;border-top:1px solid var(--border-hi);margin-bottom:8px;}
 .aprov-name{font-size:12px;color:var(--text-3);font-style:italic;}
-.aprov-area{font-size:11.5px;color:var(--text-2);margin-top:3px;}
 #back-top{position:fixed;bottom:24px;right:24px;width:36px;height:36px;background:var(--navy);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .2s;font-size:16px;box-shadow:var(--shadow-md);z-index:300;border:none;}
-#back-top.visible{opacity:1;}
-#back-top:hover{background:var(--blue);}
-::-webkit-scrollbar{width:5px;}
-::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:3px;}
-
+#back-top.visible{opacity:1;}#back-top:hover{background:var(--blue);}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:3px;}
 </style>
 </head>
 <body>
+
 <nav class="sidebar">
   <div class="sb-brand">
     <a class="sb-back" href="portal.html">Volver al Portal</a>
@@ -141,8 +134,8 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
   <div class="sb-section">Contenido</div>
   <a class="sb-nav active" href="#s0" onclick="setActive(this)"><div class="sb-nav-num">—</div> Ficha</a>
   <a class="sb-nav" href="#s1" onclick="setActive(this)"><div class="sb-nav-num">1</div> Alcance</a>
-  <a class="sb-nav" href="#s2" onclick="setActive(this)"><div class="sb-nav-num">2</div> Ambiente y Tablas</a>
-  <a class="sb-nav" href="#s3" onclick="setActive(this)"><div class="sb-nav-num">3</div> Correo a IT</a>
+  <a class="sb-nav" href="#s2" onclick="setActive(this)"><div class="sb-nav-num">2</div> Levantamiento Inicial</a>
+  <a class="sb-nav" href="#s3" onclick="setActive(this)"><div class="sb-nav-num">3</div> Tablas y Correo a IT</a>
   <a class="sb-nav" href="#s4" onclick="setActive(this)"><div class="sb-nav-num">4</div> Verificación</a>
   <a class="sb-nav" href="#s5" onclick="setActive(this)"><div class="sb-nav-num">5</div> Sesiones</a>
   <a class="sb-nav" href="#s6" onclick="setActive(this)"><div class="sb-nav-num">6</div> Aprobaciones</a>
@@ -156,52 +149,68 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
   </div>
   <div class="content">
 
+    <!-- HERO -->
     <div class="hero" id="s0">
       <div class="hero-eyebrow">FOR-IT-BD-003 · Formulario Operativo · v1.0</div>
       <div class="hero-title">Reimplementación de<br><em>Base de Datos Productiva</em></div>
-      <div class="hero-desc">Proceso para reimplementar una BD productiva existente. Incluye levantamiento, selección de tablas obligatorias y opcionales, solicitud a IT, verificación completa y sesiones de trabajo con el cliente.</div>
+      <div class="hero-desc">Proceso de reconfiguración completa de una BD productiva existente: limpieza de datos históricos, carga de nueva información, inventario y apertura contable. Incluye acompañamiento en puesta en marcha.</div>
       <div class="chips">
-        <span class="chip">GEX / Comercial → IT → Cto. Técnica</span>
+        <span class="chip">GEX / Comercial → IT → Proyectos Onboarding</span>
         <span class="chip">14 tablas obligatorias</span>
         <span class="chip chip-sky">8 sesiones mínimas</span>
       </div>
     </div>
 
+    <!-- FICHA -->
     <div class="ficha">
       <div class="ficha-row"><div class="ficha-label">Código</div><div class="ficha-val">FOR-IT-BD-003</div></div>
       <div class="ficha-row"><div class="ficha-label">Versión</div><div class="ficha-val">1.0</div></div>
       <div class="ficha-row"><div class="ficha-label">Fecha de Emisión</div><div class="ficha-val">Mayo 2026</div></div>
-      <div class="ficha-row"><div class="ficha-label">Áreas Solicitantes</div><div class="ficha-val">GEX / Comercial</div></div>
+      <div class="ficha-row"><div class="ficha-label">Área Solicitante</div><div class="ficha-val">Proyectos Onboarding</div></div>
       <div class="ficha-row"><div class="ficha-label">Destinatario</div><div class="ficha-val">IT Manager – it@manager.cl</div></div>
       <div class="ficha-row"><div class="ficha-label">Estado</div><div class="ficha-val"><span class="badge-v">VIGENTE</span></div></div>
     </div>
 
-    <!-- S1 ALCANCE -->
+    <!-- S1: ALCANCE -->
     <div class="section" id="s1">
-      <div class="sec-header"><div class="sec-num">1</div><div class="sec-title">Alcance y Descripción</div></div>
-      <div class="sec-desc">Este procedimiento describe el proceso para la <strong>Reimplementación de una Base de Datos productiva</strong>. A diferencia de una réplica simple, la reimplementación implica una reconfiguración del sistema con sesiones de trabajo, carga de inventario y apertura contable.</div>
-      <div class="alert alert-blue">
-        <span class="alert-icon">ℹ</span>
-        <div>El proceso se inicia con un levantamiento realizado por GEX o Comercial en conjunto con el cliente. Una vez acordados los alcances, llega al área de Consultoría Técnica la OT y se programan las sesiones de configuración y validación según el Checklist Comercial.</div>
-      </div>
+      <div class="sec-header"><div class="sec-num">1</div><div class="sec-title">Alcance y Descripción del Procedimiento</div></div>
+      <div class="sec-desc">Este procedimiento describe el proceso de reimplementación de una base de datos productiva. Se aplica cuando un cliente que ya opera en el sistema requiere una reconfiguración completa de su BD: limpieza de datos históricos, carga de nueva información de maestros, inventario y contabilidad, dejando la BD lista para operar como si fuera una implementación nueva.</div>
+      <div class="sec-desc">A diferencia de una réplica simple, la reimplementación incluye:</div>
+      <ul class="ul-list">
+        <li>Levantamiento detallado de necesidades con el cliente</li>
+        <li>Creación de nueva BD a partir de tablas seleccionadas de la BD original</li>
+        <li>Configuración y verificación completa por parte de Proyectos Onboarding</li>
+        <li>Carga de inventario inicial y apertura contable</li>
+        <li>Apoyo DTE si el cliente utiliza Acepta</li>
+        <li>Acompañamiento en la puesta en marcha</li>
+      </ul>
     </div>
 
-    <!-- S2 AMBIENTE Y TABLAS -->
+    <!-- S2: LEVANTAMIENTO -->
     <div class="section" id="s2">
-      <div class="sec-header"><div class="sec-num">2</div><div class="sec-title">Datos del Ambiente y Tablas a Copiar</div></div>
-      <div class="sub-title">2.1 Datos del Ambiente ASP</div>
+      <div class="sec-header"><div class="sec-num">2</div><div class="sec-title">Levantamiento Inicial</div></div>
+      <div class="sec-desc">El proceso se inicia con el levantamiento realizado por Comercial o GEX junto al cliente, recopilando sus necesidades mediante el checklist comercial. Una vez acordados los alcances, se genera la OT y es enviada al área de Proyectos Onboarding, la cual programa el levantamiento de proyecto en base al checklist comercial y acuerda las fechas de las sesiones de configuración y validación.</div>
+    </div>
+
+    <!-- S3: TABLAS Y CORREO -->
+    <div class="section" id="s3">
+      <div class="sec-header"><div class="sec-num">3</div><div class="sec-title">Selección de Tablas y Solicitud a IT</div></div>
+      <div class="sec-desc">Proyectos Onboarding, en conjunto con el cliente, revisa las tablas de la BD de origen y acuerda qué información se copiará a la nueva BD. Las tablas obligatorias se incluyen siempre.</div>
+
+      <div class="sub-title">3.1 Datos del Ambiente ASP</div>
       <div class="amb-box">
         <div class="amb-row"><span class="amb-key">AMBIENTE</span><input class="amb-input" id="inp-amb" placeholder="\\MANAGER.LOCAL\MG\[código]\MANAGER8\COMUNES\"></div>
         <div class="amb-row"><span class="amb-key">BD</span><input class="amb-input" id="inp-bd" placeholder="[código BD]"></div>
       </div>
-      <div class="sub-title">2.2 Levantamiento y Selección de Tablas</div>
-      <div class="sec-desc">Consultoría Técnica, en conjunto con el cliente, revisa las tablas de la BD de origen y acuerda qué información se copiará. Las tablas marcadas como <strong>OBLIGATORIA</strong> se incluyen siempre, independiente del tipo de reimplementación.</div>
+
+      <div class="sub-title">3.2 Tablas a Copiar</div>
+      <div class="sec-desc">Las tablas en azul son <strong>OBLIGATORIAS</strong> y se copian siempre. Las demás se marcan SÍ o NO según lo acordado con el cliente.</div>
       <div class="tablas-wrap">
-        <table class="tablas-table">
+        <table class="t-table">
           <thead><tr>
             <th style="width:44px;">N°</th>
-            <th class="th-left" style="width:140px;">Tabla</th>
-            <th class="th-left">Contenido</th>
+            <th class="thl" style="width:140px;">Tabla</th>
+            <th class="thl">Contenido</th>
             <th class="th-ob" style="width:110px;">OBLIGATORIA</th>
             <th class="th-si" style="width:60px;">SÍ</th>
             <th class="th-no" style="width:60px;">NO</th>
@@ -210,127 +219,141 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
         </table>
       </div>
       <div class="legend">
-        <span><span class="legend-dot" style="background:#C47A10;"></span>OBLIGATORIA = se copia siempre</span>
-        <span><span class="legend-dot" style="background:var(--green);"></span>SÍ = tabla incluida según acuerdo con cliente</span>
-        <span><span class="legend-dot" style="background:var(--red);"></span>NO = no aplica para este cliente</span>
+        <span><span class="ld" style="background:var(--orange);"></span>OBLIGATORIA = se copia siempre</span>
+        <span><span class="ld" style="background:var(--green);"></span>SÍ = tabla incluida según acuerdo con cliente</span>
+        <span><span class="ld" style="background:var(--red);"></span>NO = no aplica para este cliente</span>
       </div>
-    </div>
 
-    <!-- S3 CORREO -->
-    <div class="section" id="s3">
-      <div class="sec-header"><div class="sec-num">3</div><div class="sec-title">Solicitud a IT – Modelo de Correo</div></div>
-      <div class="sec-desc">Una vez definidas las tablas, Consultoría Técnica envía el siguiente correo a IT con toda la información necesaria para ejecutar sin consultas adicionales.</div>
+      <div class="sub-title" style="margin-top:24px;">3.3 Modelo de Correo a IT</div>
+      <div class="sec-desc">Una vez definidas las tablas, Proyectos Onboarding envía el siguiente correo a IT.</div>
       <div class="email-card">
         <div class="email-strip"></div>
         <div class="email-meta">
-          <div class="email-meta-row"><span class="email-lbl">Para:</span><span>it@manager.cl</span></div>
-          <div class="email-meta-row"><span class="email-lbl">Asunto:</span><span>Solicitud Reimplementación BD – [NOMBRE CLIENTE] – [NOMBRE BD]</span></div>
-          <div class="email-meta-row"><span class="email-lbl">Área Solicitante:</span><span>Consultoría Técnica</span></div>
+          <div class="email-meta-row"><span class="em-lbl">Para:</span><span>it@manager.cl</span></div>
+          <div class="email-meta-row"><span class="em-lbl">Asunto:</span><span>Solicitud Creación BD – [NOMBRE CLIENTE] – [NOMBRE BD]</span></div>
+          <div class="email-meta-row"><span class="em-lbl">Área Solicitante:</span><span>Proyectos Onboarding</span></div>
         </div>
         <div class="email-body">
-          <div style="margin-bottom:10px;">Estimados, muy buenas tardes,</div>
-          <div style="margin-bottom:10px;">Junto con saludar, solicito lo siguiente:</div>
-          <div style="margin-bottom:8px;"><strong>1.</strong> Crear base denominada <strong>"[NOMBRE_BD]"</strong> y en el campo "Descripción" indicar: <strong>[descripción — máx. 30 caracteres]</strong></div>
-          <div style="margin-bottom:10px;"><strong>2.</strong> Copiar desde base <strong>"[BD_ORIGEN]"</strong> a <strong>"[NOMBRE_BD]"</strong> las siguientes tablas <em>(importante: debe ser desde esa base, no otra)</em>:</div>
-          <table class="tablas-table" style="margin-bottom:12px;">
+          <p style="margin-bottom:8px;">Estimados, muy buenas tardes,</p>
+          <p style="margin-bottom:10px;">Junto con saludar, solicito lo siguiente:</p>
+          <p style="margin-bottom:8px;"><strong>1.</strong> Crear base denominada <strong>"[NOMBRE_BD]"</strong> y en el campo "Descripción" indicar: <em>[descripción — máx. 30 caracteres]</em></p>
+          <p style="margin-bottom:12px;"><strong>2.</strong> Copiar desde base <strong>"[BD_ORIGEN]"</strong> a <strong>"[NOMBRE_BD]"</strong> las siguientes tablas <em>(importante: debe ser desde esa base, no otra)</em>:</p>
+          <table class="t-table" style="margin-bottom:12px;">
             <thead><tr>
               <th style="width:44px;">N°</th>
-              <th class="th-left" style="width:140px;">Tabla</th>
-              <th class="th-left">Contenido</th>
+              <th class="thl" style="width:140px;">Tabla</th>
+              <th class="thl">Contenido</th>
             </tr></thead>
             <tbody id="correo-body"></tbody>
           </table>
           <div class="email-env" id="env-preview">AMBIENTE : \\MANAGER.LOCAL\MG\[código]\MANAGER8\COMUNES\<br>BD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [código BD]</div>
-          <div style="font-size:12px;color:var(--text-3);font-style:italic;margin-bottom:10px;">Nota: La base nueva debe quedar actualizada a la última versión disponible del sistema.</div>
-          <div>Estaré atenta a sus comentarios. Saludos cordiales.</div>
+          <p style="font-size:12px;color:var(--text-3);font-style:italic;margin-bottom:10px;">Nota: La base nueva debe quedar actualizada a la última versión disponible del sistema.</p>
+          <p>Estaré atenta a sus comentarios. Saludos cordiales.</p>
         </div>
       </div>
     </div>
 
-    <!-- S4 VERIFICACION -->
+    <!-- S4: VERIFICACION -->
     <div class="section" id="s4">
-      <div class="sec-header"><div class="sec-num">4</div><div class="sec-title">Verificación Post-Creación – Consultoría Técnica</div></div>
-      <div class="sec-desc">Una vez que IT confirma la creación de la BD, Consultoría Técnica verifica los siguientes puntos antes de presentar la BD al cliente.</div>
+      <div class="sec-header"><div class="sec-num">4</div><div class="sec-title">Verificación Post-Creación – Proyectos Onboarding</div></div>
+      <div class="sec-desc">Una vez que IT confirma la creación de la BD, Proyectos Onboarding verifica los siguientes puntos antes de presentar la BD al cliente.</div>
+
+      <div class="sub-title">4.1 Verificación Interna</div>
       <table class="verif-table">
         <thead><tr>
-          <th>Verificación</th>
+          <th>Verificación Proyectos Onboarding</th>
           <th class="th-si" style="width:70px;">SÍ</th>
           <th class="th-no" style="width:70px;">NO</th>
           <th style="width:160px;">Observaciones</th>
         </tr></thead>
-        <tbody id="verif-body"></tbody>
+        <tbody id="verif-body-1"></tbody>
       </table>
-      <div class="alert alert-orange" style="margin-top:14px;">
+      <div class="alert alert-orange">
         <span class="alert-icon">⚠</span>
-        <div><strong>Formatos de impresión:</strong> si el cliente cuenta con formatos especiales, el consultor debe comparar con la BD anterior y activar los formatos requeridos antes de continuar.</div>
+        <div>Si el cliente tiene formatos personalizados (facturas, guías, órdenes de compra), comparar con la BD original y habilitar los requeridos antes de avanzar.</div>
       </div>
+
+      <div class="sub-title">4.2 Puntos a Verificar con el Cliente</div>
+      <table class="verif-table">
+        <thead><tr>
+          <th>Verificación con el Cliente</th>
+          <th class="th-si" style="width:70px;">SÍ</th>
+          <th class="th-no" style="width:70px;">NO</th>
+          <th style="width:160px;">Observaciones</th>
+        </tr></thead>
+        <tbody id="verif-body-2"></tbody>
+      </table>
     </div>
 
-    <!-- S5 SESIONES -->
+    <!-- S5: SESIONES -->
     <div class="section" id="s5">
-      <div class="sec-header"><div class="sec-num">5</div><div class="sec-title">Sesiones Mínimas – Reimplementación</div></div>
-      <div class="sec-desc">Sesiones mínimas para la reimplementación de <strong>1 BD</strong> (solo configuración). Si el cliente necesita capacitación de algún módulo, debe venir especificado en la OT y las sesiones se agendan de forma separada.</div>
-      <table class="sessions-table">
+      <div class="sec-header"><div class="sec-num">5</div><div class="sec-title">Sesiones Requeridas – Reimplementación</div></div>
+      <div class="sec-desc">Sesiones mínimas para una reimplementación de BD (solo configuración, sin capacitación de módulos). Si el cliente requiere capacitación de algún módulo específico, se deben agendar sesiones adicionales.</div>
+      <table class="sess-table">
         <thead><tr>
           <th style="width:70px;text-align:center;">Sesión</th>
           <th style="width:200px;">Nombre</th>
           <th>Descripción</th>
-          <th style="width:160px;">Área Responsable</th>
+          <th style="width:90px;text-align:center;">Duración</th>
         </tr></thead>
         <tbody>
           <tr>
             <td style="text-align:center;"><div class="sess-num">1</div></td>
             <td><div class="sess-name">Levantamiento</div></td>
-            <td>Reunión inicial con el cliente para identificar necesidades, definir alcance de la reimplementación y acordar tablas a copiar. Se completa el Checklist Comercial.</td>
-            <td>GEX / Comercial + Cto. Técnica</td>
+            <td>Reunión inicial con el cliente para relevar sus necesidades, configuraciones actuales y definir el alcance de la reimplementación. Se completa el checklist comercial.</td>
+            <td style="text-align:center;color:var(--text-2);">2 hrs</td>
           </tr>
-          <tr style="background:#FAFBFD;">
+          <tr>
             <td style="text-align:center;"><div class="sess-num">2</div></td>
-            <td><div class="sess-name">Revisión BD</div></td>
-            <td>Verificación completa de la nueva BD creada por IT: tablas, parámetros, formatos, accesos y configuraciones base del sistema.</td>
-            <td>Consultoría Técnica</td>
+            <td><div class="sess-name">Revisión de BD</div></td>
+            <td>Proyectos Onboarding revisa la BD creada: tablas obligatorias, parámetros, formatos y accesos. Se verifica que la base esté correctamente configurada.</td>
+            <td style="text-align:center;color:var(--text-2);">2 hrs</td>
           </tr>
           <tr>
             <td style="text-align:center;"><div class="sess-num">3</div></td>
-            <td><div class="sess-name">Presentación Ciclo</div></td>
-            <td>Presentación de la BD al cliente y validación del ciclo completo de operación (compra, venta, stock, contabilidad según módulos contratados).</td>
-            <td>Consultoría Técnica + Cliente</td>
+            <td><div class="sess-name">Presentación de Ciclo</div></td>
+            <td>Se presenta al cliente el flujo completo del sistema. Se realizan pruebas funcionales internas para validar el correcto funcionamiento de la BD.</td>
+            <td style="text-align:center;color:var(--text-2);">2 hrs</td>
           </tr>
-          <tr style="background:#FAFBFD;">
+          <tr>
             <td style="text-align:center;"><div class="sess-num">4</div></td>
             <td><div class="sess-name">Explicación Importadores</div></td>
-            <td>Capacitación en el uso de importadores: carga masiva de inventario y carga contable para subir documentos en los distintos módulos del sistema.</td>
-            <td>Consultoría Técnica + Cliente</td>
+            <td>Se instruye al cliente sobre el uso de importadores para la carga masiva de datos: inventario, apertura contable y documentos en los distintos módulos.</td>
+            <td style="text-align:center;color:var(--text-2);">2 hrs</td>
           </tr>
           <tr>
             <td style="text-align:center;"><div class="sess-num">5</div></td>
             <td><div class="sess-name">Carga de Inventario</div></td>
-            <td>Apoyo en la carga del inventario inicial mediante el importador correspondiente. El cliente carga sus saldos actuales de stock.</td>
-            <td>Consultoría Técnica + Cliente</td>
+            <td>El cliente o el consultor realiza la carga del inventario inicial mediante el importador correspondiente. Se verifica la correcta recepción de los datos.</td>
+            <td style="text-align:center;color:var(--text-2);">2 hrs</td>
           </tr>
-          <tr style="background:#FAFBFD;">
+          <tr>
             <td style="text-align:center;"><div class="sess-num">6</div></td>
             <td><div class="sess-name">Carga Contable</div></td>
-            <td>Apoyo en la apertura contable: carga de saldos iniciales y documentos contables mediante el importador de contabilidad.</td>
-            <td>Consultoría Técnica + Cliente</td>
+            <td>Se realiza la apertura contable mediante el importador. Se validan los saldos iniciales y el plan de cuentas queda operativo.</td>
+            <td style="text-align:center;color:var(--text-2);">2 hrs</td>
           </tr>
           <tr>
             <td style="text-align:center;"><div class="sess-num">7</div></td>
             <td><div class="sess-name">Apoyo DTE</div><div class="sess-note">Solo si aplica Acepta</div></td>
-            <td>Verificación de certificados digitales, cesiones de factoring, rutas y parámetros web. Prueba de emisión de documento en el SII. Aplica solo si el cliente tiene contratado Acepta.</td>
-            <td>DTE + Cto. Técnica + Cliente</td>
+            <td>Solo si el cliente utiliza Acepta. Se configuran certificados digitales, rutas DTE y parámetros web. Se prueba la emisión de un documento electrónico en el SII.</td>
+            <td style="text-align:center;color:var(--text-2);">2 hrs</td>
           </tr>
-          <tr style="background:#FAFBFD;">
+          <tr>
             <td style="text-align:center;"><div class="sess-num">8</div></td>
             <td><div class="sess-name">Apoyo Puesta en Marcha</div></td>
-            <td>Acompañamiento al cliente en el inicio de operaciones con la nueva BD. Resolución de dudas y verificación de que el sistema funcione correctamente en producción.</td>
-            <td>Consultoría Técnica + Cliente</td>
+            <td>Acompañamiento al cliente en el inicio de operaciones en la nueva BD. Se resuelven dudas, se verifica el funcionamiento general y se cierra formalmente el proyecto.</td>
+            <td style="text-align:center;color:var(--text-2);">2 hrs</td>
           </tr>
         </tbody>
       </table>
+      <div class="alert alert-red" style="margin-top:12px;">
+        <span class="alert-icon">⚠</span>
+        <div>La sesión 7 (Apoyo DTE) aplica únicamente si el cliente utiliza Acepta para facturación electrónica.</div>
+      </div>
     </div>
 
-    <!-- S6 APROBACIONES -->
+    <!-- S6: APROBACIONES -->
     <div class="section" id="s6">
       <div class="sec-header"><div class="sec-num">6</div><div class="sec-title">Aprobaciones</div></div>
       <div class="aprov-grid">
@@ -343,6 +366,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
   </div>
 </div>
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
 <script>
 const TABLAS=[
   ["1","ACCESS","Control de acceso y permisos de usuarios",true],
@@ -366,38 +390,29 @@ const TABLAS=[
   ["19","COMUNAS_DB","Tabla de comunas y regiones",false],
   ["20","CONTA_DB","Contactos de clientes y proveedores",false],
   ["21","RECET_DB","Recetas / fórmulas de producción",false],
-  ["*","DESCT_DB","Descuentos y valor LP — solo si aplica al cliente",false],
+  ["22","DESCT_DB","Descuentos configurados y valor de la LP (incluir solo si aplica)",false],
 ];
-const VERIF=["BD creada con el nombre correcto en el ambiente indicado","Descripción correcta — verificar en Juegos de Datos del sistema","Todas las tablas solicitadas fueron copiadas desde la BD de origen correcta","Las tablas obligatorias están presentes en la nueva BD","BD actualizada a la última versión disponible del sistema","Acceso confirmado desde el entorno ASP (ingresar con credenciales del cliente)","Formatos de impresión especiales configurados correctamente (si aplica)","Revisión de parámetros internos del sistema","Funcionamiento FTP (verificar configuración y conectividad)","Accesos Ramaflex (verificar acceso y permisos)","Prueba de ciclos interna (validar flujo completo de operación)"];
-function cb(type){return `<div class="cb-${type}" onclick="toggleCb(this,'${type}')"></div>`;}
+const VERIF1=["BD creada con el nombre correcto en el ambiente indicado","Descripción correcta — verificar en Juegos de Datos del sistema","Todas las tablas solicitadas fueron copiadas desde la BD de origen correcta","Las tablas obligatorias están presentes en la nueva BD","BD actualizada a la última versión disponible del sistema","Acceso confirmado desde el entorno ASP o Ramaflex (ingresar con credenciales del cliente)","Formatos de impresión configurados correctamente (si aplica, habilitarlos antes de continuar)","Revisión de parámetros internos del sistema","Funcionamiento FTP (verificar configuración y conectividad)","Prueba de ciclos (validar flujo completo de operación)"];
+const VERIF2=["Presentación de la nueva BD al cliente","Explicación de importadores al cliente (inventario, apertura contable, carga de documentos)","Carga de inventario valorizado","Apertura contable"];
+function cb(t){return`<div class="cb-${t}" onclick="toggleCb(this,'${t}')"></div>`;}
 function renderTablas(){
   document.getElementById('tablas-body').innerHTML=TABLAS.map((r,i)=>{
-    const ob=r[3];const opc=r[0]==='*';
-    const shade=i%2===1?'background:#FAFBFD;':'';
-    return`<tr>
-      <td style="${shade};font-family:var(--mono);font-size:12px;font-weight:600;color:${opc?'#bbb':'var(--navy)'};text-align:center;">${r[0]}</td>
-      <td style="${shade}" class="td-cod ${opc?'td-opc':''}">${r[1]}</td>
-      <td style="${shade}" class="td-left ${opc?'td-opc':''}">${r[2]}</td>
-      <td style="${shade};text-align:center;">${ob?'<span class="ob-badge">✔ SÍ</span>':'—'}</td>
-      <td style="${shade};background:${i%2===1?'#E4F3EA':'#F0FAF4'};">${cb('si')}</td>
-      <td style="${shade};background:${i%2===1?'#F8E8EA':'#FFF0F2'};">${cb('no')}</td>
-    </tr>`;
+    const ob=r[3];const rc=ob?'ob-row':'';const shade=(!ob&&i%2===1)?'background:#FAFBFD;':'';
+    return`<tr class="${rc}"><td style="${shade};font-family:var(--mono);font-size:12px;font-weight:600;color:var(--navy);text-align:center;">${r[0]}</td><td style="${shade}" class="tdc">${r[1]}</td><td style="${shade}" class="tdl">${r[2]}</td><td style="${shade};text-align:center;">${ob?'<span class="ob-b">✔ SÍ</span>':'—'}</td><td style="${shade};">${cb('si')}</td><td style="${shade};">${cb('no')}</td></tr>`;
   }).join('');
   document.getElementById('correo-body').innerHTML=TABLAS.map((r,i)=>{
-    const ob=r[3];const opc=r[0]==='*';
-    const shade=i%2===1?'background:#FAFBFD;':'';
-    return`<tr><td style="${shade};text-align:center;font-family:var(--mono);font-size:11px;color:${opc?'#bbb':'var(--navy)'};">${r[0]}</td><td style="${shade}" class="td-cod ${opc?'td-opc':''}">${r[1]}${ob?' <span style="font-size:9px;color:#C47A10;">(OBL)</span>':''}</td><td style="${shade}" class="td-left ${opc?'td-opc':''}">${r[2]}</td></tr>`;
+    const ob=r[3];const rc=ob?'ob-row':'';const shade=(!ob&&i%2===1)?'background:#FAFBFD;':'';
+    return`<tr class="${rc}"><td style="${shade};text-align:center;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--navy);">${r[0]}</td><td style="${shade}" class="tdc">${r[1]}${ob?' <span style="font-size:9px;color:var(--orange);">(OBL)</span>':''}</td><td style="${shade}" class="tdl">${r[2]}</td></tr>`;
   }).join('');
 }
-function renderVerif(){
-  document.getElementById('verif-body').innerHTML=VERIF.map((v,i)=>{
+function renderVerif(items,id){
+  document.getElementById(id).innerHTML=items.map((v,i)=>{
     const shade=i%2===1?'background:#FAFBFD;':'';
     return`<tr><td style="${shade}">${v}</td><td style="${shade};background:${i%2===1?'#E4F3EA':'#F0FAF4'};">${cb('si')}</td><td style="${shade};background:${i%2===1?'#F8E8EA':'#FFF0F2'};">${cb('no')}</td><td style="${shade}"></td></tr>`;
   }).join('');
 }
-function toggleCb(el,type){
-  const row=el.closest('tr');
-  const opp=type==='si'?'no':'si';
+function toggleCb(el,t){
+  const row=el.closest('tr');const opp=t==='si'?'no':'si';
   row.querySelectorAll(`.cb-${opp}`).forEach(e=>e.classList.remove('on'));
   el.classList.toggle('on');
 }
@@ -410,7 +425,9 @@ document.getElementById('inp-amb').addEventListener('input',syncEnv);
 document.getElementById('inp-bd').addEventListener('input',syncEnv);
 function setActive(el){document.querySelectorAll('.sb-nav').forEach(i=>i.classList.remove('active'));el.classList.add('active');}
 window.addEventListener('scroll',()=>{document.getElementById('back-top').classList.toggle('visible',window.scrollY>300);},{passive:true});
-renderTablas();renderVerif();
+renderTablas();
+renderVerif(VERIF1,'verif-body-1');
+renderVerif(VERIF2,'verif-body-2');
 </script>
 </body>
 </html>
