@@ -251,6 +251,21 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
     <span class="sb-item-badge">v4</span>
   </div>
 
+  <div class="sb-section">
+    Área Comercial
+    <span class="sb-section-add" title="Agregar">+</span>
+  </div>
+  <div class="sb-item" onclick="openDoc('guia_comercial.html','Guía Comercial · Creación BD',this)">
+    <div class="sb-dot" style="background:#00C896;"></div>
+    Guía Creación BD
+    <span class="sb-item-badge">nuevo</span>
+  </div>
+  <div class="sb-item" onclick="openDoc('formulario_levantamiento.html','Formulario de Levantamiento',this)">
+    <div class="sb-dot" style="background:#F5A623;"></div>
+    Formulario Levantamiento
+    <span class="sb-item-badge">nuevo</span>
+  </div>
+
   <div class="sb-section">Áreas</div>
   <div class="sb-item" onclick="showView('areas',this)">
     <div class="sb-dot" style="background:rgba(255,255,255,0.3);"></div>
@@ -309,9 +324,9 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
       <!-- STATS -->
       <div class="stats-row">
         <div class="stat-card">
-          <div class="stat-n">3</div>
-          <div class="stat-l">Procedimientos publicados</div>
-          <div class="stat-sub">Migración ASP + Solicitud BD + Reimplementación</div>
+          <div class="stat-n">5</div>
+          <div class="stat-l">Documentos publicados</div>
+          <div class="stat-sub">Procedimientos + Guías + Área Comercial</div>
         </div>
         <div class="stat-card">
           <div class="stat-n">1</div>
@@ -464,6 +479,47 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
           </div>
         </div>
 
+      </div>
+
+
+      <div class="sec-title">Área Comercial</div>
+      <div class="docs-grid" style="margin-bottom:36px;">
+        <div class="doc-card">
+          <div class="doc-card-stripe" style="background:linear-gradient(90deg,#00A08A,#00C896);"></div>
+          <div class="doc-card-body">
+            <div class="doc-card-type" style="background:#E6FAF5;color:#00836F;">🗺 Guía Visual</div>
+            <div class="doc-card-title">Guía Comercial · Creación Nueva BD</div>
+            <div class="doc-card-desc">Guía visual paso a paso para el área Comercial. Muestra qué hace Comercial, qué hace IT y qué hace Onboarding. Incluye checklist interactivo y preguntas frecuentes.</div>
+            <div class="doc-card-meta">
+              <span class="doc-status status-vigente">● Vigente</span>
+              <span class="doc-meta-pill">4 pasos</span>
+              <span class="doc-meta-pill">Visual</span>
+              <span class="doc-meta-pill">Nuevo</span>
+            </div>
+          </div>
+          <div class="doc-card-footer">
+            <div class="doc-card-code">GUI-COM-BD-001</div>
+            <a href="#" onclick="openDoc('guia_comercial.html','Guía Comercial · Creación BD',null);return false;" class="doc-card-link">Abrir →</a>
+          </div>
+        </div>
+        <div class="doc-card">
+          <div class="doc-card-stripe" style="background:linear-gradient(90deg,#F5A623,#F7C84A);"></div>
+          <div class="doc-card-body">
+            <div class="doc-card-type" style="background:#FEF8E6;color:#C47A10;">📋 Formulario</div>
+            <div class="doc-card-title">Formulario de Levantamiento</div>
+            <div class="doc-card-desc">Formulario interactivo para completar con el cliente durante la reunión. Al terminar genera automáticamente el correo listo para enviar a IT con un solo clic.</div>
+            <div class="doc-card-meta">
+              <span class="doc-status status-vigente">● Vigente</span>
+              <span class="doc-meta-pill">22 tablas</span>
+              <span class="doc-meta-pill">Genera correo a IT</span>
+              <span class="doc-meta-pill">Nuevo</span>
+            </div>
+          </div>
+          <div class="doc-card-footer">
+            <div class="doc-card-code">FOR-COM-LEV-001</div>
+            <a href="#" onclick="openDoc('formulario_levantamiento.html','Formulario de Levantamiento',null);return false;" class="doc-card-link">Abrir →</a>
+          </div>
+        </div>
       </div>
 
     </div><!-- /view-home -->
