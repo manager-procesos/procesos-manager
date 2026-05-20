@@ -320,6 +320,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;">📨 Correo listo para copiar y enviar a IT</div>
       <div class="summ-email" id="email-preview"></div>
       <button class="copy-btn" id="copy-btn" onclick="copyEmail()">📋 Copiar correo</button>
+      <button class="copy-btn" onclick="downloadResumen()" style="background:var(--green);margin-left:8px;">⬇ Descargar resumen</button>
     </div>
   </div>
 
@@ -519,6 +520,113 @@ function copyEmail(){
 // Init
 renderTablas();
 updateProgress();
+
+function downloadResumen() {
+  const v = id => document.getElementById(id)?.value || '';
+  const cliente = v('f-razon') || 'Cliente';
+  const fecha = new Date().toLocaleDateString('es-CL').replace(/\//g,'-');
+  const fname = `Levantamiento_${cliente.replace(/[^a-zA-Z0-9]/g,'_')}_${fecha}.html`;
+
+  const selTablas = TABLAS.filter((t,i) => t.ob || document.getElementById('si-'+i)?.classList.contains('on'));
+
+  const getToggle = group => {
+    const opts = document.querySelectorAll(`[onclick*="'${group}'"]`);
+    for(const o of opts){
+      if(o.classList.contains('selected-green')) return 'Sí';
+      if(o.classList.contains('selected-red')) return 'No';
+      if(o.classList.contains('selected')) return o.textContent.trim();
+    }
+    return '—';
+  };
+
+  const emailText = document.getElementById('email-preview')?.textContent || '';
+
+  const html = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Levantamiento – ${cliente} – ${fecha}</title>
+<style>
+  body{font-family:'Segoe UI',Arial,sans-serif;max-width:760px;margin:40px auto;padding:0 24px;color:#18243C;font-size:14px;line-height:1.6;}
+  .header{background:#1F3864;color:#fff;padding:24px 28px;border-radius:12px;margin-bottom:28px;}
+  .header h1{font-size:20px;margin:0 0 4px;}
+  .header p{font-size:12px;color:rgba(255,255,255,.6);margin:0;}
+  .section{margin-bottom:24px;}
+  .sec-title{font-size:13px;font-weight:700;color:#8898B8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #DDE4EE;}
+  .row{display:flex;gap:8px;margin-bottom:6px;}
+  .lbl{color:#8898B8;font-size:12.5px;width:180px;flex-shrink:0;}
+  .val{font-weight:600;color:#18243C;}
+  .tabla-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;}
+  .tabla-tag{background:#EEF3FC;color:#1F3864;font-family:monospace;font-size:11.5px;font-weight:700;padding:4px 8px;border-radius:6px;border:1px solid #B4C6E7;}
+  .tabla-tag.ob{background:#FFF3E0;color:#C47A10;border-color:#F0C898;}
+  .email-box{background:#F7FAFD;border:1px solid #DDE4EE;border-radius:8px;padding:16px;font-family:monospace;font-size:12px;white-space:pre-wrap;line-height:1.8;color:#4A5A78;}
+  .footer{margin-top:36px;padding-top:16px;border-top:1px solid #DDE4EE;font-size:11px;color:#8898B8;text-align:center;}
+  .chip{display:inline-block;background:#E6F4EC;color:#0A6A32;font-size:11px;padding:2px 8px;border-radius:8px;margin-left:6px;font-weight:600;}
+  @media print{body{margin:20px;}.header{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Formulario de Levantamiento</h1>
+  <p>Creación Nueva BD (Réplica) · Generado el ${new Date().toLocaleString('es-CL')} · Manager ERP</p>
+</div>
+
+<div class="section">
+  <div class="sec-title">Datos del Cliente</div>
+  <div class="row"><span class="lbl">Razón Social</span><span class="val">${v('f-razon') || '—'}</span></div>
+  <div class="row"><span class="lbl">RUT</span><span class="val">${v('f-rut') || '—'}</span></div>
+  <div class="row"><span class="lbl">Contacto</span><span class="val">${v('f-contacto') || '—'}</span></div>
+  <div class="row"><span class="lbl">Correo</span><span class="val">${v('f-email') || '—'}</span></div>
+  <div class="row"><span class="lbl">Teléfono</span><span class="val">${v('f-tel') || '—'}</span></div>
+</div>
+
+<div class="section">
+  <div class="sec-title">Base de Datos</div>
+  <div class="row"><span class="lbl">BD Nueva</span><span class="val" style="font-family:monospace">${v('f-bdnueva') || '—'}</span></div>
+  <div class="row"><span class="lbl">Descripción</span><span class="val">${v('f-desc') || '—'}</span></div>
+  <div class="row"><span class="lbl">BD Origen</span><span class="val" style="font-family:monospace">${v('f-bdorigen') || '—'}</span></div>
+  <div class="row"><span class="lbl">Ambiente</span><span class="val" style="font-family:monospace;font-size:12px">${v('f-ambiente') || '—'}</span></div>
+  <div class="row"><span class="lbl">Código BD</span><span class="val" style="font-family:monospace">${v('f-codigo') || '—'}</span></div>
+  <div class="row"><span class="lbl">Módulos</span><span class="val">${v('f-modulos') || '—'}</span></div>
+</div>
+
+<div class="section">
+  <div class="sec-title">Condiciones</div>
+  <div class="row"><span class="lbl">IT Interno</span><span class="val">${getToggle('it-interno')}</span></div>
+  <div class="row"><span class="lbl">Factura con Acepta</span><span class="val">${getToggle('acepta')}</span></div>
+  <div class="row"><span class="lbl">Formatos personalizados</span><span class="val">${getToggle('formatos')}</span></div>
+  <div class="row"><span class="lbl">Más de una BD</span><span class="val">${getToggle('mas-bd')}</span></div>
+  <div class="row"><span class="lbl">Fecha estimada</span><span class="val">${v('f-fecha') || '—'}</span></div>
+  <div class="row"><span class="lbl">Observaciones</span><span class="val">${v('f-obs') || '—'}</span></div>
+</div>
+
+<div class="section">
+  <div class="sec-title">Tablas Seleccionadas (${selTablas.length})</div>
+  <div class="tabla-grid">
+    ${selTablas.map(t => `<div class="tabla-tag ${t.ob ? 'ob' : ''}">${t.cod}${t.ob ? ' ★' : ''}</div>`).join('')}
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-title">Correo para IT</div>
+  <div class="email-box">${emailText}</div>
+</div>
+
+<div class="footer">
+  Manager ERP · Formulario generado automáticamente · Uso interno
+</div>
+</body>
+</html>`;
+
+  const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fname;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 </script>
 </body>
 </html>
