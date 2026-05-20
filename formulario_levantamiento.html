@@ -235,7 +235,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       </div>
       <div class="field">
         <div class="field-label">Módulos contratados en ASP</div>
-        <input type="text" id="f-modulos" placeholder="Ej: Facturación, Inventario, Contabilidad" oninput="updateProgress()">
+        <div class="toggle-group" style="flex-wrap:wrap;gap:8px;margin-top:4px;" id="modulos-group">
+          <div class="toggle-opt" onclick="toggleModulo(this)"><div class="toggle-dot"></div>Abastecimiento</div>
+          <div class="toggle-opt" onclick="toggleModulo(this)"><div class="toggle-dot"></div>Existencias</div>
+          <div class="toggle-opt" onclick="toggleModulo(this)"><div class="toggle-dot"></div>Producción</div>
+          <div class="toggle-opt" onclick="toggleModulo(this)"><div class="toggle-dot"></div>Servicios</div>
+          <div class="toggle-opt" onclick="toggleModulo(this)"><div class="toggle-dot"></div>Ventas</div>
+          <div class="toggle-opt" onclick="toggleModulo(this)"><div class="toggle-dot"></div>Finanzas</div>
+          <div class="toggle-opt" onclick="toggleModulo(this)"><div class="toggle-dot"></div>Gestión Comercial</div>
+          <div class="toggle-opt" onclick="toggleModulo(this)"><div class="toggle-dot"></div>Gestión Financiera</div>
+        </div>
       </div>
     </div>
   </div>
@@ -508,13 +517,7 @@ Estaré atenta a sus comentarios. Saludos cordiales.`;
 }
 
 function copyEmail(){
-  const emailEl = document.getElementById('email-preview');
-  let text = emailEl?.textContent || '';
-  if(!text.trim()){
-    // Generate on the fly if summary not yet shown
-    generateSummary();
-    text = document.getElementById('email-preview')?.textContent || '';
-  }
+  let text = buildEmail();
   navigator.clipboard.writeText(text).then(()=>{
     const btn=document.getElementById('copy-btn');
     btn.textContent='✓ Copiado!';
@@ -523,6 +526,61 @@ function copyEmail(){
   });
 }
 
+function toggleModulo(el){
+  el.classList.toggle('selected-green');
+  updateProgress();
+}
+function getModulos(){
+  const sel=[...document.querySelectorAll('#modulos-group .toggle-opt.selected-green')].map(o=>o.textContent.trim());
+  return sel.length?sel.join(', '):'—';
+}
+function buildEmail(){
+  const v=id=>document.getElementById(id)?.value||'';
+  const selTablas=TABLAS.filter((t,i)=>t.ob||document.getElementById('si-'+i)?.classList.contains('on'));
+  const tablasList=selTablas.map((t,i)=>`${i+1}. ${t.cod} — ${t.desc}`).join('\n');
+  const getToggle=group=>{
+    const opts=document.querySelectorAll('[onclick*="''+group+''"]');
+    for(const o of opts){
+      if(o.classList.contains('selected-green'))return'Sí';
+      if(o.classList.contains('selected-red'))return'No';
+      if(o.classList.contains('selected'))return o.textContent.trim();
+    }
+    return'—';
+  };
+  const otrasBD=v('f-otras-bd');
+  const masBD=getToggle('mas-bd');
+  const masBDLine=masBD==='Sí'&&otrasBD?`\nOtras BD: ${otrasBD}`:'';
+  return `Para: it@manager.cl
+Asunto: Solicitud Creación BD – ${v('f-razon')||'[CLIENTE]'} – ${v('f-bdnueva')||'[BD]'}
+Área Solicitante: Comercial / GEX
+
+Estimados, muy buenas tardes,
+
+Junto con saludar, solicito lo siguiente:
+
+── DATOS GENERALES ──────────────────────────
+Cliente      : ${v('f-razon')||'—'}
+RUT          : ${v('f-rut')||'—'}
+Módulos ASP  : ${getModulos()}
+¿Más de 1 BD?: ${masBD}${masBDLine}
+
+── SOLICITUD BD ─────────────────────────────
+1. Crear base denominada "${v('f-bdnueva')||'[NOMBRE_BD]'}"
+   Descripción : ${v('f-desc')||'[descripción — máx. 30 caracteres]'}
+
+2. Copiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a "${v('f-bdnueva')||'[NOMBRE_BD]'}"
+   las siguientes tablas (debe ser desde esa base, no otra):
+
+${tablasList}
+
+── AMBIENTE ─────────────────────────────────
+AMBIENTE : ${v('f-ambiente')||'[ruta del ambiente]'}
+BD       : ${v('f-codigo')||'[código BD]'}
+
+Nota: La base nueva debe quedar actualizada a la última versión disponible.
+
+Estaré atenta a sus comentarios. Saludos cordiales.`;
+}
 // Init
 renderTablas();
 updateProgress();
@@ -618,7 +676,7 @@ Estaré atenta a sus comentarios. Saludos cordiales.`;
   <div class="row"><span class="lbl">BD Origen</span><span class="val" style="font-family:monospace">${v('f-bdorigen') || '—'}</span></div>
   <div class="row"><span class="lbl">Ambiente</span><span class="val" style="font-family:monospace;font-size:12px">${v('f-ambiente') || '—'}</span></div>
   <div class="row"><span class="lbl">Código BD</span><span class="val" style="font-family:monospace">${v('f-codigo') || '—'}</span></div>
-  <div class="row"><span class="lbl">Módulos</span><span class="val">${v('f-modulos') || '—'}</span></div>
+  <div class="row"><span class="lbl">Módulos</span><span class="val">${getModulos()}</span></div>
 </div>
 
 <div class="section">
