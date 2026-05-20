@@ -506,7 +506,7 @@ ${tablasList}
 Nota: La base nueva debe quedar actualizada a la última versión disponible del sistema.
 
 AMBIENTE : ${v('f-ambiente')||'[ruta del ambiente]'}
-BD       : ${v('f-codigo')||'[código BD]'}
+BD       : ${(v('f-codigo')||'[código BD]').split('//')[0].trim()}
 
 Estaré atenta a sus comentarios. Saludos cordiales.`;
 
@@ -572,7 +572,7 @@ Junto con saludar, solicito lo siguiente:
 ${bdBlock}${adicionalBlock}
 
 AMBIENTE : ${v('f-ambiente')||'[ruta del ambiente]'}
-BD       : ${v('f-codigo')||'[código BD]'}
+BD       : ${(v('f-codigo')||'[código BD]').split('//')[0].trim()}
 
 Copiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a ${bdRef} las siguientes tablas (debe ser desde esa base, no otra):
 
@@ -626,7 +626,7 @@ ${tablasList}
 Nota: La base nueva debe quedar actualizada a la última versión disponible del sistema.
 
 AMBIENTE : ${v('f-ambiente')||'[ruta del ambiente]'}
-BD       : ${v('f-codigo')||'[código BD]'}
+BD       : ${(v('f-codigo')||'[código BD]').split('//')[0].trim()}
 
 Estaré atenta a sus comentarios. Saludos cordiales.`;
     })();
