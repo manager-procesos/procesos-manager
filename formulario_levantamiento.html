@@ -508,7 +508,13 @@ Estaré atenta a sus comentarios. Saludos cordiales.`;
 }
 
 function copyEmail(){
-  const text=document.getElementById('email-preview').textContent;
+  const emailEl = document.getElementById('email-preview');
+  let text = emailEl?.textContent || '';
+  if(!text.trim()){
+    // Generate on the fly if summary not yet shown
+    generateSummary();
+    text = document.getElementById('email-preview')?.textContent || '';
+  }
   navigator.clipboard.writeText(text).then(()=>{
     const btn=document.getElementById('copy-btn');
     btn.textContent='✓ Copiado!';
@@ -539,7 +545,32 @@ function downloadResumen() {
     return '—';
   };
 
-  const emailText = document.getElementById('email-preview')?.textContent || '';
+  const emailText = document.getElementById('email-preview')?.textContent ||
+    (() => {
+      const tablasList = selTablas.map((t,i) => `${i+1}. ${t.cod}${t.ob?' (OBLIGATORIA)':''} — ${t.desc}`).join('\n');
+      return `Para: it@manager.cl
+Asunto: Solicitud Creación BD – ${v('f-razon')||'[CLIENTE]'} – ${v('f-bdnueva')||'[BD]'}
+Área Solicitante: Comercial / GEX
+
+Estimados, muy buenas tardes,
+
+Junto con saludar, solicito lo siguiente:
+
+1. Crear base denominada "${v('f-bdnueva')||'[NOMBRE_BD]'}" y en el campo "Descripción" indicar:
+   ${v('f-desc')||'[descripción]'}
+
+2. Copiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a "${v('f-bdnueva')||'[NOMBRE_BD]'}" las siguientes tablas
+   (importante: debe ser desde esa base, no otra):
+
+${tablasList}
+
+Nota: La base nueva debe quedar actualizada a la última versión disponible del sistema.
+
+AMBIENTE : ${v('f-ambiente')||'[ruta del ambiente]'}
+BD       : ${v('f-codigo')||'[código BD]'}
+
+Estaré atenta a sus comentarios. Saludos cordiales.`;
+    })();
 
   const html = `<!DOCTYPE html>
 <html lang="es">
