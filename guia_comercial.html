@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Guía Comercial · Creación Nueva BD (Réplica)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1F3864;--blue:#2E6DA4;--sky:#00B0F0;--bg:#F0F4FA;--card:#fff;--border:#DDE4EE;--text:#18243C;--text-2:#4A5A78;--text-3:#8898B8;--green:#1A6B42;--red:#C0001A;--orange:#C47A10;--purple:#5B2C8D;--font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--disp:'Fraunces',Georgia,serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* TOP BAR */
+.topbar{background:var(--navy);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;}
+.tb-logo{display:flex;align-items:center;gap:10px;}
+.tb-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--sky),var(--blue));border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;}
+.tb-name{font-size:15px;font-weight:600;color:#fff;}
+.tb-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px;}
+.tb-badge{background:rgba(0,176,240,.2);color:var(--sky);font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;border:1px solid rgba(0,176,240,.3);}
+.tb-back{color:rgba(255,255,255,.5);font-size:12px;text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .15s;}
+.tb-back:hover{color:#fff;}
+.tb-back::before{content:'←';}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1F3864 0%,#2557A7 60%,#3A72B0 100%);padding:52px 40px 44px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;left:50%;top:-80px;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;background:rgba(0,176,240,.06);}
+.hero-tag{display:inline-block;background:rgba(0,176,240,.2);color:var(--sky);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 12px;border-radius:20px;border:1px solid rgba(0,176,240,.3);margin-bottom:16px;}
+.hero-title{font-family:var(--disp);font-size:38px;color:#fff;line-height:1.15;margin-bottom:12px;}
+.hero-title em{color:rgba(255,255,255,.55);font-style:italic;}
+.hero-desc{color:rgba(255,255,255,.65);font-size:15px;max-width:540px;margin:0 auto 24px;}
+.hero-chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.hchip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);font-size:12px;padding:5px 14px;border-radius:20px;font-weight:500;}
+.hchip-sky{background:rgba(0,176,240,.2);border-color:rgba(0,176,240,.35);color:var(--sky);}
+
+/* SECTIONS */
+.section{padding:48px 40px;max-width:1100px;margin:0 auto;}
+.sec-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--sky);text-transform:uppercase;margin-bottom:8px;}
+.sec-title{font-size:26px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.sec-desc{color:var(--text-2);font-size:15px;line-height:1.65;margin-bottom:32px;max-width:680px;}
+
+/* STEPS CARDS */
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative;}
+.steps-grid::before{content:'';position:absolute;top:44px;left:calc(12.5% + 8px);right:calc(12.5% + 8px);height:2px;background:linear-gradient(90deg,var(--sky),var(--blue));z-index:0;}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 20px;text-align:center;position:relative;z-index:1;transition:transform .2s,box-shadow .2s;}
+.step-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(30,50,100,.12);}
+.step-card.yours{border-top:3px solid var(--sky);}
+.step-card.theirs{border-top:3px solid var(--border);opacity:.7;}
+.step-icon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 14px;box-shadow:0 4px 12px rgba(0,0,0,.1);}
+.step-num{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:var(--mono);}
+.step-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.step-desc{font-size:12.5px;color:var(--text-2);line-height:1.5;margin-bottom:12px;}
+.step-tag{display:inline-block;font-size:10px;font-weight:600;padding:3px 10px;border-radius:10px;}
+.tag-you{background:#EEF3FC;color:var(--navy);}
+.tag-it{background:#FEF0E6;color:var(--brown,#7B3F00);}
+.tag-onb{background:#E8F4EE;color:var(--green);}
+.tag-cli{background:#F4EEF8;color:var(--purple);}
+.step-result{margin-top:10px;padding:7px 10px;background:var(--bg);border-radius:8px;font-size:11.5px;color:var(--text-3);border-left:2px solid var(--border);}
+.step-result::before{content:'→ ';font-weight:600;}
+
+/* RESPONSIBILITY BANNER */
+.resp-banner{background:linear-gradient(135deg,#EEF3FC,#E0EAFA);border:1px solid var(--border);border-radius:16px;padding:28px 32px;margin-bottom:48px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+.rb-icon{width:56px;height:56px;background:var(--navy);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.rb-title{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:4px;}
+.rb-desc{font-size:14px;color:var(--text-2);line-height:1.55;}
+
+/* CHECKLIST VISUAL */
+.cl-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.cl-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(30,50,100,.06);}
+.cl-head{padding:14px 18px;display:flex;align-items:center;gap:10px;color:#fff;}
+.cl-head-icon{font-size:18px;}
+.cl-head-title{font-size:13px;font-weight:700;}
+.cl-items{padding:8px 0;}
+.cl-item{display:flex;align-items:center;gap:10px;padding:9px 18px;cursor:pointer;transition:background .1s;border-bottom:1px solid #F5F7FC;}
+.cl-item:last-child{border-bottom:none;}
+.cl-item:hover{background:#F8FAFD;}
+.cl-cb{width:18px;height:18px;border:2px solid var(--border);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.cl-item.done .cl-cb{background:var(--navy);border-color:var(--navy);}
+.cl-item.done .cl-cb::after{content:'✓';color:#fff;font-size:11px;font-weight:700;}
+.cl-item.done .cl-text{text-decoration:line-through;color:var(--text-3);}
+.cl-text{font-size:13px;color:var(--text-2);line-height:1.4;}
+.cl-prog{padding:12px 18px;border-top:1px solid var(--border);background:#FAFBFD;}
+.cl-prog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-bottom:5px;}
+.cl-prog-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.cl-prog-fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--sky));border-radius:3px;transition:width .3s;}
+
+/* CTA */
+.cta-section{background:linear-gradient(135deg,var(--navy),#2557A7);border-radius:20px;padding:40px;text-align:center;margin:0 40px 60px;}
+.cta-title{font-family:var(--disp);font-size:26px;color:#fff;margin-bottom:10px;}
+.cta-desc{color:rgba(255,255,255,.65);font-size:14px;margin-bottom:24px;}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--navy);font-size:14px;font-weight:700;padding:12px 28px;border-radius:12px;text-decoration:none;transition:all .2s;cursor:pointer;border:none;font-family:var(--font);}
+.cta-btn:hover{background:var(--sky);color:#fff;transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.15);}
+
+/* FLOW HORIZONTAL */
+.flow-row{display:flex;align-items:stretch;gap:0;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:32px;}
+.flow-col{flex:1;padding:18px 16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:6px;}
+.flow-col:last-child{border-right:none;}
+.flow-day{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:4px;display:inline-block;margin-bottom:4px;width:fit-content;}
+.flow-who{font-size:12px;font-weight:700;line-height:1.2;}
+.flow-what{font-size:11.5px;color:var(--text-2);line-height:1.4;}
+.flow-note{background:#EAF7F0;border:1px solid #A8DCBC;border-radius:10px;padding:12px 18px;font-size:13px;color:#0A5A30;display:flex;align-items:center;gap:10px;}
+.flow-note::before{content:'★';font-size:14px;}
+
+/* ACCORDION */
+.faq-item{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;}
+.faq-q{padding:16px 20px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
+.faq-q:hover{background:#F8FAFD;}
+.faq-arrow{font-size:12px;color:var(--text-3);transition:transform .2s;}
+.faq-item.open .faq-arrow{transform:rotate(180deg);}
+.faq-a{display:none;padding:0 20px 16px;font-size:13.5px;color:var(--text-2);line-height:1.65;border-top:1px solid var(--border);}
+.faq-item.open .faq-a{display:block;}
+
+#back-top{position:fixed;bottom:24px;right:24px;width:40px;height:40px;background:var(--navy);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .2s;font-size:16px;box-shadow:0 4px 16px rgba(30,50,100,.2);z-index:300;border:none;}
+#back-top.visible{opacity:1;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="tb-logo">
+    <div class="tb-mark">M</div>
+    <div>
+      <div class="tb-name">Manager ERP</div>
+      <div class="tb-sub">Área Comercial · Guía Operativa</div>
+    </div>
+  </div>
+  <a class="tb-back" href="portal.html">Volver al Portal</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Guía para el Área Comercial</div>
+  <div class="hero-title">Creación Nueva BD<br><em>Réplica sin Movimientos</em></div>
+  <div class="hero-desc">Todo lo que el área Comercial necesita saber para gestionar correctamente este proceso: qué hacer, cuándo y qué entregar.</div>
+  <div class="hero-chips">
+    <span class="hchip">4 pasos simples</span>
+    <span class="hchip">Tu parte dura ~30 min</span>
+    <span class="hchip hchip-sky">Luego IT y Onboarding se encargan</span>
+  </div>
+</div>
+
+<!-- TU RESPONSABILIDAD -->
+<div class="section">
+  <div class="sec-label">Tu rol en este proceso</div>
+  <div class="sec-title">¿Qué hace el Área Comercial?</div>
+  <div class="sec-desc">El proceso completo involucra 3 áreas. El área Comercial lidera los primeros pasos y luego pasa el control. Aquí está el mapa completo:</div>
+
+  <!-- STEPS -->
+  <div class="steps-grid" style="margin-bottom:40px;">
+    <div class="step-card yours">
+      <div class="step-num">1</div>
+      <div class="step-icon" style="background:linear-gradient(135deg,#1F3864,#2E6DA4);">📋</div>
+      <div class="step-title">Levantamiento con el Cliente</div>
+      <div class="step-desc">Reúnete con el cliente y completa el formulario de levantamiento. Acuerda qué tablas necesita copiar.</div>
+      <span class="step-tag tag-you">● Tu responsabilidad</span>
+      <div class="step-result">Formulario completado</div>
+    </div>
+    <div class="step-card yours">
+      <div class="step-num">2</div>
+      <div class="step-icon" style="background:linear-gradient(135deg,#2E6DA4,#00B0F0);">📨</div>
+      <div class="step-title">Solicitar BD a IT</div>
+      <div class="step-desc">Envía el correo a IT con el formulario completado. Indica las tablas acordadas y los datos del ambiente.</div>
+      <span class="step-tag tag-you">● Tu responsabilidad</span>
+      <div class="step-result">Correo enviado a it@manager.cl</div>
+    </div>
+    <div class="step-card theirs">
+      <div class="step-num">3</div>
+      <div class="step-icon" style="background:linear-gradient(135deg,#7B3F00,#C47A10);">⚙️</div>
+      <div class="step-title">IT Crea la BD</div>
+      <div class="step-desc">IT crea el ambiente, la BD y los usuarios. Envía correo de bienvenida al cliente con sus credenciales.</div>
+      <span class="step-tag tag-it">● IT Manager</span>
+      <div class="step-result">BD lista + correo al cliente</div>
+    </div>
+    <div class="step-card theirs">
+      <div class="step-num">4</div>
+      <div class="step-icon" style="background:linear-gradient(135deg,#1A6B42,#2E9A5A);">✅</div>
+      <div class="step-title">Verificación y Entrega</div>
+      <div class="step-desc">Proyectos Onboarding verifica la BD, accesos y formatos. Presenta la BD al cliente y cierra el proceso.</div>
+      <span class="step-tag tag-onb">● Proyectos Onboarding</span>
+      <div class="step-result">Cliente operando</div>
+    </div>
+  </div>
+
+  <!-- FLUJO TEMPORAL -->
+  <div class="sec-label">Tiempos del proceso</div>
+  <div class="flow-row">
+    <div class="flow-col">
+      <div class="flow-day" style="background:#EEF3FC;color:#1F3864;">Día 1</div>
+      <div class="flow-who" style="color:#1F3864;">Tú (Comercial)</div>
+      <div class="flow-what">Levantamiento con cliente + envío de correo a IT</div>
+    </div>
+    <div class="flow-col">
+      <div class="flow-day" style="background:#FEF0E6;color:#7B3F00;">Día 1-2</div>
+      <div class="flow-who" style="color:#7B3F00;">IT Manager</div>
+      <div class="flow-what">Crea BD, ambiente y usuarios</div>
+    </div>
+    <div class="flow-col">
+      <div class="flow-day" style="background:#E8F4EE;color:#1A6B42;">Día 2-3</div>
+      <div class="flow-who" style="color:#1A6B42;">Proyectos Onboarding</div>
+      <div class="flow-what">Verifica BD y presenta al cliente</div>
+    </div>
+    <div class="flow-col">
+      <div class="flow-day" style="background:#F4EEF8;color:#5B2C8D;">Resultado</div>
+      <div class="flow-who" style="color:#5B2C8D;">Cliente</div>
+      <div class="flow-what">Opera en nueva BD con sus datos replicados</div>
+    </div>
+  </div>
+  <div class="flow-note">Tu parte (Comercial) se completa en el Día 1. El resto lo gestionan IT y Onboarding.</div>
+</div>
+
+<!-- CHECKLIST COMERCIAL -->
+<div class="section" style="padding-top:0;">
+  <div class="sec-label">Tu checklist antes de enviar a IT</div>
+  <div class="sec-title">¿Tengo todo para hacer la solicitud?</div>
+  <div class="sec-desc">Antes de enviar el correo a IT, confirma que tienes toda esta información. Si falta algún dato, consúltalo con el cliente primero.</div>
+
+  <div class="cl-cols">
+    <div class="cl-card">
+      <div class="cl-head" style="background:#1F3864;">
+        <span class="cl-head-icon">👤</span>
+        <span class="cl-head-title">Datos del Cliente</span>
+      </div>
+      <div class="cl-items">
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">Razón social y RUT confirmados</div></div>
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">Nombre y correo del contacto principal</div></div>
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">Teléfono del contacto</div></div>
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">OT generada y número registrado</div></div>
+      </div>
+      <div class="cl-prog">
+        <div class="cl-prog-label"><span>Progreso</span><span class="pct">0%</span></div>
+        <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="cl-card">
+      <div class="cl-head" style="background:#2E6DA4;">
+        <span class="cl-head-icon">🗄️</span>
+        <span class="cl-head-title">Datos Técnicos</span>
+      </div>
+      <div class="cl-items">
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">Nombre de la BD nueva definido</div></div>
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">BD de origen identificada</div></div>
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">Ambiente ASP del cliente confirmado</div></div>
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">Módulos contratados registrados</div></div>
+      </div>
+      <div class="cl-prog">
+        <div class="cl-prog-label"><span>Progreso</span><span class="pct">0%</span></div>
+        <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="cl-card">
+      <div class="cl-head" style="background:#1A6B42;">
+        <span class="cl-head-icon">📋</span>
+        <span class="cl-head-title">Tablas y Acuerdos</span>
+      </div>
+      <div class="cl-items">
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">Formulario de levantamiento completado</div></div>
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">Tablas a copiar acordadas con el cliente</div></div>
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">Confirmado si el cliente factura con Acepta</div></div>
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">Confirmado si hay más de 1 BD a crear</div></div>
+      </div>
+      <div class="cl-prog">
+        <div class="cl-prog-label"><span>Progreso</span><span class="pct">0%</span></div>
+        <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="cl-card">
+      <div class="cl-head" style="background:#5B2C8D;">
+        <span class="cl-head-icon">📨</span>
+        <span class="cl-head-title">Envío a IT</span>
+      </div>
+      <div class="cl-items">
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">Correo redactado con todos los datos</div></div>
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">Tablas seleccionadas incluidas en el correo</div></div>
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">Correo enviado a it@manager.cl</div></div>
+        <div class="cl-item" onclick="toggleCl(this)"><div class="cl-cb"></div><div class="cl-text">OT informada a Proyectos Onboarding</div></div>
+      </div>
+      <div class="cl-prog">
+        <div class="cl-prog-label"><span>Progreso</span><span class="pct">0%</span></div>
+        <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section" style="padding-top:0;">
+  <div class="sec-label">Preguntas frecuentes</div>
+  <div class="sec-title">Dudas comunes del área Comercial</div>
+  <div style="margin-top:24px;">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Qué pasa si el cliente tiene más de una BD? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">Cada BD requiere su propio proceso. Debes indicarlo en el formulario y enviar un correo a IT por cada BD. Coordina con Proyectos Onboarding para planificar los tiempos.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Necesito saber qué tablas copiar? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">No necesitas conocer los detalles técnicos. El formulario de levantamiento te guía con preguntas simples y Proyectos Onboarding valida las tablas. Tu rol es recopilar la información del cliente.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">¿El cliente pierde sus datos actuales? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">No. La BD original permanece intacta. Lo que se crea es una BD nueva que replica la configuración (tablas, parámetros, usuarios) sin los movimientos históricos.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Cuánto tarda todo el proceso? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">Normalmente entre 2 y 3 días hábiles desde que envías el correo a IT. Tu parte (levantamiento + correo) dura aproximadamente 30 minutos si tienes toda la información a mano.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Qué incluye y qué NO incluye este proceso? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">Incluye: configuración, tablas de maestros, parámetros y usuarios. NO incluye: stock, documentos de movimientos ni apertura contable. Si el cliente necesita eso, el proceso es una Reimplementación (FOR-IT-BD-003), no una Réplica.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-title">¿Listo para comenzar?</div>
+  <div class="cta-desc">Abre el formulario de levantamiento con el cliente y complétenlo juntos en la reunión.</div>
+  <button class="cta-btn" onclick="window.location.href='formulario_levantamiento.html'">
+    📋 Abrir Formulario de Levantamiento →
+  </button>
+</div>
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+function toggleCl(el){
+  el.classList.toggle('done');
+  const card=el.closest('.cl-card');
+  const total=card.querySelectorAll('.cl-item').length;
+  const done=card.querySelectorAll('.cl-item.done').length;
+  const pct=Math.round(done/total*100);
+  card.querySelector('.cl-prog-fill').style.width=pct+'%';
+  card.querySelector('.pct').textContent=pct+'%';
+}
+function toggleFaq(el){
+  el.closest('.faq-item').classList.toggle('open');
+}
+window.addEventListener('scroll',()=>{
+  document.getElementById('back-top').classList.toggle('visible',window.scrollY>300);
+},{passive:true});
+</script>
+</body>
+</html>

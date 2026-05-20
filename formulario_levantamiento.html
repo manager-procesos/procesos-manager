@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Formulario de Levantamiento · Creación Nueva BD</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1F3864;--blue:#2E6DA4;--sky:#00B0F0;--bg:#F0F4FA;--card:#fff;--border:#DDE4EE;--border-hi:#B4C6E7;--text:#18243C;--text-2:#4A5A78;--text-3:#8898B8;--green:#1A6B42;--red:#C0001A;--orange:#C47A10;--font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--r:10px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px;}
+
+.topbar{background:var(--navy);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.tb-left{display:flex;align-items:center;gap:10px;}
+.tb-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--sky),var(--blue));border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;}
+.tb-title{font-size:14px;font-weight:600;color:#fff;}
+.tb-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px;}
+.tb-back{color:rgba(255,255,255,.5);font-size:12px;text-decoration:none;display:flex;align-items:center;gap:4px;}
+.tb-back:hover{color:#fff;}
+.tb-back::before{content:'←';}
+
+/* PROGRESS */
+.progress-bar-wrap{background:rgba(255,255,255,.1);height:3px;}
+.progress-bar-fill{height:100%;background:var(--sky);transition:width .4s ease;width:0%;}
+
+.wrap{max-width:720px;margin:0 auto;padding:32px 20px;}
+
+/* HERO */
+.form-hero{background:linear-gradient(135deg,var(--navy),#2557A7);border-radius:16px;padding:28px 28px 24px;margin-bottom:28px;text-align:center;}
+.fh-tag{display:inline-block;background:rgba(0,176,240,.2);color:var(--sky);font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:12px;border:1px solid rgba(0,176,240,.3);margin-bottom:10px;}
+.fh-title{font-size:22px;font-weight:700;color:#fff;margin-bottom:6px;}
+.fh-desc{font-size:13px;color:rgba(255,255,255,.6);line-height:1.55;}
+.fh-chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+.fh-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.75);font-size:11px;padding:3px 10px;border-radius:12px;}
+
+/* SECTIONS */
+.form-section{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:16px;box-shadow:0 2px 8px rgba(30,50,100,.05);}
+.fs-head{padding:16px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .1s;}
+.fs-head:hover{background:#FAFBFD;}
+.fs-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.fs-title{font-size:15px;font-weight:700;color:var(--text);flex:1;}
+.fs-status{font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;background:#F0F4FA;color:var(--text-3);}
+.fs-status.done{background:#E6F4EC;color:#0A6A32;}
+.fs-arrow{font-size:12px;color:var(--text-3);transition:transform .2s;margin-left:8px;}
+.form-section.open .fs-arrow{transform:rotate(180deg);}
+.fs-body{display:none;padding:0 20px 20px;border-top:1px solid var(--border);}
+.form-section.open .fs-body{display:block;}
+
+/* FORM FIELDS */
+.field{margin-bottom:18px;}
+.field:last-child{margin-bottom:0;}
+.field-label{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.field-req{color:var(--red);font-size:11px;}
+.field-hint{font-size:11.5px;color:var(--text-3);margin-bottom:6px;}
+.field input,.field textarea,.field select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:var(--font);font-size:14px;color:var(--text);background:#fff;outline:none;transition:border .15s;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(0,176,240,.1);}
+.field textarea{min-height:80px;resize:vertical;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* RADIO / TOGGLE */
+.toggle-group{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.toggle-opt{display:flex;align-items:center;gap:7px;padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:13px;color:var(--text-2);transition:all .15s;user-select:none;}
+.toggle-opt:hover{border-color:var(--border-hi);background:#F8FAFD;}
+.toggle-opt.selected{border-color:var(--navy);background:#EEF3FC;color:var(--navy);font-weight:600;}
+.toggle-opt.selected-green{border-color:var(--green);background:#E6F4EC;color:var(--green);font-weight:600;}
+.toggle-opt.selected-red{border-color:var(--red);background:#FEE8E8;color:var(--red);font-weight:600;}
+.toggle-dot{width:14px;height:14px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;}
+.toggle-opt.selected .toggle-dot::after,.toggle-opt.selected-green .toggle-dot::after,.toggle-opt.selected-red .toggle-dot::after{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+
+/* TABLAS */
+.tablas-header{display:grid;grid-template-columns:44px 1fr 70px 70px;gap:0;background:var(--navy);border-radius:8px 8px 0 0;padding:8px 0;margin-top:14px;}
+.th-cell{text-align:center;font-size:10.5px;font-weight:600;color:rgba(255,255,255,.8);font-family:var(--mono);}
+.th-cell.tl{text-align:left;padding-left:12px;}
+.th-si{background:rgba(26,107,66,.5);}
+.th-no{background:rgba(192,0,26,.5);}
+.tabla-row{display:grid;grid-template-columns:44px 1fr 70px 70px;border-bottom:1px solid var(--border);align-items:center;}
+.tabla-row:last-child{border-bottom:none;}
+.tabla-row.ob{background:#EEF3FC;}
+.tabla-row:not(.ob):nth-child(even){background:#FAFBFD;}
+.tabla-row:hover{background:#F0F4FC;}
+.tr-num{text-align:center;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--navy);padding:9px 4px;}
+.tr-name{padding:9px 10px 9px 0;}
+.tr-cod{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--navy);}
+.tr-desc{font-size:11.5px;color:var(--text-2);margin-top:1px;}
+.tr-ob-badge{font-size:9px;font-weight:700;color:var(--orange);background:#FFF3E0;padding:1px 5px;border-radius:4px;border:1px solid #F0C898;display:inline-block;margin-top:2px;}
+.tr-cb{text-align:center;padding:6px 0;}
+.tcb{width:22px;height:22px;border-radius:5px;border:2px solid;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;}
+.tcb-si{border-color:#A8D4B8;background:#F0FAF4;}
+.tcb-si.on{background:var(--green);border-color:var(--green);}
+.tcb-si.on::after{content:'✓';color:#fff;font-size:12px;font-weight:700;}
+.tcb-no{border-color:#F0B4BC;background:#FFF0F2;}
+.tcb-no.on{background:var(--red);border-color:var(--red);}
+.tcb-no.on::after{content:'✗';color:#fff;font-size:12px;font-weight:700;}
+.tablas-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:0;}
+
+/* SUMMARY */
+.summary-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;display:none;}
+.summary-box.visible{display:block;}
+.summ-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.summ-section{margin-bottom:16px;}
+.summ-sec-title{font-size:12px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border);}
+.summ-row{display:flex;gap:8px;margin-bottom:5px;font-size:13.5px;}
+.summ-label{color:var(--text-3);width:160px;flex-shrink:0;font-size:12.5px;}
+.summ-val{color:var(--text);font-weight:500;}
+.summ-email{background:#F7FAFD;border:1px solid var(--border);border-radius:10px;padding:16px;font-family:var(--mono);font-size:12px;line-height:1.8;color:var(--text-2);white-space:pre-wrap;word-break:break-word;margin-top:8px;}
+.copy-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);margin-top:10px;transition:all .15s;}
+.copy-btn:hover{background:var(--blue);}
+.copy-btn.copied{background:var(--green);}
+
+/* STICKY FOOTER */
+.sticky-footer{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;z-index:100;}
+.sf-progress{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-2);}
+.sf-pct{font-weight:700;color:var(--navy);font-family:var(--mono);font-size:15px;}
+.sf-mini-bar{width:120px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.sf-mini-fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--sky));border-radius:3px;transition:width .4s;}
+.sf-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;background:var(--navy);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .15s;}
+.sf-btn:hover{background:var(--blue);}
+.sf-btn:disabled{background:var(--border);color:var(--text-3);cursor:default;}
+
+.alert-box{border-radius:8px;padding:10px 14px;font-size:13px;line-height:1.55;margin-bottom:14px;display:flex;gap:8px;}
+.alert-blue{background:#EEF3FC;border-left:3px solid var(--blue);color:#1A3060;}
+.alert-orange{background:#FFF8F0;border-left:3px solid var(--orange);color:#7A4A00;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-left">
+    <div class="tb-mark">M</div>
+    <div>
+      <div class="tb-title">Formulario de Levantamiento</div>
+      <div class="tb-sub">Creación Nueva BD · Réplica</div>
+    </div>
+  </div>
+  <a class="tb-back" href="guia_comercial.html">Volver a la Guía</a>
+</div>
+<div class="progress-bar-wrap"><div class="progress-bar-fill" id="top-progress"></div></div>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="form-hero">
+    <div class="fh-tag">Formulario de Levantamiento</div>
+    <div class="fh-title">Completar con el Cliente</div>
+    <div class="fh-desc">Abre este formulario en la reunión con el cliente y complétalo juntos. Al terminar, genera el resumen listo para enviar a IT.</div>
+    <div class="fh-chips">
+      <span class="fh-chip">📱 Funciona en celular y notebook</span>
+      <span class="fh-chip">⏱ ~15 minutos</span>
+      <span class="fh-chip">📨 Genera el correo a IT automáticamente</span>
+    </div>
+  </div>
+
+  <!-- S1: DATOS CLIENTE -->
+  <div class="form-section open" id="sec-cliente">
+    <div class="fs-head" onclick="toggleSection('sec-cliente')">
+      <div class="fs-icon" style="background:#EEF3FC;">👤</div>
+      <div class="fs-title">1. Datos del Cliente</div>
+      <span class="fs-status" id="st-cliente">Pendiente</span>
+      <span class="fs-arrow">▼</span>
+    </div>
+    <div class="fs-body">
+      <div style="height:16px;"></div>
+      <div class="field-row">
+        <div class="field">
+          <div class="field-label">Razón Social <span class="field-req">*</span></div>
+          <input type="text" id="f-razon" placeholder="Nombre completo de la empresa" oninput="updateProgress()">
+        </div>
+        <div class="field">
+          <div class="field-label">RUT <span class="field-req">*</span></div>
+          <input type="text" id="f-rut" placeholder="XX.XXX.XXX-X" oninput="updateProgress()">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <div class="field-label">Nombre del Contacto <span class="field-req">*</span></div>
+          <input type="text" id="f-contacto" placeholder="Nombre y cargo" oninput="updateProgress()">
+        </div>
+        <div class="field">
+          <div class="field-label">Correo del Contacto <span class="field-req">*</span></div>
+          <input type="email" id="f-email" placeholder="correo@empresa.cl" oninput="updateProgress()">
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Teléfono</div>
+        <input type="text" id="f-tel" placeholder="+56 9 XXXX XXXX" oninput="updateProgress()">
+      </div>
+    </div>
+  </div>
+
+  <!-- S2: DATOS BD -->
+  <div class="form-section" id="sec-bd">
+    <div class="fs-head" onclick="toggleSection('sec-bd')">
+      <div class="fs-icon" style="background:#FEF0E6;">🗄️</div>
+      <div class="fs-title">2. Datos de la Base de Datos</div>
+      <span class="fs-status" id="st-bd">Pendiente</span>
+      <span class="fs-arrow">▼</span>
+    </div>
+    <div class="fs-body">
+      <div style="height:16px;"></div>
+      <div class="field-row">
+        <div class="field">
+          <div class="field-label">Nombre de la BD nueva <span class="field-req">*</span></div>
+          <div class="field-hint">Máx. 30 caracteres. Ejemplo: EMPRESA_26</div>
+          <input type="text" id="f-bdnueva" placeholder="NOMBRE_BD" maxlength="30" oninput="updateProgress();updateCharCount()" style="font-family:var(--mono);font-size:13px;">
+          <div style="font-size:11px;color:var(--text-3);margin-top:4px;text-align:right;"><span id="char-count">0</span>/30 caracteres</div>
+        </div>
+        <div class="field">
+          <div class="field-label">BD de Origen (copiar desde) <span class="field-req">*</span></div>
+          <input type="text" id="f-bdorigen" placeholder="NOMBRE_BD_ORIGEN" style="font-family:var(--mono);font-size:13px;" oninput="updateProgress()">
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Descripción de la BD nueva <span class="field-req">*</span></div>
+        <div class="field-hint">Nombre descriptivo que aparecerá en el sistema. Máx. 30 caracteres.</div>
+        <input type="text" id="f-desc" placeholder="Importadora Ejemplo 2026" maxlength="30" oninput="updateProgress()">
+      </div>
+      <div class="field">
+        <div class="field-label">Ambiente ASP <span class="field-req">*</span></div>
+        <input type="text" id="f-ambiente" placeholder="\\MANAGER.LOCAL\MG\[código]\MANAGER8\COMUNES\" style="font-family:var(--mono);font-size:12px;" oninput="updateProgress()">
+      </div>
+      <div class="field">
+        <div class="field-label">Código BD (nombre interno)</div>
+        <input type="text" id="f-codigo" placeholder="T969935600A" style="font-family:var(--mono);font-size:13px;" oninput="updateProgress()">
+      </div>
+      <div class="field">
+        <div class="field-label">¿El cliente tiene más de una BD?</div>
+        <div class="toggle-group">
+          <div class="toggle-opt" onclick="selectToggle(this,'mas-bd','no')"><div class="toggle-dot"></div>No, solo esta BD</div>
+          <div class="toggle-opt" onclick="selectToggle(this,'mas-bd','si')"><div class="toggle-dot"></div>Sí, tiene más de una BD</div>
+        </div>
+      </div>
+      <div class="field" id="field-mas-bd" style="display:none;">
+        <div class="field-label">Detallar las otras BD</div>
+        <textarea id="f-otras-bd" placeholder="Indicar nombres y si comparten el mismo ambiente ASP" oninput="updateProgress()"></textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">Módulos contratados en ASP</div>
+        <input type="text" id="f-modulos" placeholder="Ej: Facturación, Inventario, Contabilidad" oninput="updateProgress()">
+      </div>
+    </div>
+  </div>
+
+  <!-- S3: PREGUNTAS CLAVE -->
+  <div class="form-section" id="sec-preguntas">
+    <div class="fs-head" onclick="toggleSection('sec-preguntas')">
+      <div class="fs-icon" style="background:#E8F4EE;">❓</div>
+      <div class="fs-title">3. Preguntas Clave</div>
+      <span class="fs-status" id="st-preguntas">Pendiente</span>
+      <span class="fs-arrow">▼</span>
+    </div>
+    <div class="fs-body">
+      <div style="height:16px;"></div>
+      <div class="field">
+        <div class="field-label">¿El cliente tiene IT interno para entregar el respaldo?</div>
+        <div class="toggle-group">
+          <div class="toggle-opt" onclick="selectToggle(this,'it-interno','si')"><div class="toggle-dot"></div>Sí, tiene IT interno</div>
+          <div class="toggle-opt" onclick="selectToggle(this,'it-interno','no')"><div class="toggle-dot"></div>No, necesita apoyo</div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">¿El cliente factura con Acepta?</div>
+        <div class="toggle-group">
+          <div class="toggle-opt" onclick="selectToggle(this,'acepta','si');document.getElementById('dte-note').style.display='block'"><div class="toggle-dot"></div>Sí, usa Acepta</div>
+          <div class="toggle-opt" onclick="selectToggle(this,'acepta','no');document.getElementById('dte-note').style.display='none'"><div class="toggle-dot"></div>No usa Acepta</div>
+          <div class="toggle-opt" onclick="selectToggle(this,'acepta','otra')"><div class="toggle-dot"></div>Otra entidad</div>
+        </div>
+        <div class="alert-box alert-orange" id="dte-note" style="display:none;margin-top:10px;">
+          ⚠ El área de DTE debe ser notificada para coordinar la configuración de Acepta.
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">¿Tiene formatos de impresión personalizados?</div>
+        <div class="toggle-group">
+          <div class="toggle-opt" onclick="selectToggle(this,'formatos','si')"><div class="toggle-dot"></div>Sí, tiene formatos personalizados</div>
+          <div class="toggle-opt" onclick="selectToggle(this,'formatos','no')"><div class="toggle-dot"></div>No, usa formatos estándar</div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Fecha estimada de inicio del proceso</div>
+        <input type="date" id="f-fecha" oninput="updateProgress()">
+      </div>
+      <div class="field">
+        <div class="field-label">Observaciones adicionales</div>
+        <textarea id="f-obs" placeholder="Cualquier detalle relevante del cliente o del proceso..." oninput="updateProgress()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- S4: TABLAS -->
+  <div class="form-section" id="sec-tablas">
+    <div class="fs-head" onclick="toggleSection('sec-tablas')">
+      <div class="fs-icon" style="background:#F4EEF8;">📊</div>
+      <div class="fs-title">4. Tablas a Copiar</div>
+      <span class="fs-status" id="st-tablas">Pendiente</span>
+      <span class="fs-arrow">▼</span>
+    </div>
+    <div class="fs-body">
+      <div style="height:16px;"></div>
+      <div class="alert-box alert-blue">
+        ℹ Las tablas en azul son <strong>OBLIGATORIAS</strong> y siempre se incluyen. Para las demás, marca SÍ o NO según lo que el cliente necesite.
+      </div>
+      <div class="tablas-wrap">
+        <div class="tablas-header">
+          <div class="th-cell">N°</div>
+          <div class="th-cell tl">Tabla / Contenido</div>
+          <div class="th-cell th-si">SÍ</div>
+          <div class="th-cell th-no">NO</div>
+        </div>
+        <div id="tablas-list"></div>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--text-3);font-style:italic;">Las tablas OBLIGATORIAS se incluyen siempre. Marca SÍ/NO solo en las opcionales.</div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-box" id="summary-box">
+    <div class="summ-title">📋 Resumen del Levantamiento</div>
+    <div id="summ-content"></div>
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;">📨 Correo listo para copiar y enviar a IT</div>
+      <div class="summ-email" id="email-preview"></div>
+      <button class="copy-btn" id="copy-btn" onclick="copyEmail()">📋 Copiar correo</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- STICKY FOOTER -->
+<div class="sticky-footer">
+  <div class="sf-progress">
+    <div class="sf-pct" id="sf-pct">0%</div>
+    <div>
+      <div style="font-size:11px;color:var(--text-3);margin-bottom:3px;">Completado</div>
+      <div class="sf-mini-bar"><div class="sf-mini-fill" id="sf-fill"></div></div>
+    </div>
+  </div>
+  <button class="sf-btn" id="gen-btn" onclick="generateSummary()">✨ Generar Resumen y Correo</button>
+</div>
+
+<script>
+const TABLAS=[
+  {n:"1",cod:"ACCESS",desc:"Control de acceso y permisos de usuarios",ob:true},
+  {n:"2",cod:"AUTOR_DB",desc:"Autorizaciones del sistema",ob:true},
+  {n:"3",cod:"GRUPOS_DB",desc:"Nombre de grupos de permisos de usuarios",ob:true},
+  {n:"4",cod:"PARAM_DB",desc:"Parámetros generales del sistema",ob:true},
+  {n:"5",cod:"PARAMAPP_DB",desc:"Parámetros web",ob:true},
+  {n:"6",cod:"SQL_DB",desc:"Consultas y reportes personalizados SQL",ob:true},
+  {n:"7",cod:"EMP1_DB",desc:"Datos generales de la empresa (parte 1)",ob:true},
+  {n:"8",cod:"EMP2_DB",desc:"Datos generales de la empresa (parte 2)",ob:true},
+  {n:"9",cod:"EMP3_DB",desc:"Datos generales de la empresa (parte 3)",ob:true},
+  {n:"10",cod:"PLAN_DB",desc:"Plan de cuentas contable",ob:true},
+  {n:"11",cod:"TIDOC_DB",desc:"Tipos de documentos del sistema",ob:true},
+  {n:"12",cod:"CHOI_DB",desc:"Comunas, ciudades, clases, nombre LP y otros",ob:true},
+  {n:"13",cod:"USER_DB",desc:"Usuarios y configuración de acceso",ob:true},
+  {n:"14",cod:"PERSO_DB",desc:"Tabla de personal",ob:true},
+  {n:"15",cod:"ART_DB",desc:"Artículos / productos del catálogo",ob:false},
+  {n:"16",cod:"CENT_DB",desc:"Centros de costo",ob:false},
+  {n:"17",cod:"CLASE_DB",desc:"Direcciones de despacho y otros",ob:false},
+  {n:"18",cod:"CLIEN_DB",desc:"Maestro de clientes y proveedores",ob:false},
+  {n:"19",cod:"COMUNAS_DB",desc:"Tabla de comunas y regiones",ob:false},
+  {n:"20",cod:"CONTA_DB",desc:"Contactos de clientes y proveedores",ob:false},
+  {n:"21",cod:"RECET_DB",desc:"Recetas / fórmulas de producción",ob:false},
+  {n:"22",cod:"DESCT_DB",desc:"Descuentos y valor LP (solo si aplica)",ob:false},
+];
+
+// Render tablas
+function renderTablas(){
+  document.getElementById('tablas-list').innerHTML=TABLAS.map((t,i)=>`
+    <div class="tabla-row ${t.ob?'ob':''}" id="tr-${i}">
+      <div class="tr-num">${t.n}</div>
+      <div class="tr-name">
+        <div class="tr-cod">${t.cod}${t.ob?' <span class="tr-ob-badge">OBLIGATORIA</span>':''}</div>
+        <div class="tr-desc">${t.desc}</div>
+      </div>
+      <div class="tr-cb"><div class="tcb tcb-si ${t.ob?'on':''}" id="si-${i}" onclick="toggleTabla(${i},'si')"></div></div>
+      <div class="tr-cb"><div class="tcb tcb-no ${t.ob?'':''}' id="no-${i}" onclick="toggleTabla(${i},'no')"></div></div>
+    </div>`).join('');
+}
+
+function toggleTabla(i,type){
+  if(TABLAS[i].ob) return;
+  const si=document.getElementById('si-'+i);
+  const no=document.getElementById('no-'+i);
+  if(type==='si'){si.classList.toggle('on');if(si.classList.contains('on'))no.classList.remove('on');}
+  else{no.classList.toggle('on');if(no.classList.contains('on'))si.classList.remove('on');}
+  updateProgress();
+}
+
+// Toggle sections
+function toggleSection(id){
+  const s=document.getElementById(id);
+  s.classList.toggle('open');
+}
+
+// Toggle options
+function selectToggle(el,group,val){
+  const parent=el.closest('.toggle-group');
+  parent.querySelectorAll('.toggle-opt').forEach(o=>{
+    o.classList.remove('selected','selected-green','selected-red');
+  });
+  const cls=val==='si'?'selected-green':val==='no'?'selected-red':'selected';
+  el.classList.add(cls);
+  if(group==='mas-bd'){
+    document.getElementById('field-mas-bd').style.display=val==='si'?'block':'none';
+  }
+  updateProgress();
+}
+
+function updateCharCount(){
+  const v=document.getElementById('f-bdnueva').value;
+  document.getElementById('char-count').textContent=v.length;
+}
+
+// Progress
+function updateProgress(){
+  const fields=[
+    document.getElementById('f-razon').value,
+    document.getElementById('f-rut').value,
+    document.getElementById('f-contacto').value,
+    document.getElementById('f-email').value,
+    document.getElementById('f-bdnueva').value,
+    document.getElementById('f-bdorigen').value,
+    document.getElementById('f-desc').value,
+    document.getElementById('f-ambiente').value,
+  ];
+  const filled=fields.filter(v=>v.trim()!=='').length;
+  const pct=Math.round(filled/fields.length*100);
+  document.getElementById('sf-pct').textContent=pct+'%';
+  document.getElementById('sf-fill').style.width=pct+'%';
+  document.getElementById('top-progress').style.width=pct+'%';
+  // section statuses
+  const cl=document.getElementById('f-razon').value&&document.getElementById('f-contacto').value;
+  document.getElementById('st-cliente').textContent=cl?'✓ Completado':'Pendiente';
+  document.getElementById('st-cliente').className='fs-status'+(cl?' done':'');
+  const bd=document.getElementById('f-bdnueva').value&&document.getElementById('f-bdorigen').value;
+  document.getElementById('st-bd').textContent=bd?'✓ Completado':'Pendiente';
+  document.getElementById('st-bd').className='fs-status'+(bd?' done':'');
+}
+
+// Generate summary
+function generateSummary(){
+  const v=id=>document.getElementById(id)?.value||'';
+  const tog=group=>{
+    const sel=document.querySelector(`.toggle-opt.selected-green, .toggle-opt.selected-red, .toggle-opt.selected`);
+    // find by group via parent
+    const opts=document.querySelectorAll(`[onclick*="'${group}'"]`);
+    for(const o of opts){
+      if(o.classList.contains('selected-green'))return'Sí';
+      if(o.classList.contains('selected-red'))return'No';
+      if(o.classList.contains('selected'))return o.textContent.trim();
+    }
+    return'—';
+  };
+
+  const selTablas=TABLAS.filter((t,i)=>t.ob||document.getElementById('si-'+i)?.classList.contains('on'));
+
+  const summ=document.getElementById('summ-content');
+  summ.innerHTML=`
+    <div class="summ-section">
+      <div class="summ-sec-title">Cliente</div>
+      <div class="summ-row"><span class="summ-label">Razón Social</span><span class="summ-val">${v('f-razon')||'—'}</span></div>
+      <div class="summ-row"><span class="summ-label">RUT</span><span class="summ-val">${v('f-rut')||'—'}</span></div>
+      <div class="summ-row"><span class="summ-label">Contacto</span><span class="summ-val">${v('f-contacto')||'—'}</span></div>
+      <div class="summ-row"><span class="summ-label">Correo</span><span class="summ-val">${v('f-email')||'—'}</span></div>
+    </div>
+    <div class="summ-section">
+      <div class="summ-sec-title">Base de Datos</div>
+      <div class="summ-row"><span class="summ-label">BD Nueva</span><span class="summ-val" style="font-family:var(--mono)">${v('f-bdnueva')||'—'}</span></div>
+      <div class="summ-row"><span class="summ-label">Descripción</span><span class="summ-val">${v('f-desc')||'—'}</span></div>
+      <div class="summ-row"><span class="summ-label">BD Origen</span><span class="summ-val" style="font-family:var(--mono)">${v('f-bdorigen')||'—'}</span></div>
+      <div class="summ-row"><span class="summ-label">Ambiente</span><span class="summ-val" style="font-family:var(--mono);font-size:12px;">${v('f-ambiente')||'—'}</span></div>
+    </div>
+    <div class="summ-section">
+      <div class="summ-sec-title">Tablas seleccionadas (${selTablas.length})</div>
+      <div style="font-family:var(--mono);font-size:12px;color:var(--text-2);line-height:1.9;">${selTablas.map(t=>t.cod+(t.ob?' <span style="font-size:10px;color:var(--orange);">(OBL)</span>':'')).join(' &nbsp;·&nbsp; ')}</div>
+    </div>`;
+
+  // Build email
+  const tablasList=selTablas.map((t,i)=>`${i+1}. ${t.cod}${t.ob?' (OBLIGATORIA)':''} — ${t.desc}`).join('\n');
+  const emailText=`Para: it@manager.cl
+Asunto: Solicitud Creación BD – ${v('f-razon')||'[CLIENTE]'} – ${v('f-bdnueva')||'[BD]'}
+Área Solicitante: Comercial / GEX
+
+Estimados, muy buenas tardes,
+
+Junto con saludar, solicito lo siguiente:
+
+1. Crear base denominada "${v('f-bdnueva')||'[NOMBRE_BD]'}" y en el campo "Descripción" indicar:
+   ${v('f-desc')||'[descripción]'}
+
+2. Copiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a "${v('f-bdnueva')||'[NOMBRE_BD]'}" las siguientes tablas
+   (importante: debe ser desde esa base, no otra):
+
+${tablasList}
+
+Nota: La base nueva debe quedar actualizada a la última versión disponible del sistema.
+
+AMBIENTE : ${v('f-ambiente')||'[ruta del ambiente]'}
+BD       : ${v('f-codigo')||'[código BD]'}
+
+Estaré atenta a sus comentarios. Saludos cordiales.`;
+
+  document.getElementById('email-preview').textContent=emailText;
+  const box=document.getElementById('summary-box');
+  box.classList.add('visible');
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function copyEmail(){
+  const text=document.getElementById('email-preview').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.getElementById('copy-btn');
+    btn.textContent='✓ Copiado!';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='📋 Copiar correo';btn.classList.remove('copied');},2000);
+  });
+}
+
+// Init
+renderTablas();
+updateProgress();
+</script>
+</body>
+</html>
