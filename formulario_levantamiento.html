@@ -547,9 +547,20 @@ function buildEmail(){
     }
     return'—';
   };
-  const otrasBD=v('f-otras-bd');
   const masBD=getToggle('mas-bd');
-  const masBDLine=masBD==='Sí'&&otrasBD?`\nOtras BD: ${otrasBD}`:'';
+  const otrasBD=v('f-otras-bd').trim();
+
+  let bdBlock=`1. Crear base denominada "${v('f-bdnueva')||'[NOMBRE_BD]'}" y en el campo "Descripción" indicar: ${v('f-desc')||'[descripción — máx. 30 caracteres]'}`;
+
+  let adicionalBlock='';
+  if(masBD==='Sí' && otrasBD){
+    const lineas=otrasBD.split('\n').filter(l=>l.trim());
+    const bdList=lineas.map((l,i)=>`   ${i+2}. ${l.trim()}`).join('\n');
+    adicionalBlock=`\n\nAdemás, crear las siguientes BD en el mismo ambiente:\n${bdList}`;
+  }
+
+  const bdRef=masBD==='Sí'?'todas las bases anteriores':`"${v('f-bdnueva')||'[NOMBRE_BD]'}"`;
+
   return `Para: it@manager.cl
 Asunto: Solicitud Creación BD – ${v('f-razon')||'[CLIENTE]'} – ${v('f-bdnueva')||'[BD]'}
 Área Solicitante: Comercial / GEX
@@ -558,26 +569,16 @@ Estimados, muy buenas tardes,
 
 Junto con saludar, solicito lo siguiente:
 
-── DATOS GENERALES ──────────────────────────
-Cliente      : ${v('f-razon')||'—'}
-RUT          : ${v('f-rut')||'—'}
-Módulos ASP  : ${getModulos()}
-¿Más de 1 BD?: ${masBD}${masBDLine}
+${bdBlock}${adicionalBlock}
 
-── SOLICITUD BD ─────────────────────────────
-1. Crear base denominada "${v('f-bdnueva')||'[NOMBRE_BD]'}"
-   Descripción : ${v('f-desc')||'[descripción — máx. 30 caracteres]'}
-
-2. Copiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a "${v('f-bdnueva')||'[NOMBRE_BD]'}"
-   las siguientes tablas (debe ser desde esa base, no otra):
-
-${tablasList}
-
-── AMBIENTE ─────────────────────────────────
 AMBIENTE : ${v('f-ambiente')||'[ruta del ambiente]'}
 BD       : ${v('f-codigo')||'[código BD]'}
 
-Nota: La base nueva debe quedar actualizada a la última versión disponible.
+Copiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a ${bdRef} las siguientes tablas (debe ser desde esa base, no otra):
+
+${tablasList}
+
+Nota: Todas las bases deben quedar actualizadas a la última versión disponible.
 
 Estaré atenta a sus comentarios. Saludos cordiales.`;
 }
