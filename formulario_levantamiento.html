@@ -539,7 +539,7 @@ function buildEmail(){
   const selTablas=TABLAS.filter((t,i)=>t.ob||document.getElementById('si-'+i)?.classList.contains('on'));
   const tablasList=selTablas.map((t,i)=>`${i+1}. ${t.cod} — ${t.desc}`).join('\n');
   const getToggle=group=>{
-    const opts=document.querySelectorAll('[onclick*="''+group+''"]');
+    const opts=document.querySelectorAll('[onclick*="\''+group+'\'"]');
     for(const o of opts){
       if(o.classList.contains('selected-green'))return'Sí';
       if(o.classList.contains('selected-red'))return'No';
