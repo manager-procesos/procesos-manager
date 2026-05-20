@@ -329,6 +329,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;">📨 Correo listo para copiar y enviar a IT</div>
       <div class="summ-email" id="email-preview"></div>
       <button class="copy-btn" id="copy-btn" onclick="copyEmail()">📋 Copiar correo</button>
+      <button class="copy-btn" onclick="openInOutlook()" style="background:#0078D4;margin-left:8px;">✉ Abrir en Outlook</button>
       <button class="copy-btn" onclick="downloadResumen()" style="background:var(--green);margin-left:8px;">⬇ Descargar resumen</button>
     </div>
   </div>
@@ -585,6 +586,17 @@ Estaré atenta a sus comentarios. Saludos cordiales.`;
 // Init
 renderTablas();
 updateProgress();
+
+
+function openInOutlook(){
+  const text = buildEmail();
+  const lines = text.split('\n');
+  const asunto = lines.find(l=>l.startsWith('Asunto:'))?.replace('Asunto:','').trim()||'Solicitud Creación BD';
+  // Remove header lines (Para, Asunto, Área) from body
+  const body = lines.slice(lines.findIndex(l=>l.trim()=='')+1).join('\n');
+  const mailto = `mailto:it@manager.cl?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+}
 
 function downloadResumen() {
   const v = id => document.getElementById(id)?.value || '';
