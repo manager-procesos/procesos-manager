@@ -55,7 +55,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .field input,.field textarea,.field select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:var(--font);font-size:14px;color:var(--text);background:#fff;outline:none;transition:border .15s;}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(0,176,240,.1);}
 .field textarea{min-height:80px;resize:vertical;}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start;}
 
 /* RADIO / TOGGLE */
 .toggle-group{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
@@ -202,9 +202,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
           <div class="field-label">Nombre de la BD nueva <span class="field-req">*</span></div>
           <div class="field-hint">Máx. 30 caracteres. Ejemplo: EMPRESA_26</div>
           <input type="text" id="f-bdnueva" placeholder="NOMBRE_BD" maxlength="30" oninput="updateProgress();updateCharCount()" style="font-family:var(--mono);font-size:13px;">
-          <div style="font-size:11px;color:var(--text-3);margin-top:4px;text-align:right;"><span id="char-count">0</span>/30 caracteres</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:4px;text-align:right;width:100%;"><span id="char-count">0</span>/30</div>
         </div>
-        <div class="field">
+        <div class="field" style="align-self:flex-start;">
           <div class="field-label">BD de Origen (copiar desde) <span class="field-req">*</span></div>
           <input type="text" id="f-bdorigen" placeholder="NOMBRE_BD_ORIGEN" style="font-family:var(--mono);font-size:13px;" oninput="updateProgress()">
         </div>
@@ -589,60 +589,15 @@ updateProgress();
 
 
 function openInOutlook(){
-  const v=id=>document.getElementById(id)?.value||'';
-  const selTablas=TABLAS.filter((t,i)=>t.ob||document.getElementById('si-'+i)?.classList.contains('on'));
-  const getToggle=group=>{
-    const opts=document.querySelectorAll('[onclick*="\''+group+'\'"]');
-    for(const o of opts){
-      if(o.classList.contains('selected-green'))return'Sí';
-      if(o.classList.contains('selected-red'))return'No';
-      if(o.classList.contains('selected'))return o.textContent.trim();
-    }
-    return'—';
-  };
-  const masBD=getToggle('mas-bd');
-  const otrasBD=v('f-otras-bd').trim();
-  const asunto=`Solicitud Creación BD – ${v('f-razon')||'[CLIENTE]'} – ${v('f-bdnueva')||'[BD]'}`;
-
-  // Format tablas as aligned text columns
-  const maxCod=Math.max(...selTablas.map(t=>t.cod.length));
-  const tablasLines=selTablas.map((t,i)=>{
-    const num=String(i+1).padStart(2,' ');
-    const cod=t.cod.padEnd(maxCod+2,' ');
-    return `   ${num}. ${cod}${t.desc}`;
-  }).join('\n');
-
-  let bdBlock=`1. Crear base denominada "${v('f-bdnueva')||'[NOMBRE_BD]'}" y en el campo "Descripción" indicar: ${v('f-desc')||'[descripción — máx. 30 caracteres]'}`;
-  if(masBD==='Sí' && otrasBD){
-    const lineas=otrasBD.split('\n').filter(l=>l.trim());
-    const lista=lineas.map((l,i)=>`   ${i+2}. ${l.trim()}`).join('\n');
-    bdBlock+=`\n\nAdemás, crear las siguientes BD en el mismo ambiente:\n${lista}`;
-  }
-
-  const bdRef=masBD==='Sí'?'todas las bases anteriores':`"${v('f-bdnueva')||'[NOMBRE_BD]'}"`;
-  const codigo=(v('f-codigo')||'[código BD]').split('//')[0].trim();
-
-  const body=`Estimados, muy buenas tardes,
-
-Junto con saludar, solicito lo siguiente:
-
-${bdBlock}
-
-AMBIENTE : ${v('f-ambiente')||'[ruta del ambiente]'}
-BD       : ${codigo}
-
-Copiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a ${bdRef} las siguientes tablas (debe ser desde esa base, no otra):
-
-   N°   Tabla            Descripción
-   ─────────────────────────────────────────────────────────────────
-${tablasLines}
-
-Nota: Todas las bases deben quedar actualizadas a la última versión disponible.
-
-Estaré atenta a sus comentarios. Saludos cordiales.`;
-
-  const mailto=`mailto:it@manager.cl?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(body)}`;
-  window.location.href=mailto;
+  const text = buildEmail();
+  const lines = text.split('
+');
+  const asunto = lines.find(l=>l.startsWith('Asunto:'))?.replace('Asunto:','').trim()||'Solicitud Creación BD';
+  const bodyStart = lines.findIndex(l=>l.trim()==='') + 1;
+  const body = lines.slice(bodyStart).join('
+');
+  const mailto = `mailto:it@manager.cl?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
 }
 
 function downloadResumen() {
