@@ -602,53 +602,46 @@ function openInOutlook(){
   };
   const masBD=getToggle('mas-bd');
   const otrasBD=v('f-otras-bd').trim();
-
   const asunto=`Solicitud Creación BD – ${v('f-razon')||'[CLIENTE]'} – ${v('f-bdnueva')||'[BD]'}`;
 
-  // Additional BDs block
-  let bdAdicional='';
+  // Format tablas as aligned text columns
+  const maxCod=Math.max(...selTablas.map(t=>t.cod.length));
+  const tablasLines=selTablas.map((t,i)=>{
+    const num=String(i+1).padStart(2,' ');
+    const cod=t.cod.padEnd(maxCod+2,' ');
+    return `   ${num}. ${cod}${t.desc}`;
+  }).join('\n');
+
+  let bdBlock=`1. Crear base denominada "${v('f-bdnueva')||'[NOMBRE_BD]'}" y en el campo "Descripción" indicar: ${v('f-desc')||'[descripción — máx. 30 caracteres]'}`;
   if(masBD==='Sí' && otrasBD){
     const lineas=otrasBD.split('\n').filter(l=>l.trim());
-    const items=lineas.map((l,i)=>`<p style="margin:0 0 3px 0;">${i+2}. ${l.trim()}</p>`).join('');
-    bdAdicional=`<p style="margin:10px 0 4px 0;">Además, crear las siguientes BD en el mismo ambiente:</p>${items}`;
+    const lista=lineas.map((l,i)=>`   ${i+2}. ${l.trim()}`).join('\n');
+    bdBlock+=`\n\nAdemás, crear las siguientes BD en el mismo ambiente:\n${lista}`;
   }
 
   const bdRef=masBD==='Sí'?'todas las bases anteriores':`"${v('f-bdnueva')||'[NOMBRE_BD]'}"`;
+  const codigo=(v('f-codigo')||'[código BD]').split('//')[0].trim();
 
-  // Tablas as HTML table
-  const tablasRows=selTablas.map((t,i)=>`
-    <tr>
-      <td style="padding:3px 10px 3px 6px;border:1px solid #D0D0D0;color:#555;">${i+1}</td>
-      <td style="padding:3px 10px 3px 6px;border:1px solid #D0D0D0;font-family:Courier New,monospace;font-size:10pt;font-weight:bold;color:#1F3864;">${t.cod}</td>
-      <td style="padding:3px 10px 3px 6px;border:1px solid #D0D0D0;color:#333;">${t.desc}</td>
-    </tr>`).join('');
+  const body=`Estimados, muy buenas tardes,
 
-  const htmlBody=`<div style="font-family:Calibri,sans-serif;font-size:11pt;color:#000000;">
-<p style="margin:0 0 14px 0;">Estimados, muy buenas tardes,</p>
-<p style="margin:0 0 14px 0;">Junto con saludar, solicito lo siguiente:</p>
-<p style="margin:0 0 4px 0;">1. Crear base denominada <strong>"${v('f-bdnueva')||'[NOMBRE_BD]'}"</strong> y en el campo "Descripción" indicar: ${v('f-desc')||'[descripción — máx. 30 caracteres]'}</p>
-${bdAdicional}
-<p style="margin:12px 0 6px 0;">
-  <strong>AMBIENTE :</strong> <span style="font-family:Courier New,monospace;font-size:10pt;">${v('f-ambiente')||'[ruta del ambiente]'}</span><br>
-  <strong>BD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</strong> <span style="font-family:Courier New,monospace;font-size:10pt;">${(v('f-codigo')||'[código BD]').split('//')[0].trim()}</span>
-</p>
-<p style="margin:14px 0 8px 0;">Copiar desde base <strong>"${v('f-bdorigen')||'[BD_ORIGEN]'}"</strong> a ${bdRef} las siguientes tablas <em>(debe ser desde esa base, no otra)</em>:</p>
-<table style="border-collapse:collapse;font-family:Calibri,sans-serif;font-size:11pt;margin-bottom:14px;">
-  <thead>
-    <tr>
-      <th style="padding:5px 10px;border:1px solid #D0D0D0;background:#1F3864;color:#fff;text-align:center;font-weight:500;font-size:10pt;">N°</th>
-      <th style="padding:5px 14px;border:1px solid #D0D0D0;background:#1F3864;color:#fff;text-align:left;font-weight:500;font-size:10pt;">Tabla</th>
-      <th style="padding:5px 14px;border:1px solid #D0D0D0;background:#1F3864;color:#fff;text-align:left;font-weight:500;font-size:10pt;">Contenido</th>
-    </tr>
-  </thead>
-  <tbody>${tablasRows}</tbody>
-</table>
-<p style="margin:0 0 14px 0;color:#666;font-style:italic;">Nota: Todas las bases deben quedar actualizadas a la última versión disponible.</p>
-<p style="margin:0;">Estaré atenta a sus comentarios. Saludos cordiales.</p>
-</div>`;
+Junto con saludar, solicito lo siguiente:
 
-  // Use mailto with x-body for HTML (works in Outlook desktop)
-  const mailto=`mailto:it@manager.cl?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(htmlBody)}`;
+${bdBlock}
+
+AMBIENTE : ${v('f-ambiente')||'[ruta del ambiente]'}
+BD       : ${codigo}
+
+Copiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a ${bdRef} las siguientes tablas (debe ser desde esa base, no otra):
+
+   N°   Tabla            Descripción
+   ─────────────────────────────────────────────────────────────────
+${tablasLines}
+
+Nota: Todas las bases deben quedar actualizadas a la última versión disponible.
+
+Estaré atenta a sus comentarios. Saludos cordiales.`;
+
+  const mailto=`mailto:it@manager.cl?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(body)}`;
   window.location.href=mailto;
 }
 
