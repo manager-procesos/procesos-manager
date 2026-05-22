@@ -7,78 +7,94 @@
 <style>
 :root{--navy:#1F3864;--blue:#2E6DA4;--sky:#00B0F0;--bg:#F0F4FA;--card:#fff;--border:#DDE4EE;--border-hi:#B4C6E7;--text:#18243C;--text-2:#4A5A78;--text-3:#8898B8;--green:#1A6B42;--red:#C0001A;--orange:#C47A10;--font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--r:8px;--r-lg:12px;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}html{scroll-behavior:smooth;}
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px;font-size:14px;}
-.topbar{background:var(--navy);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--navy);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;}
 .tb-left{display:flex;align-items:center;gap:10px;}
-.tb-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--sky),var(--blue));border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;}
+.tb-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--sky),var(--blue));border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0;}
 .tb-title{font-size:14px;font-weight:600;color:#fff;}
 .tb-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px;}
 .tb-back{color:rgba(255,255,255,.5);font-size:12px;text-decoration:none;display:flex;align-items:center;gap:4px;}
 .tb-back:hover{color:#fff;}.tb-back::before{content:'←';}
 .prog-wrap{background:rgba(255,255,255,.1);height:3px;}
 .prog-fill{height:100%;background:var(--sky);transition:width .4s;width:0%;}
-.wrap{max-width:700px;margin:0 auto;padding:24px 16px 20px;}
+
+/* ── DESKTOP LAYOUT ── */
+.wrap{max-width:700px;margin:0 auto;padding:24px 16px 100px;}
 .form-hero{background:linear-gradient(135deg,var(--navy),#2557A7);border-radius:var(--r-lg);padding:24px 28px;margin-bottom:20px;text-align:center;}
 .fh-tag{display:inline-block;background:rgba(0,176,240,.2);color:var(--sky);font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:12px;border:1px solid rgba(0,176,240,.3);margin-bottom:10px;}
 .fh-title{font-size:20px;font-weight:700;color:#fff;margin-bottom:5px;}
 .fh-desc{font-size:12.5px;color:rgba(255,255,255,.6);line-height:1.55;margin-bottom:12px;}
 .fh-chips{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;}
 .fh-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.75);font-size:11px;padding:3px 10px;border-radius:12px;}
+
+/* ── DESKTOP ACCORDION ── */
 .sec{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);margin-bottom:10px;overflow:hidden;}
-.sec-head{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;transition:background .1s;}
+.sec-head{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;transition:background .1s;-webkit-tap-highlight-color:transparent;}
 .sec-head:hover{background:#FAFBFD;}
-.sec-icon{width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.sec-icon{width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
 .sec-title{font-size:14px;font-weight:600;flex:1;}
 .sec-badge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;background:#F0F4FA;color:var(--text-3);}
 .sec-badge.done{background:#E6F4EC;color:#0A6A32;}
-.sec-arrow{font-size:12px;color:var(--text-3);transition:transform .2s;margin-left:6px;}
+.sec-arrow{font-size:13px;color:var(--text-3);transition:transform .2s;margin-left:6px;}
 .sec.open .sec-arrow{transform:rotate(180deg);}
 .sec-body{display:none;padding:0 16px 16px;border-top:1px solid var(--border);}
 .sec.open .sec-body{display:block;}
+
+/* ── FIELDS ── */
 .field{margin-top:14px;}
 .field label{display:block;font-size:13px;font-weight:600;margin-bottom:5px;color:var(--text);}
 .hint{font-size:11.5px;color:var(--text-3);margin-bottom:5px;}
 .req{color:var(--red);margin-left:2px;}
-.field input,.field textarea{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-family:var(--font);font-size:13.5px;color:var(--text);background:#fff;outline:none;transition:border .15s;}
+.field input,.field textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-family:var(--font);font-size:14px;color:var(--text);background:#fff;outline:none;transition:border .15s;}
 .field input:focus,.field textarea:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(0,176,240,.1);}
 .field textarea{min-height:72px;resize:vertical;}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start;}
 .char-count{font-size:11px;color:var(--text-3);text-align:right;margin-top:3px;}
+
+/* ── TOGGLES ── */
 .toggles{display:flex;gap:7px;flex-wrap:wrap;margin-top:5px;}
-.tog{display:flex;align-items:center;gap:6px;padding:8px 13px;border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;font-size:13px;color:var(--text-2);transition:all .15s;user-select:none;}
+.tog{display:flex;align-items:center;gap:6px;padding:9px 14px;border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;font-size:13.5px;color:var(--text-2);transition:all .15s;user-select:none;-webkit-tap-highlight-color:transparent;}
 .tog:hover{border-color:var(--border-hi);}
 .tog.on{border-color:var(--sky);background:#EEF3FC;color:var(--navy);font-weight:600;}
 .tog-dot{width:13px;height:13px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .tog.on .tog-dot::after{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* ── ALERTS ── */
 .alert-box{border-radius:var(--r);padding:10px 14px;font-size:13px;line-height:1.55;margin-top:10px;display:flex;gap:8px;}
 .alert-blue{background:#EEF3FC;border-left:3px solid var(--blue);color:#1A3060;}
 .alert-orange{background:#FFF8F0;border-left:3px solid var(--orange);color:#7A4A00;}
+
+/* ── TABLA ── */
 .tabla-wrap{margin-top:10px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
-.t-head{display:grid;grid-template-columns:36px 1fr 54px 54px;background:#F0F4FA;padding:7px 0;border-bottom:1px solid var(--border);}
+.t-head{display:grid;grid-template-columns:32px 1fr 50px 50px;background:#F0F4FA;padding:7px 0;border-bottom:1px solid var(--border);}
 .th{text-align:center;font-size:11px;font-weight:600;color:var(--text-3);}
-.th.tl{text-align:left;padding-left:10px;}
+.th.tl{text-align:left;padding-left:8px;}
 .th.si{color:var(--green);}
 .th.no{color:var(--red);}
-.tr{display:grid;grid-template-columns:36px 1fr 54px 54px;align-items:center;border-bottom:1px solid var(--border);}
+.tr{display:grid;grid-template-columns:32px 1fr 50px 50px;align-items:center;border-bottom:1px solid var(--border);}
 .tr:last-child{border-bottom:none;}
 .tr.ob{background:#EEF3FC;}
 .tr:not(.ob):nth-child(even){background:#FAFBFD;}
 .td-n{text-align:center;font-size:11px;color:var(--text-3);padding:7px 0;}
-.td-info{padding:7px 8px;}
+.td-info{padding:7px 6px;}
 .td-cod{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--navy);}
 .td-desc{font-size:11px;color:var(--text-2);margin-top:1px;}
 .ob-b{font-size:9px;font-weight:700;color:var(--orange);background:#FFF3E0;padding:1px 5px;border-radius:3px;border:1px solid #F0C898;display:inline-block;}
 .td-cb{text-align:center;padding:4px 0;}
-.cb{width:20px;height:20px;border-radius:4px;border:1.5px solid;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .12s;}
+.cb{width:22px;height:22px;border-radius:4px;border:1.5px solid;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .12s;}
 .cb-si{border-color:#A8D4B8;background:#F0FAF4;}
 .cb-si.on{background:var(--green);border-color:var(--green);}
-.cb-si.on::after{content:'✓';color:#fff;font-size:11px;font-weight:700;}
+.cb-si.on::after{content:'✓';color:#fff;font-size:12px;font-weight:700;}
 .cb-no{border-color:#F0B4BC;background:#FFF0F2;}
 .cb-no.on{background:var(--red);border-color:var(--red);}
-.cb-no.on::after{content:'✗';color:#fff;font-size:11px;font-weight:700;}
+.cb-no.on::after{content:'✗';color:#fff;font-size:12px;font-weight:700;}
+
+/* ── SUMMARY ── */
 .summ-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;margin-top:12px;display:none;}
 .summ-box.show{display:block;}
-.summ-title{font-size:15px;font-weight:700;margin-bottom:14px;color:var(--text);}
+.summ-title{font-size:15px;font-weight:700;margin-bottom:14px;}
 .summ-sec{margin-bottom:14px;}
 .summ-sec-title{font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border);}
 .summ-row{display:flex;gap:8px;margin-bottom:5px;}
@@ -88,25 +104,76 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .tag{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:4px;background:#EEF3FC;color:var(--navy);border:1px solid var(--border-hi);}
 .email-box{background:#F7FAFD;border:1px solid var(--border);border-radius:var(--r);padding:14px;font-family:var(--mono);font-size:12px;line-height:1.8;white-space:pre-wrap;word-break:break-word;margin-top:8px;color:var(--text-2);}
 .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-.btn-gen{padding:10px 22px;background:var(--navy);color:#fff;border:none;border-radius:var(--r);font-size:13.5px;font-weight:600;cursor:pointer;font-family:var(--font);}
+.btn-gen{padding:10px 22px;background:var(--navy);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);}
 .btn-gen:hover{background:var(--blue);}
-.btn-copy,.btn-ol,.btn-dl{padding:8px 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font);display:inline-flex;align-items:center;gap:5px;}
-.btn-copy{background:var(--card);color:var(--text);border:1px solid var(--border);}
-.btn-copy:hover{border-color:var(--border-hi);}
-.btn-copy.ok{background:#E6F4EC;color:#0A6A32;border-color:#A8DCBC;}
-.btn-ol{background:#EEF3FC;color:var(--navy);border:1px solid var(--border-hi);}
-.btn-ol:hover{background:#E0EAF8;}
-.btn-dl{background:#E6F4EC;color:#0A6A32;border:1px solid #A8DCBC;}
-.btn-dl:hover{background:#D0ECD8;}
-.sticky-footer{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;z-index:100;}
-.sf-left{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--text-2);}
+.btn-sec{padding:9px 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font);border:1px solid var(--border);background:var(--card);color:var(--text);}
+.btn-sec:hover{border-color:var(--border-hi);}
+.btn-sec.ok{background:#E6F4EC;color:#0A6A32;border-color:#A8DCBC;}
+.btn-ol{background:#EEF3FC;color:var(--navy);border-color:var(--border-hi);}
+.btn-dl{background:#E6F4EC;color:#0A6A32;border-color:#A8DCBC;}
+
+/* ── STICKY FOOTER ── */
+.sticky-footer{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;z-index:200;}
+.sf-left{display:flex;align-items:center;gap:10px;}
 .sf-pct{font-size:16px;font-weight:700;color:var(--navy);font-family:var(--mono);}
 .sf-mini{width:90px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
 .sf-fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--sky));border-radius:2px;transition:width .4s;}
+.sf-label{font-size:11px;color:var(--text-3);margin-bottom:3px;}
+
+/* ══════════════════════════════════════
+   MOBILE — full-screen panel navigation
+   ══════════════════════════════════════ */
+@media(max-width:640px){
+  body{background:var(--bg);}
+  .wrap{padding:12px 0 90px;}
+  .form-hero{border-radius:0;margin-bottom:0;padding:18px 16px;}
+  .fh-chips{flex-direction:column;align-items:center;gap:5px;}
+
+  /* Menu list — visible on mobile home */
+  .mobile-menu{display:block;}
+  .mm-item{display:flex;align-items:center;gap:12px;padding:15px 16px;background:var(--card);border-bottom:1px solid var(--border);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .1s;}
+  .mm-item:active{background:#F0F4FA;}
+  .mm-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .mm-label{flex:1;}
+  .mm-title{font-size:15px;font-weight:600;color:var(--text);}
+  .mm-sub{font-size:12px;color:var(--text-3);margin-top:2px;}
+  .mm-badge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;background:#F0F4FA;color:var(--text-3);}
+  .mm-badge.done{background:#E6F4EC;color:#0A6A32;}
+  .mm-arrow{font-size:18px;color:var(--text-3);}
+
+  /* Panel — full screen section */
+  .mobile-panel{position:fixed;inset:0;background:var(--bg);z-index:400;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow-y:auto;padding-bottom:80px;}
+  .mobile-panel.active{transform:translateX(0);}
+  .panel-topbar{background:var(--navy);padding:13px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;}
+  .panel-back{background:none;border:none;color:rgba(255,255,255,.7);font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;padding:0;font-family:var(--font);}
+  .panel-back::before{content:'←';font-size:16px;}
+  .panel-back:active{color:#fff;}
+  .panel-title{color:#fff;font-size:15px;font-weight:600;}
+  .panel-body{padding:16px;}
+
+  /* Hide desktop accordions on mobile */
+  .sec{display:none;}
+  .form-hero .fh-desc{display:none;}
+
+  /* Summary also full width on mobile */
+  .summ-box{border-radius:0;margin:0;}
+  .btns{flex-direction:column;}
+  .btns .btn-sec,.btns .btn-ol,.btns .btn-dl{width:100%;text-align:center;padding:12px;}
+
+  .row2{grid-template-columns:1fr;}
+  .toggles .tog{padding:11px 14px;font-size:14px;}
+  .field input,.field textarea{font-size:16px;padding:11px 12px;}
+}
+
+@media(min-width:641px){
+  .mobile-menu{display:none;}
+  .mobile-panel{display:none !important;}
+}
 </style>
 </head>
 <body>
-<div class="topbar">
+
+<div class="topbar" id="main-topbar">
   <div class="tb-left">
     <div class="tb-mark">M</div>
     <div>
@@ -118,19 +185,60 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 </div>
 <div class="prog-wrap"><div class="prog-fill" id="tp"></div></div>
 
-<div class="wrap">
+<!-- ══ DESKTOP CONTENT ══ -->
+<div class="wrap" id="desktop-wrap">
   <div class="form-hero">
     <div class="fh-tag">Formulario de Levantamiento</div>
     <div class="fh-title">Completar con el Cliente</div>
     <div class="fh-desc">Abre este formulario en la reunión y complétalo juntos. Al terminar genera el resumen y el correo listo para enviar a IT.</div>
     <div class="fh-chips">
-      <span class="fh-chip">📱 Funciona en celular y notebook</span>
+      <span class="fh-chip">📱 Web y celular</span>
       <span class="fh-chip">⏱ ~15 minutos</span>
-      <span class="fh-chip">📨 Genera correo a IT automáticamente</span>
+      <span class="fh-chip">📨 Genera correo a IT</span>
     </div>
   </div>
 
-  <!-- S1 -->
+  <!-- MOBILE MENU LIST -->
+  <div class="mobile-menu">
+    <div class="mm-item" onclick="openPanel('p1')">
+      <div class="mm-icon" style="background:#EEF3FC;">👤</div>
+      <div class="mm-label">
+        <div class="mm-title">1. Datos del Cliente</div>
+        <div class="mm-sub">Razón social, RUT, contacto</div>
+      </div>
+      <span class="mm-badge" id="mb1">Pendiente</span>
+      <span class="mm-arrow">›</span>
+    </div>
+    <div class="mm-item" onclick="openPanel('p2')">
+      <div class="mm-icon" style="background:#FEF0E6;">🗄️</div>
+      <div class="mm-label">
+        <div class="mm-title">2. Datos de la Base de Datos</div>
+        <div class="mm-sub">Nombre BD, ambiente, módulos</div>
+      </div>
+      <span class="mm-badge" id="mb2">Pendiente</span>
+      <span class="mm-arrow">›</span>
+    </div>
+    <div class="mm-item" onclick="openPanel('p3')">
+      <div class="mm-icon" style="background:#E8F4EE;">❓</div>
+      <div class="mm-label">
+        <div class="mm-title">3. Preguntas Clave</div>
+        <div class="mm-sub">Acepta, formatos, IT interno</div>
+      </div>
+      <span class="mm-badge" id="mb3">Pendiente</span>
+      <span class="mm-arrow">›</span>
+    </div>
+    <div class="mm-item" onclick="openPanel('p4')">
+      <div class="mm-icon" style="background:#F4EEF8;">📊</div>
+      <div class="mm-label">
+        <div class="mm-title">4. Tablas a Copiar</div>
+        <div class="mm-sub">Seleccionar tablas con el cliente</div>
+      </div>
+      <span class="mm-badge" id="mb4">Pendiente</span>
+      <span class="mm-arrow">›</span>
+    </div>
+  </div>
+
+  <!-- DESKTOP ACCORDIONS -->
   <div class="sec open" id="s1">
     <div class="sec-head" onclick="togSec('s1')">
       <div class="sec-icon" style="background:#EEF3FC;">👤</div>
@@ -138,20 +246,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <span class="sec-badge" id="b1">Pendiente</span>
       <span class="sec-arrow">▼</span>
     </div>
-    <div class="sec-body">
-      <div class="row2">
-        <div class="field"><label>Razón Social<span class="req">*</span></label><input id="f-razon" placeholder="Nombre empresa" oninput="upd()"></div>
-        <div class="field"><label>RUT<span class="req">*</span></label><input id="f-rut" placeholder="XX.XXX.XXX-X" oninput="upd()"></div>
-      </div>
-      <div class="row2">
-        <div class="field"><label>Contacto Principal<span class="req">*</span></label><input id="f-contacto" placeholder="Nombre y cargo" oninput="upd()"></div>
-        <div class="field"><label>Correo<span class="req">*</span></label><input id="f-email" type="email" placeholder="correo@empresa.cl" oninput="upd()"></div>
-      </div>
-      <div class="field"><label>Teléfono</label><input id="f-tel" placeholder="+56 9 XXXX XXXX" oninput="upd()"></div>
-    </div>
+    <div class="sec-body" id="body-s1"></div>
   </div>
-
-  <!-- S2 -->
   <div class="sec" id="s2">
     <div class="sec-head" onclick="togSec('s2')">
       <div class="sec-icon" style="background:#FEF0E6;">🗄️</div>
@@ -159,48 +255,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <span class="sec-badge" id="b2">Pendiente</span>
       <span class="sec-arrow">▼</span>
     </div>
-    <div class="sec-body">
-      <div class="row2">
-        <div class="field">
-          <label>Nombre BD nueva<span class="req">*</span></label>
-          <div class="hint">Máx. 30 caracteres</div>
-          <input id="f-bdnueva" placeholder="NOMBRE_BD" maxlength="30" style="font-family:var(--mono);font-size:12px;" oninput="upd();document.getElementById('cc').textContent=this.value.length">
-          <div class="char-count"><span id="cc">0</span>/30</div>
-        </div>
-        <div class="field">
-          <label>BD de Origen<span class="req">*</span></label>
-          <div class="hint">Copiar desde esta BD</div>
-          <input id="f-bdorigen" placeholder="NOMBRE_ORIGEN" style="font-family:var(--mono);font-size:12px;" oninput="upd()">
-        </div>
-      </div>
-      <div class="field"><label>Descripción BD nueva<span class="req">*</span></label><div class="hint">Nombre que aparece en el sistema · Máx. 30 caracteres</div><input id="f-desc" placeholder="Empresa Ejemplo 2026" maxlength="30" oninput="upd()"></div>
-      <div class="field"><label>Ambiente ASP<span class="req">*</span></label><input id="f-amb" placeholder="\\MANAGER.LOCAL\MG\[código]\MANAGER8\COMUNES\" style="font-family:var(--mono);font-size:11px;" oninput="upd()"></div>
-      <div class="field"><label>Código BD (nombre interno)</label><input id="f-cod" placeholder="T969935600A" style="font-family:var(--mono);font-size:12px;" oninput="upd()"></div>
-      <div class="field">
-        <label>¿El cliente tiene más de una BD?</label>
-        <div class="toggles">
-          <div class="tog" onclick="selTog(this,'mas','no');document.getElementById('otras-bd').style.display='none'"><div class="tog-dot"></div>No, solo esta</div>
-          <div class="tog" onclick="selTog(this,'mas','si');document.getElementById('otras-bd').style.display='block'"><div class="tog-dot"></div>Sí, tiene más</div>
-        </div>
-      </div>
-      <div class="field" id="otras-bd" style="display:none;"><label>Detallar las otras BD</label><textarea id="f-otras" placeholder="Indicar nombre de cada BD, una por línea" oninput="upd()"></textarea></div>
-      <div class="field">
-        <label>Módulos contratados en ASP</label>
-        <div class="toggles" id="mods">
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Abastecimiento</div>
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Existencias</div>
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Producción</div>
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Servicios</div>
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Ventas</div>
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Finanzas</div>
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Gestión Comercial</div>
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Gestión Financiera</div>
-        </div>
-      </div>
-    </div>
+    <div class="sec-body" id="body-s2"></div>
   </div>
-
-  <!-- S3 -->
   <div class="sec" id="s3">
     <div class="sec-head" onclick="togSec('s3')">
       <div class="sec-icon" style="background:#E8F4EE;">❓</div>
@@ -208,24 +264,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <span class="sec-badge" id="b3">Pendiente</span>
       <span class="sec-arrow">▼</span>
     </div>
-    <div class="sec-body">
-      <div class="field"><label>¿Tiene IT interno para entregar el respaldo?</label><div class="toggles"><div class="tog" onclick="selTog(this,'it','si')"><div class="tog-dot"></div>Sí</div><div class="tog" onclick="selTog(this,'it','no')"><div class="tog-dot"></div>No, necesita apoyo</div></div></div>
-      <div class="field">
-        <label>¿Factura con Acepta?</label>
-        <div class="toggles">
-          <div class="tog" onclick="selTog(this,'acepta','si');document.getElementById('dte-note').style.display='flex'"><div class="tog-dot"></div>Sí, usa Acepta</div>
-          <div class="tog" onclick="selTog(this,'acepta','no');document.getElementById('dte-note').style.display='none'"><div class="tog-dot"></div>No</div>
-          <div class="tog" onclick="selTog(this,'acepta','otra');document.getElementById('dte-note').style.display='none'"><div class="tog-dot"></div>Otra entidad</div>
-        </div>
-        <div class="alert-box alert-orange" id="dte-note" style="display:none;">⚠ Notificar al área DTE para configurar Acepta.</div>
-      </div>
-      <div class="field"><label>¿Tiene formatos de impresión personalizados?</label><div class="toggles"><div class="tog" onclick="selTog(this,'fmt','si')"><div class="tog-dot"></div>Sí</div><div class="tog" onclick="selTog(this,'fmt','no')"><div class="tog-dot"></div>No, usa estándar</div></div></div>
-      <div class="field"><label>Fecha estimada de inicio</label><input type="date" id="f-fecha" oninput="upd()"></div>
-      <div class="field"><label>Observaciones</label><textarea id="f-obs" placeholder="Detalles adicionales relevantes..." oninput="upd()"></textarea></div>
-    </div>
+    <div class="sec-body" id="body-s3"></div>
   </div>
-
-  <!-- S4 TABLAS -->
   <div class="sec" id="s4">
     <div class="sec-head" onclick="togSec('s4')">
       <div class="sec-icon" style="background:#F4EEF8;">📊</div>
@@ -233,13 +273,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <span class="sec-badge" id="b4">Pendiente</span>
       <span class="sec-arrow">▼</span>
     </div>
-    <div class="sec-body">
-      <div class="alert-box alert-blue">ℹ Las tablas marcadas como OBLIGATORIA se copian siempre. Marca SÍ o NO en las demás según lo acordado.</div>
-      <div class="tabla-wrap">
-        <div class="t-head"><div class="th">N°</div><div class="th tl">Tabla / Contenido</div><div class="th si">SÍ</div><div class="th no">NO</div></div>
-        <div id="tabla-list"></div>
-      </div>
-    </div>
+    <div class="sec-body" id="body-s4"></div>
   </div>
 
   <!-- SUMMARY -->
@@ -250,19 +284,71 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Correo para IT</div>
       <div class="email-box" id="email-box"></div>
       <div class="btns">
-        <button class="btn-copy" id="btn-copy" onclick="copyEmail()">📋 Copiar correo</button>
-        <button class="btn-ol" onclick="openOutlook()">✉ Abrir en Outlook</button>
-        <button class="btn-dl" onclick="downloadResumen()">⬇ Descargar resumen</button>
+        <button class="btn-sec" id="btn-copy" onclick="copyEmail()">📋 Copiar correo</button>
+        <button class="btn-sec btn-ol" onclick="openOutlook()">✉ Abrir en Outlook</button>
+        <button class="btn-sec btn-dl" onclick="downloadResumen()">⬇ Descargar resumen</button>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ══ MOBILE PANELS ══ -->
+<div class="mobile-panel" id="p1">
+  <div class="panel-topbar">
+    <button class="panel-back" onclick="closePanel('p1')">Volver</button>
+    <div class="panel-title">Datos del Cliente</div>
+  </div>
+  <div class="panel-body" id="pbody-p1"></div>
+</div>
+<div class="mobile-panel" id="p2">
+  <div class="panel-topbar">
+    <button class="panel-back" onclick="closePanel('p2')">Volver</button>
+    <div class="panel-title">Datos de la BD</div>
+  </div>
+  <div class="panel-body" id="pbody-p2"></div>
+</div>
+<div class="mobile-panel" id="p3">
+  <div class="panel-topbar">
+    <button class="panel-back" onclick="closePanel('p3')">Volver</button>
+    <div class="panel-title">Preguntas Clave</div>
+  </div>
+  <div class="panel-body" id="pbody-p3"></div>
+</div>
+<div class="mobile-panel" id="p4">
+  <div class="panel-topbar">
+    <button class="panel-back" onclick="closePanel('p4')">Volver</button>
+    <div class="panel-title">Tablas a Copiar</div>
+  </div>
+  <div class="panel-body" id="pbody-p4"></div>
+</div>
+<div class="mobile-panel" id="p-summ">
+  <div class="panel-topbar">
+    <button class="panel-back" onclick="closePanel('p-summ')">Volver</button>
+    <div class="panel-title">Resumen</div>
+  </div>
+  <div class="panel-body">
+    <div class="summ-box show" id="summ-mobile">
+      <div class="summ-title">📋 Resumen del Levantamiento</div>
+      <div id="summ-content-mobile"></div>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);">
+        <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Correo para IT</div>
+        <div class="email-box" id="email-box-mobile"></div>
+        <div class="btns" style="margin-top:12px;">
+          <button class="btn-sec" id="btn-copy-m" onclick="copyEmail('m')">📋 Copiar correo</button>
+          <button class="btn-sec btn-ol" onclick="openOutlook()">✉ Abrir en Outlook</button>
+          <button class="btn-sec btn-dl" onclick="downloadResumen()">⬇ Descargar resumen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STICKY FOOTER -->
 <div class="sticky-footer">
   <div class="sf-left">
     <div class="sf-pct" id="sf-pct">0%</div>
     <div>
-      <div style="font-size:11px;color:var(--text-3);margin-bottom:3px;">Completado</div>
+      <div class="sf-label">Completado</div>
       <div class="sf-mini"><div class="sf-fill" id="sf-fill"></div></div>
     </div>
   </div>
@@ -296,28 +382,135 @@ const TABLAS=[
 ];
 const togState={};
 
+// ── HTML TEMPLATES ──
+function htmlCliente(){return `
+  <div class="row2">
+    <div class="field"><label>Razón Social<span class="req">*</span></label><input id="f-razon" placeholder="Nombre empresa" oninput="upd()"></div>
+    <div class="field"><label>RUT<span class="req">*</span></label><input id="f-rut" placeholder="XX.XXX.XXX-X" oninput="upd()"></div>
+  </div>
+  <div class="row2">
+    <div class="field"><label>Contacto Principal<span class="req">*</span></label><input id="f-contacto" placeholder="Nombre y cargo" oninput="upd()"></div>
+    <div class="field"><label>Correo<span class="req">*</span></label><input id="f-email" type="email" placeholder="correo@empresa.cl" oninput="upd()"></div>
+  </div>
+  <div class="field"><label>Teléfono</label><input id="f-tel" placeholder="+56 9 XXXX XXXX" oninput="upd()"></div>`;}
+
+function htmlBD(){return `
+  <div class="row2">
+    <div class="field">
+      <label>Nombre BD nueva<span class="req">*</span></label>
+      <div class="hint">Máx. 30 caracteres</div>
+      <input id="f-bdnueva" placeholder="NOMBRE_BD" maxlength="30" style="font-family:var(--mono);font-size:13px;" oninput="upd();document.querySelectorAll('.cc-count').forEach(e=>e.textContent=this.value.length)">
+      <div class="char-count"><span class="cc-count">0</span>/30</div>
+    </div>
+    <div class="field">
+      <label>BD de Origen<span class="req">*</span></label>
+      <div class="hint">Copiar desde esta BD</div>
+      <input id="f-bdorigen" placeholder="NOMBRE_ORIGEN" style="font-family:var(--mono);font-size:13px;" oninput="upd()">
+    </div>
+  </div>
+  <div class="field"><label>Descripción BD nueva<span class="req">*</span></label><div class="hint">Nombre en el sistema · Máx. 30 caracteres</div><input id="f-desc" placeholder="Empresa Ejemplo 2026" maxlength="30" oninput="upd()"></div>
+  <div class="field"><label>Ambiente ASP<span class="req">*</span></label><input id="f-amb" placeholder="\\MANAGER.LOCAL\\MG\\[código]\\MANAGER8\\COMUNES\\" style="font-family:var(--mono);font-size:11px;" oninput="upd()"></div>
+  <div class="field"><label>Código BD (nombre interno)</label><input id="f-cod" placeholder="T969935600A" style="font-family:var(--mono);font-size:13px;" oninput="upd()"></div>
+  <div class="field">
+    <label>¿El cliente tiene más de una BD?</label>
+    <div class="toggles">
+      <div class="tog" onclick="selTog(this,'mas','no');document.querySelectorAll('.otras-bd-wrap').forEach(e=>e.style.display='none')"><div class="tog-dot"></div>No, solo esta</div>
+      <div class="tog" onclick="selTog(this,'mas','si');document.querySelectorAll('.otras-bd-wrap').forEach(e=>e.style.display='block')"><div class="tog-dot"></div>Sí, tiene más</div>
+    </div>
+  </div>
+  <div class="field otras-bd-wrap" style="display:none;"><label>Detallar las otras BD</label><textarea id="f-otras" placeholder="Indicar nombre de cada BD, una por línea" oninput="upd()"></textarea></div>
+  <div class="field">
+    <label>Módulos contratados en ASP</label>
+    <div class="toggles mods-group">
+      <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Abastecimiento</div>
+      <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Existencias</div>
+      <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Producción</div>
+      <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Servicios</div>
+      <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Ventas</div>
+      <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Finanzas</div>
+      <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Gestión Comercial</div>
+      <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Gestión Financiera</div>
+    </div>
+  </div>`;}
+
+function htmlPreguntas(){return `
+  <div class="field"><label>¿Tiene IT interno para entregar el respaldo?</label><div class="toggles"><div class="tog" onclick="selTog(this,'it','si')"><div class="tog-dot"></div>Sí</div><div class="tog" onclick="selTog(this,'it','no')"><div class="tog-dot"></div>No, necesita apoyo</div></div></div>
+  <div class="field">
+    <label>¿Factura con Acepta?</label>
+    <div class="toggles">
+      <div class="tog" onclick="selTog(this,'acepta','si');document.querySelectorAll('.dte-note').forEach(e=>e.style.display='flex')"><div class="tog-dot"></div>Sí, usa Acepta</div>
+      <div class="tog" onclick="selTog(this,'acepta','no');document.querySelectorAll('.dte-note').forEach(e=>e.style.display='none')"><div class="tog-dot"></div>No</div>
+      <div class="tog" onclick="selTog(this,'acepta','otra');document.querySelectorAll('.dte-note').forEach(e=>e.style.display='none')"><div class="tog-dot"></div>Otra entidad</div>
+    </div>
+    <div class="alert-box alert-orange dte-note" style="display:none;">⚠ Notificar al área DTE para configurar Acepta.</div>
+  </div>
+  <div class="field"><label>¿Tiene formatos de impresión personalizados?</label><div class="toggles"><div class="tog" onclick="selTog(this,'fmt','si')"><div class="tog-dot"></div>Sí</div><div class="tog" onclick="selTog(this,'fmt','no')"><div class="tog-dot"></div>No, usa estándar</div></div></div>
+  <div class="field"><label>Fecha estimada de inicio</label><input type="date" id="f-fecha" oninput="upd()"></div>
+  <div class="field"><label>Observaciones</label><textarea id="f-obs" placeholder="Detalles adicionales relevantes..." oninput="upd()"></textarea></div>`;}
+
+function htmlTablas(){return `
+  <div class="alert-box alert-blue" style="margin-bottom:10px;">ℹ Las OBLIGATORIAS se copian siempre. Marca SÍ/NO en las demás.</div>
+  <div class="tabla-wrap">
+    <div class="t-head"><div class="th">N°</div><div class="th tl">Tabla</div><div class="th si">SÍ</div><div class="th no">NO</div></div>
+    <div id="tabla-list"></div>
+  </div>`;}
+
+// Inject content into both desktop and mobile containers
+function injectContent(){
+  document.getElementById('body-s1').innerHTML=htmlCliente();
+  document.getElementById('pbody-p1').innerHTML=htmlCliente();
+  document.getElementById('body-s2').innerHTML=htmlBD();
+  document.getElementById('pbody-p2').innerHTML=htmlBD();
+  document.getElementById('body-s3').innerHTML=htmlPreguntas();
+  document.getElementById('pbody-p3').innerHTML=htmlPreguntas();
+  document.getElementById('body-s4').innerHTML=htmlTablas();
+  document.getElementById('pbody-p4').innerHTML=htmlTablas();
+  renderTablas();
+}
+
 function renderTablas(){
-  document.getElementById('tabla-list').innerHTML=TABLAS.map((t,i)=>`
-    <div class="tr ${t.ob?'ob':''}" id="tr${i}">
-      <div class="td-n">${t.ob?'★':t.n}</div>
-      <div class="td-info">
-        <div class="td-cod">${t.cod}${t.ob?' <span class="ob-b">OBLIGATORIA</span>':''}</div>
-        <div class="td-desc">${t.desc}</div>
-      </div>
-      <div class="td-cb"><div class="cb cb-si ${t.ob?'on':''}" id="si${i}" onclick="tCb(${i},'si')"></div></div>
-      <div class="td-cb"><div class="cb cb-no" id="no${i}" onclick="tCb(${i},'no')"></div></div>
-    </div>`).join('');
+  document.querySelectorAll('#tabla-list').forEach(el=>{
+    el.innerHTML=TABLAS.map((t,i)=>`
+      <div class="tr ${t.ob?'ob':''}" id="tr${i}">
+        <div class="td-n">${t.ob?'★':t.n}</div>
+        <div class="td-info"><div class="td-cod">${t.cod}${t.ob?' <span class="ob-b">OBLIGATORIA</span>':''}</div><div class="td-desc">${t.desc}</div></div>
+        <div class="td-cb"><div class="cb cb-si ${t.ob?'on':''}" onclick="tCb(${i},'si')"></div></div>
+        <div class="td-cb"><div class="cb cb-no" onclick="tCb(${i},'no')"></div></div>
+      </div>`).join('');
+  });
 }
 
 function tCb(i,type){
   if(TABLAS[i].ob)return;
-  const si=document.getElementById('si'+i),no=document.getElementById('no'+i);
-  if(type==='si'){si.classList.toggle('on');if(si.classList.contains('on'))no.classList.remove('on');}
-  else{no.classList.toggle('on');if(no.classList.contains('on'))si.classList.remove('on');}
+  const all_si=document.querySelectorAll(`[id="si${i}"]`)||[];
+  const all_no=document.querySelectorAll(`[id="no${i}"]`)||[];
+  // Find by position in all tr elements
+  const siEls=document.querySelectorAll('.cb-si');
+  const noEls=document.querySelectorAll('.cb-no');
+  // Each tabla appears twice (desktop+mobile), index accordingly
+  const count=TABLAS.length;
+  const indices=[];
+  siEls.forEach((el,idx)=>{if(idx%count===i)indices.push(idx);});
+  if(type==='si'){
+    siEls.forEach((el,idx)=>{if(idx%count===i){el.classList.toggle('on');}});
+    noEls.forEach((el,idx)=>{if(idx%count===i&&document.querySelectorAll('.cb-si')[idx]?.classList.contains('on'))el.classList.remove('on');});
+  } else {
+    noEls.forEach((el,idx)=>{if(idx%count===i){el.classList.toggle('on');}});
+    siEls.forEach((el,idx)=>{if(idx%count===i&&document.querySelectorAll('.cb-no')[idx]?.classList.contains('on'))el.classList.remove('on');});
+  }
   upd();
 }
 
 function togSec(id){document.getElementById(id).classList.toggle('open');}
+
+function openPanel(id){
+  document.getElementById(id).classList.add('active');
+  document.body.style.overflow='hidden';
+}
+function closePanel(id){
+  document.getElementById(id).classList.remove('active');
+  document.body.style.overflow='';
+}
 
 function selTog(el,group,val){
   document.querySelectorAll(`[onclick*="'${group}'"]`).forEach(o=>o.classList.remove('on'));
@@ -325,35 +518,41 @@ function selTog(el,group,val){
   togState[group]=val;
   upd();
 }
-
 function togMod(el){el.classList.toggle('on');upd();}
-function getMods(){return[...document.querySelectorAll('#mods .tog.on')].map(o=>o.textContent.trim()).join(', ')||'—';}
+function getMods(){return[...document.querySelectorAll('.mods-group .tog.on')].filter((el,i,arr)=>arr.findIndex(e=>e.textContent===el.textContent)===i).map(o=>o.textContent.trim()).join(', ')||'—';}
 function v(id){return(document.getElementById(id)?.value||'').trim();}
 
 function upd(){
   const req=[v('f-razon'),v('f-rut'),v('f-contacto'),v('f-email'),v('f-bdnueva'),v('f-bdorigen'),v('f-desc'),v('f-amb')];
   const filled=req.filter(x=>x).length;
   const pct=Math.round(filled/req.length*100);
-  document.getElementById('tp').style.width=pct+'%';
-  document.getElementById('sf-fill').style.width=pct+'%';
+  ['tp','sf-fill'].forEach(id=>document.getElementById(id).style.width=pct+'%');
   document.getElementById('sf-pct').textContent=pct+'%';
   const cl=v('f-razon')&&v('f-contacto');
-  setBadge('b1',cl);
   const bd=v('f-bdnueva')&&v('f-bdorigen');
-  setBadge('b2',bd);
+  setBadge('b1','mb1',cl);
+  setBadge('b2','mb2',bd);
 }
 
-function setBadge(id,done){
-  const el=document.getElementById(id);
-  el.textContent=done?'✓ Completado':'Pendiente';
-  el.className='sec-badge'+(done?' done':'');
+function setBadge(did,mid,done){
+  [did,mid].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.textContent=done?'✓ Completado':'Pendiente';
+    el.className=(id.startsWith('b')?'sec-badge':'mm-badge')+(done?' done':'');
+  });
 }
 
 function buildEmail(){
   const masBD=togState['mas'];
   const otrasBD=v('f-otras');
   const codigo=(v('f-cod')||'[código BD]').split('//')[0].trim();
-  const sel=TABLAS.filter((t,i)=>t.ob||document.getElementById('si'+i)?.classList.contains('on'));
+  const sel=TABLAS.filter((t,i)=>{
+    const siEls=document.querySelectorAll('.cb-si');
+    let on=false;
+    siEls.forEach((el,idx)=>{if(idx%TABLAS.length===i&&el.classList.contains('on'))on=true;});
+    return t.ob||on;
+  });
   const maxCod=Math.max(...sel.map(t=>t.cod.length));
   const tablasLines=sel.map((t,j)=>`   ${String(j+1).padStart(2,' ')}. ${t.cod.padEnd(maxCod+2,' ')}${t.desc}`).join('\n');
   let bdBlock=`1. Crear base denominada "${v('f-bdnueva')||'[NOMBRE_BD]'}" y en el campo "Descripción" indicar: ${v('f-desc')||'[descripción]'}`;
@@ -385,8 +584,14 @@ Estaré atenta a sus comentarios. Saludos cordiales.`;
 }
 
 function generate(){
-  const sel=TABLAS.filter((t,i)=>t.ob||document.getElementById('si'+i)?.classList.contains('on'));
-  document.getElementById('summ-content').innerHTML=`
+  const sel=TABLAS.filter((t,i)=>{
+    const siEls=document.querySelectorAll('.cb-si');
+    let on=false;
+    siEls.forEach((el,idx)=>{if(idx%TABLAS.length===i&&el.classList.contains('on'))on=true;});
+    return t.ob||on;
+  });
+  const emailText=buildEmail();
+  const summHtml=`
     <div class="summ-sec"><div class="summ-sec-title">Cliente</div>
       <div class="summ-row"><span class="summ-lbl">Razón Social</span><span class="summ-val">${v('f-razon')||'—'}</span></div>
       <div class="summ-row"><span class="summ-lbl">RUT</span><span class="summ-val">${v('f-rut')||'—'}</span></div>
@@ -402,20 +607,31 @@ function generate(){
     <div class="summ-sec"><div class="summ-sec-title">Tablas seleccionadas (${sel.length})</div>
       <div class="tags">${sel.map(t=>`<span class="tag">${t.cod}</span>`).join('')}</div>
     </div>`;
-  document.getElementById('email-box').textContent=buildEmail();
-  const s=document.getElementById('summ');
-  s.classList.add('show');
-  s.scrollIntoView({behavior:'smooth',block:'start'});
+
+  // Desktop
+  const ds=document.getElementById('summ');
+  document.getElementById('summ-content').innerHTML=summHtml;
+  document.getElementById('email-box').textContent=emailText;
+  ds.classList.add('show');
+
+  // Mobile — open panel
+  document.getElementById('summ-content-mobile').innerHTML=summHtml;
+  document.getElementById('email-box-mobile').textContent=emailText;
+  const isMobile=window.innerWidth<=640;
+  if(isMobile){openPanel('p-summ');}
+  else{ds.scrollIntoView({behavior:'smooth',block:'start'});}
 }
 
-function copyEmail(){
+function copyEmail(suffix){
   navigator.clipboard.writeText(buildEmail()).then(()=>{
-    const b=document.getElementById('btn-copy');
+    const id=suffix?'btn-copy-m':'btn-copy';
+    const b=document.getElementById(id);
+    if(!b)return;
+    const orig=b.textContent;
     b.textContent='✓ Copiado';b.classList.add('ok');
-    setTimeout(()=>{b.textContent='📋 Copiar correo';b.classList.remove('ok');},2000);
+    setTimeout(()=>{b.textContent=orig;b.classList.remove('ok');},2000);
   });
 }
-
 function openOutlook(){
   const email=buildEmail();
   const lines=email.split('\n');
@@ -423,9 +639,13 @@ function openOutlook(){
   const body=lines.slice(lines.findIndex(l=>l.trim()==='')+1).join('\n');
   window.location.href=`mailto:it@manager.cl?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(body)}`;
 }
-
 function downloadResumen(){
-  const sel=TABLAS.filter((t,i)=>t.ob||document.getElementById('si'+i)?.classList.contains('on'));
+  const sel=TABLAS.filter((t,i)=>{
+    const siEls=document.querySelectorAll('.cb-si');
+    let on=false;
+    siEls.forEach((el,idx)=>{if(idx%TABLAS.length===i&&el.classList.contains('on'))on=true;});
+    return t.ob||on;
+  });
   const cliente=v('f-razon')||'Cliente';
   const fecha=new Date().toLocaleDateString('es-CL').replace(/\//g,'-');
   const emailText=buildEmail();
@@ -435,8 +655,7 @@ function downloadResumen(){
 .hdr h1{font-size:16pt;margin:0 0 4px;}.hdr p{font-size:10pt;opacity:.7;margin:0;}
 .sec{margin-bottom:20px;}.st{font-size:9pt;font-weight:bold;text-transform:uppercase;letter-spacing:.06em;color:#888;border-bottom:1px solid #ddd;padding-bottom:5px;margin-bottom:10px;}
 .row{display:flex;gap:8px;margin-bottom:5px;}.lbl{color:#666;width:160px;flex-shrink:0;}.val{font-weight:bold;}
-.tags{display:flex;flex-wrap:wrap;gap:5px;}
-.tag{font-family:'Courier New',monospace;font-size:10pt;padding:2px 8px;background:#e8f0fb;border-radius:4px;}
+.tags{display:flex;flex-wrap:wrap;gap:5px;}.tag{font-family:monospace;font-size:10pt;padding:2px 8px;background:#e8f0fb;border-radius:4px;}
 .email{background:#f5f5f5;border:1px solid #ddd;border-radius:6px;padding:14px;font-family:'Courier New',monospace;font-size:10pt;white-space:pre-wrap;line-height:1.8;}
 @media print{body{margin:16px;}}</style></head><body>
 <div class="hdr"><h1>Formulario de Levantamiento</h1><p>Creación Nueva BD (Réplica) · ${new Date().toLocaleString('es-CL')} · Manager ERP</p></div>
@@ -463,7 +682,7 @@ function downloadResumen(){
   a.click();
 }
 
-renderTablas();
+injectContent();
 upd();
 </script>
 </body>
