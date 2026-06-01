@@ -683,22 +683,45 @@ function setBadge(did,mid,done){
 
 function buildEmail(){
   const masBD=togState['mas'];
-  const otrasBD=v('f-otras');
   const codigo=(v('f-cod')||'[código BD]').split('//')[0].trim();
-  const sel=TABLAS.filter((t,i)=>{
+  const maxCod=Math.max(...TABLAS.map(t=>t.cod.length));
+
+  // Get selected tablas for main BD
+  const mainSel=TABLAS.filter((t,i)=>{
     const siEls=document.querySelectorAll('.cb-si');
     let on=false;
     siEls.forEach((el,idx)=>{if(idx%TABLAS.length===i&&el.classList.contains('on'))on=true;});
     return t.ob||on;
   });
-  const maxCod=Math.max(...sel.map(t=>t.cod.length));
-  const tablasLines=sel.map((t,j)=>`   ${String(j+1).padStart(2,' ')}. ${t.cod.padEnd(maxCod+2,' ')}${t.desc}`).join('\n');
-  let bdBlock=`1. Crear base denominada "${v('f-bdnueva')||'[NOMBRE_BD]'}" y en el campo "Descripción" indicar: ${v('f-desc')||'[descripción]'}`;
-  if(masBD==='si'&&otrasBD){
-    const lineas=otrasBD.split('\n').filter(l=>l.trim());
-    bdBlock+='\n\nAdemás, crear las siguientes BD en el mismo ambiente:\n'+lineas.map((l,i)=>`   ${i+2}. ${l.trim()}`).join('\n');
+
+  const fmtTablas=sel=>sel.map((t,j)=>`   ${String(j+1).padStart(2,' ')}. ${t.cod.padEnd(maxCod+2,' ')}${t.desc}`).join('\n');
+
+  // Build BD creation lines
+  let bdCreacion=`1. Crear base denominada "${v('f-bdnueva')||'[NOMBRE_BD]'}" y en el campo "Descripción" indicar: ${v('f-desc')||'[descripción]'}`;
+
+  const extraBlocks=document.querySelectorAll('.bd-block');
+  if(masBD==='si'&&extraBlocks.length>0){
+    extraBlocks.forEach((bl,i)=>{
+      const nm=bl.querySelector('.bd-nombre')?.value||`[BD_ADICIONAL_${i+2}]`;
+      const rut=bl.querySelector('.bd-rut')?.value||'';
+      const dc=bl.querySelector('.bd-desc')?.value||`[descripción BD ${i+2}]`;
+      const rutLine=rut?` — RUT: ${rut}`:'';
+      bdCreacion+=`\n${i+2}. Crear base denominada "${nm}"${rutLine} y en el campo "Descripción" indicar: ${dc}`;
+    });
   }
-  const bdRef=masBD==='si'?'todas las bases anteriores':`"${v('f-bdnueva')||'[NOMBRE_BD]'}"`;
+
+  // Tables section — main BD
+  let tablasSection=`── BD PRINCIPAL: "${v('f-bdnueva')||'[NOMBRE_BD]'}" ──────────────────────────\nCopiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" las siguientes tablas:\n${fmtTablas(mainSel)}`;
+
+  // Tables for extra BDs
+  if(masBD==='si'&&extraBlocks.length>0){
+    extraBlocks.forEach((bl,i)=>{
+      const nm=bl.querySelector('.bd-nombre')?.value||`[BD_ADICIONAL_${i+2}]`;
+      const extSel=getExtTablas(i);
+      tablasSection+=`\n\n── BD ${i+2}: "${nm}" ──────────────────────────\nCopiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" las siguientes tablas:\n${fmtTablas(extSel)}`;
+    });
+  }
+
   return `Para: it@manager.cl
 Asunto: Solicitud Creación BD – ${v('f-razon')||'[CLIENTE]'} – ${v('f-bdnueva')||'[BD]'}
 Área Solicitante: Comercial / GEX
@@ -707,14 +730,12 @@ Estimados, muy buenas tardes,
 
 Junto con saludar, solicito lo siguiente:
 
-${bdBlock}
+${bdCreacion}
 
 AMBIENTE : ${v('f-amb')||'[ruta del ambiente]'}
 BD       : ${codigo}
 
-Copiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a ${bdRef} las siguientes tablas (debe ser desde esa base, no otra):
-
-${tablasLines}
+${tablasSection}
 
 Nota: Todas las bases deben quedar actualizadas a la última versión disponible.
 
@@ -778,7 +799,7 @@ function openOutlook(){
   window.location.href=`mailto:it@manager.cl?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(body)}`;
 }
 function downloadResumen(){
-  const sel=TABLAS.filter((t,i)=>{
+  const mainSel=TABLAS.filter((t,i)=>{
     const siEls=document.querySelectorAll('.cb-si');
     let on=false;
     siEls.forEach((el,idx)=>{if(idx%TABLAS.length===i&&el.classList.contains('on'))on=true;});
@@ -787,6 +808,29 @@ function downloadResumen(){
   const cliente=v('f-razon')||'Cliente';
   const fecha=new Date().toLocaleDateString('es-CL').replace(/\//g,'-');
   const emailText=buildEmail();
+  const obs=v('f-obs');
+  const masBD=togState['mas'];
+  const extraBlocks=document.querySelectorAll('.bd-block');
+
+  // Extra BDs HTML for resumen
+  let extraBDsHtml='';
+  if(masBD==='si'&&extraBlocks.length>0){
+    extraBDsHtml='<div class="sec"><div class="st">Bases de Datos Adicionales</div>';
+    extraBlocks.forEach((bl,i)=>{
+      const nm=bl.querySelector('.bd-nombre')?.value||'—';
+      const rut=bl.querySelector('.bd-rut')?.value||'—';
+      const dc=bl.querySelector('.bd-desc')?.value||'—';
+      const extSel=getExtTablas(i);
+      extraBDsHtml+=`<div style="margin-bottom:12px;padding:10px;background:#f0f4fa;border-radius:6px;">
+        <div style="font-weight:bold;color:#1F3864;margin-bottom:6px;">BD ${i+2}: ${nm}</div>
+        <div class="row"><span class="lbl">RUT</span><span class="val">${rut}</span></div>
+        <div class="row"><span class="lbl">Descripción</span><span class="val">${dc}</span></div>
+        <div style="margin-top:6px;font-size:9pt;color:#555;">Tablas: ${extSel.map(t=>`<span style="font-family:monospace;background:#e8f0fb;padding:1px 5px;border-radius:3px;margin-right:3px;">${t.cod}</span>`).join('')}</div>
+      </div>`;
+    });
+    extraBDsHtml+='</div>';
+  }
+
   const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Levantamiento – ${cliente}</title>
 <style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;max-width:720px;margin:32px auto;padding:0 24px;color:#000;}
 .hdr{background:#1F3864;color:#fff;padding:20px 24px;border-radius:8px;margin-bottom:24px;}
@@ -795,10 +839,8 @@ function downloadResumen(){
 .row{display:flex;gap:8px;margin-bottom:5px;}.lbl{color:#666;width:160px;flex-shrink:0;}.val{font-weight:bold;}
 .tags{display:flex;flex-wrap:wrap;gap:5px;}.tag{font-family:monospace;font-size:10pt;padding:2px 8px;background:#e8f0fb;border-radius:4px;}
 .email{background:#f5f5f5;border:1px solid #ddd;border-radius:6px;padding:14px;font-family:'Courier New',monospace;font-size:10pt;white-space:pre-wrap;line-height:1.8;}
-@media print{body{margin:16px;}}
-/* ── BD ADICIONALES ── */
-
-</style></head><body>
+.obs-box{background:#FFF8F0;border-left:4px solid #C47A10;padding:10px 14px;border-radius:0 6px 6px 0;font-size:11pt;color:#333;line-height:1.6;}
+@media print{body{margin:16px;}}</style></head><body>
 <div class="hdr"><h1>Formulario de Levantamiento</h1><p>Creación Nueva BD (Réplica) · ${new Date().toLocaleString('es-CL')} · Manager ERP</p></div>
 <div class="sec"><div class="st">Cliente</div>
 <div class="row"><span class="lbl">Razón Social</span><span class="val">${v('f-razon')||'—'}</span></div>
@@ -806,15 +848,17 @@ function downloadResumen(){
 <div class="row"><span class="lbl">Contacto</span><span class="val">${v('f-contacto')||'—'}</span></div>
 <div class="row"><span class="lbl">Correo</span><span class="val">${v('f-email')||'—'}</span></div>
 <div class="row"><span class="lbl">Teléfono</span><span class="val">${v('f-tel')||'—'}</span></div></div>
-<div class="sec"><div class="st">Base de Datos</div>
+<div class="sec"><div class="st">Base de Datos Principal</div>
 <div class="row"><span class="lbl">BD Nueva</span><span class="val" style="font-family:monospace">${v('f-bdnueva')||'—'}</span></div>
 <div class="row"><span class="lbl">Descripción</span><span class="val">${v('f-desc')||'—'}</span></div>
 <div class="row"><span class="lbl">BD Origen</span><span class="val" style="font-family:monospace">${v('f-bdorigen')||'—'}</span></div>
 <div class="row"><span class="lbl">Ambiente</span><span class="val" style="font-family:monospace;font-size:10pt">${v('f-amb')||'—'}</span></div>
 <div class="row"><span class="lbl">Código BD</span><span class="val" style="font-family:monospace">${v('f-cod')||'—'}</span></div>
 <div class="row"><span class="lbl">Módulos</span><span class="val">${getMods()}</span></div></div>
-<div class="sec"><div class="st">Tablas seleccionadas (${sel.length})</div>
-<div class="tags">${sel.map(t=>`<span class="tag">${t.cod}</span>`).join('')}</div></div>
+<div class="sec"><div class="st">Tablas BD Principal (${mainSel.length})</div>
+<div class="tags">${mainSel.map(t=>`<span class="tag">${t.cod}</span>`).join('')}</div></div>
+${extraBDsHtml}
+${obs?`<div class="sec"><div class="st">Observaciones</div><div class="obs-box">${obs}</div></div>`:''}
 <div class="sec"><div class="st">Correo para IT</div><div class="email">${emailText}</div></div>
 </body></html>`;
   const a=document.createElement('a');
