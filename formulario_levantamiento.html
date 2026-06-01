@@ -501,8 +501,6 @@ function injectContent(){
   document.getElementById('pbody-p2').innerHTML=htmlBD();
   document.getElementById('body-s3').innerHTML=htmlPreguntas();
   document.getElementById('pbody-p3').innerHTML=htmlPreguntas();
-  document.getElementById('body-s4').innerHTML=htmlTablas();
-  document.getElementById('pbody-p4').innerHTML=htmlTablas();
   renderTablas();
 }
 
@@ -711,14 +709,14 @@ function buildEmail(){
   }
 
   // Tables section — main BD
-  let tablasSection=`── BD PRINCIPAL: "${v('f-bdnueva')||'[NOMBRE_BD]'}" ──────────────────────────\nCopiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" las siguientes tablas:\n${fmtTablas(mainSel)}`;
+  let tablasSection=`Copiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a "${v('f-bdnueva')||'[NOMBRE_BD]'}" las siguientes tablas:\n${fmtTablas(mainSel)}`;
 
   // Tables for extra BDs
   if(masBD==='si'&&extraBlocks.length>0){
     extraBlocks.forEach((bl,i)=>{
       const nm=bl.querySelector('.bd-nombre')?.value||`[BD_ADICIONAL_${i+2}]`;
       const extSel=getExtTablas(i);
-      tablasSection+=`\n\n── BD ${i+2}: "${nm}" ──────────────────────────\nCopiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" las siguientes tablas:\n${fmtTablas(extSel)}`;
+      tablasSection+=`\n\nCopiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a "${nm}" las siguientes tablas:\n${fmtTablas(extSel)}`;  
     });
   }
 
