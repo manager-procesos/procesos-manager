@@ -437,7 +437,6 @@ function htmlBD(){return `
     </div>
   </div>
   <div class="field"><label>Descripción BD nueva<span class="req">*</span></label><div class="hint">Nombre en el sistema · Máx. 30 caracteres</div><input id="f-desc" placeholder="Empresa Ejemplo 2026" maxlength="30" oninput="upd()"></div>
-  <div class="field"><label>RUT del cliente</label><input id="f-rut-bd" placeholder="XX.XXX.XXX-X" oninput="upd()"></div>
   <div class="field"><label>Ambiente ASP<span class="req">*</span></label><input id="f-amb" placeholder="\\MANAGER.LOCAL\\MG\\[código]\\MANAGER8\\COMUNES\\" style="font-family:var(--mono);font-size:11px;" oninput="upd()"></div>
   <div class="field"><label>Código BD (nombre interno)</label><input id="f-cod" placeholder="T969935600A" style="font-family:var(--mono);font-size:13px;" oninput="upd()"></div>
   <div class="field">
@@ -534,6 +533,7 @@ function renderExtraBDs(){
     const idx = b.dataset.idx;
     saved[idx] = {
       nombre: b.querySelector('.bd-nombre')?.value?.trim() || '',
+      rut: b.querySelector('.bd-rut')?.value?.trim() || '',
       desc: b.querySelector('.bd-desc')?.value?.trim() || '',
     };
   });
@@ -556,6 +556,12 @@ function renderExtraBDs(){
             <input class="bd-nombre" placeholder="NOMBRE_BD_${i+2}" value="${prev.nombre||''}" oninput="actualizarTituloBD(${i},this.value)">
           </div>
           <div class="bd-field">
+            <label>RUT del cliente</label>
+            <input class="bd-rut" placeholder="XX.XXX.XXX-X" value="${prev.rut||''}">
+          </div>
+        </div>
+        <div class="bd-fields-row">
+          <div class="bd-field" style="grid-column:1/-1;">
             <label>Descripción (máx. 30 car.)</label>
             <input class="bd-desc" placeholder="Descripción BD ${i+2}" maxlength="30" value="${prev.desc||''}">
           </div>
