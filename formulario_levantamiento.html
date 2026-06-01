@@ -442,11 +442,21 @@ function htmlBD(){return `
   <div class="field">
     <label>¿El cliente tiene más de una BD?</label>
     <div class="toggles">
-      <div class="tog" onclick="selTog(this,'mas','no');document.querySelectorAll('.otras-bd-wrap').forEach(e=>e.style.display='none')"><div class="tog-dot"></div>No, solo esta</div>
-      <div class="tog" onclick="selTog(this,'mas','si');document.querySelectorAll('.otras-bd-wrap').forEach(e=>e.style.display='block')"><div class="tog-dot"></div>Sí, tiene más</div>
+      <div class="tog" onclick="selTog(this,'mas','no');ocultarExtraBD()"><div class="tog-dot"></div>No, solo esta</div>
+      <div class="tog" onclick="selTog(this,'mas','si');mostrarExtraBD()"><div class="tog-dot"></div>Sí, tiene más</div>
     </div>
   </div>
-  <div class="field otras-bd-wrap" style="display:none;"><label>Detallar las otras BD</label><textarea id="f-otras" placeholder="Indicar nombre de cada BD, una por línea" oninput="upd()"></textarea></div>
+  <div class="extra-bds-wrap" id="extra-bds-wrap">
+    <div class="num-selector">
+      <span class="num-label">¿Cuántas BD adicionales?</span>
+      <div class="num-ctrl">
+        <button class="num-btn" onclick="changeNumBD(-1)">−</button>
+        <div class="num-val" id="num-bd-val">1</div>
+        <button class="num-btn" onclick="changeNumBD(1)">+</button>
+      </div>
+    </div>
+    <div id="bd-extra-blocks"></div>
+  </div>
   <div class="field">
     <label>Módulos contratados en ASP</label>
     <div class="toggles mods-group">
@@ -780,32 +790,7 @@ function downloadResumen(){
 .email{background:#f5f5f5;border:1px solid #ddd;border-radius:6px;padding:14px;font-family:'Courier New',monospace;font-size:10pt;white-space:pre-wrap;line-height:1.8;}
 @media print{body{margin:16px;}}
 /* ── BD ADICIONALES ── */
-.extra-bds-wrap{margin-top:14px;display:none;}
-.extra-bds-wrap.show{display:block;}
-.num-selector{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:12px 14px;background:var(--bg);border-radius:var(--r);border:1px solid var(--border);}
-.num-label{font-size:13px;font-weight:600;color:var(--text);flex:1;}
-.num-ctrl{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
-.num-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--bg);border:none;cursor:pointer;font-size:18px;color:var(--text);transition:background .15s;}
-.num-btn:hover{background:var(--border);}
-.num-val{width:40px;text-align:center;font-family:var(--mono);font-size:14px;font-weight:600;border-left:1px solid var(--border);border-right:1px solid var(--border);padding:6px 0;background:#fff;color:var(--navy);}
-.bd-block{border:1px solid var(--border-hi);border-radius:var(--r-lg);margin-bottom:10px;overflow:hidden;background:var(--card);}
-.bd-block-head{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;background:#EEF3FC;transition:background .1s;-webkit-tap-highlight-color:transparent;}
-.bd-block-head:hover{background:#E0EAF8;}
-.bd-num{width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:var(--mono);}
-.bd-block-title{font-size:13px;font-weight:600;flex:1;color:var(--navy);}
-.bd-block-arrow{font-size:12px;color:var(--text-3);transition:transform .2s;}
-.bd-block.open .bd-block-arrow{transform:rotate(180deg);}
-.bd-block-body{display:none;padding:14px;border-top:1px solid var(--border-hi);}
-.bd-block.open .bd-block-body{display:block;}
-.bd-fields-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
-.bd-field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:4px;color:var(--text-2);}
-.bd-field input{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--r);font-family:var(--mono);font-size:12px;color:var(--text);background:#fff;outline:none;transition:border .15s;}
-.bd-field input:focus{border-color:var(--sky);}
-.bd-tabla-title{font-size:12.5px;font-weight:600;color:var(--text-2);margin-bottom:6px;padding-top:4px;}
-@media(max-width:640px){
-  .bd-fields-row{grid-template-columns:1fr;}
-  .num-selector{flex-wrap:wrap;}
-}
+
 </style></head><body>
 <div class="hdr"><h1>Formulario de Levantamiento</h1><p>Creación Nueva BD (Réplica) · ${new Date().toLocaleString('es-CL')} · Manager ERP</p></div>
 <div class="sec"><div class="st">Cliente</div>
