@@ -437,15 +437,37 @@ function htmlBD(){return `
     </div>
   </div>
   <div class="field"><label>Descripción BD nueva<span class="req">*</span></label><div class="hint">Nombre en el sistema · Máx. 30 caracteres</div><input id="f-desc" placeholder="Empresa Ejemplo 2026" maxlength="30" oninput="upd()"></div>
-  <div class="field"><label>Ambiente ASP<span class="req">*</span></label><input id="f-amb" placeholder="\\MANAGER.LOCAL\\MG\\[código]\\MANAGER8\\COMUNES\\" style="font-family:var(--mono);font-size:11px;" oninput="upd()"></div>
+  <div class="field"><label>Ambiente ASP<span class="req">*</span></label><input id="f-amb" placeholder="\MANAGER.LOCAL\MG\[código]\MANAGER8\COMUNES\" style="font-family:var(--mono);font-size:11px;" oninput="upd()"></div>
   <div class="field"><label>Código BD (nombre interno)</label><input id="f-cod" placeholder="T969935600A" style="font-family:var(--mono);font-size:13px;" oninput="upd()"></div>
-  <div class="field">
+
+  <!-- TABLAS BD PRINCIPAL — colapsable, arriba -->
+  <div style="margin-top:16px;">
+    <div class="bd-block open" id="bd-principal-block">
+      <div class="bd-block-head" onclick="this.closest('.bd-block').classList.toggle('open')" style="background:#E6F4EC;">
+        <div class="bd-num" style="background:#1A6B42;">1</div>
+        <div class="bd-block-title" style="color:#1A6B42;">BD Principal — Tablas a copiar</div>
+        <span class="bd-block-arrow" style="color:#1A6B42;">▼</span>
+      </div>
+      <div class="bd-block-body">
+        <div class="alert-box alert-blue" style="margin-bottom:10px;">ℹ Las OBLIGATORIAS se copian siempre. Marca SÍ/NO en las demás según lo acordado con el cliente.</div>
+        <div class="tabla-wrap">
+          <div class="t-head"><div class="th">N°</div><div class="th tl">Tabla</div><div class="th si">SÍ</div><div class="th no">NO</div></div>
+          <div id="tabla-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOGGLE MÁS BDs -->
+  <div class="field" style="margin-top:16px;">
     <label>¿El cliente tiene más de una BD?</label>
     <div class="toggles">
       <div class="tog" onclick="selTog(this,'mas','no');ocultarExtraBD()"><div class="tog-dot"></div>No, solo esta</div>
       <div class="tog" onclick="selTog(this,'mas','si');mostrarExtraBD()"><div class="tog-dot"></div>Sí, tiene más</div>
     </div>
   </div>
+
+  <!-- BDs ADICIONALES -->
   <div class="extra-bds-wrap" id="extra-bds-wrap">
     <div class="num-selector">
       <span class="num-label">¿Cuántas BD adicionales?</span>
@@ -457,7 +479,9 @@ function htmlBD(){return `
     </div>
     <div id="bd-extra-blocks"></div>
   </div>
-  <div class="field">
+
+  <!-- MODULOS -->
+  <div class="field" style="margin-top:16px;">
     <label>Módulos contratados en ASP</label>
     <div class="toggles mods-group">
       <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Abastecimiento</div>
@@ -709,14 +733,14 @@ function buildEmail(){
   }
 
   // Tables section — main BD
-  let tablasSection=`Copiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a "${v('f-bdnueva')||'[NOMBRE_BD]'}" las siguientes tablas:\n${fmtTablas(mainSel)}`;
+  let tablasSection=`Copiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a "${v('f-bdnueva')||'[NOMBRE_BD]'}" las siguientes tablas (debe ser desde esa base, no otra):\n${fmtTablas(mainSel)}`;
 
   // Tables for extra BDs
   if(masBD==='si'&&extraBlocks.length>0){
     extraBlocks.forEach((bl,i)=>{
       const nm=bl.querySelector('.bd-nombre')?.value||`[BD_ADICIONAL_${i+2}]`;
       const extSel=getExtTablas(i);
-      tablasSection+=`\n\nCopiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a "${nm}" las siguientes tablas:\n${fmtTablas(extSel)}`;  
+      tablasSection+=`\n\nCopiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a "${nm}" las siguientes tablas:\n${fmtTablas(extSel)}`;
     });
   }
 
