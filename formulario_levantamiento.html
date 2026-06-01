@@ -169,6 +169,34 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   .mobile-menu{display:none;}
   .mobile-panel{display:none !important;}
 }
+
+/* ── BD ADICIONALES ── */
+.extra-bds-wrap{margin-top:14px;display:none;}
+.extra-bds-wrap.show{display:block;}
+.num-selector{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:12px 14px;background:var(--bg);border-radius:var(--r);border:1px solid var(--border);}
+.num-label{font-size:13px;font-weight:600;color:var(--text);flex:1;}
+.num-ctrl{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.num-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--bg);border:none;cursor:pointer;font-size:18px;color:var(--text);transition:background .15s;}
+.num-btn:hover{background:var(--border);}
+.num-val{width:40px;text-align:center;font-family:var(--mono);font-size:14px;font-weight:600;border-left:1px solid var(--border);border-right:1px solid var(--border);padding:6px 0;background:#fff;color:var(--navy);}
+.bd-block{border:1px solid var(--border-hi);border-radius:var(--r-lg);margin-bottom:10px;overflow:hidden;background:var(--card);}
+.bd-block-head{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;background:#EEF3FC;transition:background .1s;-webkit-tap-highlight-color:transparent;}
+.bd-block-head:hover{background:#E0EAF8;}
+.bd-num{width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:var(--mono);}
+.bd-block-title{font-size:13px;font-weight:600;flex:1;color:var(--navy);}
+.bd-block-arrow{font-size:12px;color:var(--text-3);transition:transform .2s;}
+.bd-block.open .bd-block-arrow{transform:rotate(180deg);}
+.bd-block-body{display:none;padding:14px;border-top:1px solid var(--border-hi);}
+.bd-block.open .bd-block-body{display:block;}
+.bd-fields-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.bd-field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:4px;color:var(--text-2);}
+.bd-field input{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--r);font-family:var(--mono);font-size:12px;color:var(--text);background:#fff;outline:none;transition:border .15s;}
+.bd-field input:focus{border-color:var(--sky);}
+.bd-tabla-title{font-size:12.5px;font-weight:600;color:var(--text-2);margin-bottom:6px;padding-top:4px;}
+@media(max-width:640px){
+  .bd-fields-row{grid-template-columns:1fr;}
+  .num-selector{flex-wrap:wrap;}
+}
 </style>
 </head>
 <body>
@@ -468,6 +496,99 @@ function injectContent(){
   renderTablas();
 }
 
+
+let numExtraBD = 1;
+
+function mostrarExtraBD(){
+  document.querySelectorAll('.extra-bds-wrap').forEach(e=>e.classList.add('show'));
+  renderExtraBDs();
+}
+
+function ocultarExtraBD(){
+  document.querySelectorAll('.extra-bds-wrap').forEach(e=>e.classList.remove('show'));
+}
+
+function changeNumBD(delta){
+  numExtraBD = Math.max(1, Math.min(6, numExtraBD + delta));
+  document.querySelectorAll('#num-bd-val').forEach(e=>e.textContent=numExtraBD);
+  renderExtraBDs();
+}
+
+function renderExtraBDs(){
+  const container = document.getElementById('bd-extra-blocks');
+  if(!container) return;
+  // Save existing values
+  const saved = {};
+  container.querySelectorAll('.bd-block').forEach(b=>{
+    const idx = b.dataset.idx;
+    saved[idx] = {
+      nombre: b.querySelector('.bd-nombre')?.value || '',
+      desc: b.querySelector('.bd-desc')?.value || '',
+    };
+  });
+  container.innerHTML = '';
+  for(let i = 0; i < numExtraBD; i++){
+    const prev = saved[i] || {};
+    const block = document.createElement('div');
+    block.className = 'bd-block open';
+    block.dataset.idx = i;
+    block.innerHTML = `
+      <div class="bd-block-head" onclick="this.closest('.bd-block').classList.toggle('open')">
+        <div class="bd-num">${i+2}</div>
+        <div class="bd-block-title" id="bdt${i}">BD Adicional ${i+1}</div>
+        <span class="bd-block-arrow">▼</span>
+      </div>
+      <div class="bd-block-body">
+        <div class="bd-fields-row">
+          <div class="bd-field">
+            <label>Nombre BD nueva</label>
+            <input class="bd-nombre" placeholder="NOMBRE_BD_${i+2}" value="${prev.nombre}" oninput="actualizarTituloBD(${i},this.value)">
+          </div>
+          <div class="bd-field">
+            <label>Descripción (máx. 30 car.)</label>
+            <input class="bd-desc" placeholder="Descripción BD ${i+2}" maxlength="30" value="${prev.desc}">
+          </div>
+        </div>
+        <div class="bd-tabla-title">Tablas a copiar para esta BD</div>
+        <div class="tabla-wrap" style="margin-top:0;">
+          <div class="t-head"><div class="th">N°</div><div class="th tl">Tabla / Contenido</div><div class="th si">SÍ</div><div class="th no">NO</div></div>
+          <div id="extlist${i}"></div>
+        </div>
+      </div>`;
+    container.appendChild(block);
+    renderExtTablas(i);
+  }
+}
+
+function actualizarTituloBD(i, val){
+  const el = document.getElementById('bdt'+i);
+  if(el) el.textContent = val || `BD Adicional ${i+1}`;
+}
+
+function renderExtTablas(bdIdx){
+  const el = document.getElementById('extlist'+bdIdx);
+  if(!el) return;
+  el.innerHTML = TABLAS.map((t,i) => `
+    <div class="tr ${t.ob?'ob':''}">
+      <div class="td-n">${t.ob?'★':t.n}</div>
+      <div class="td-info"><div class="td-cod">${t.cod}${t.ob?' <span class="ob-b">OBLIGATORIA</span>':''}</div><div class="td-desc">${t.desc}</div></div>
+      <div class="td-cb"><div class="cb cb-si ${t.ob?'on':''}" id="ext_si_${bdIdx}_${i}" onclick="tCbExt(${bdIdx},${i},'si')"></div></div>
+      <div class="td-cb"><div class="cb cb-no" id="ext_no_${bdIdx}_${i}" onclick="tCbExt(${bdIdx},${i},'no')"></div></div>
+    </div>`).join('');
+}
+
+function tCbExt(bdIdx, tIdx, type){
+  if(TABLAS[tIdx].ob) return;
+  const si = document.getElementById(`ext_si_${bdIdx}_${tIdx}`);
+  const no = document.getElementById(`ext_no_${bdIdx}_${tIdx}`);
+  if(type==='si'){si.classList.toggle('on');if(si.classList.contains('on'))no.classList.remove('on');}
+  else{no.classList.toggle('on');if(no.classList.contains('on'))si.classList.remove('on');}
+}
+
+function getExtTablas(bdIdx){
+  return TABLAS.filter((t,i)=>t.ob||document.getElementById(`ext_si_${bdIdx}_${i}`)?.classList.contains('on'));
+}
+
 function renderTablas(){
   document.querySelectorAll('#tabla-list').forEach(el=>{
     el.innerHTML=TABLAS.map((t,i)=>`
@@ -657,7 +778,35 @@ function downloadResumen(){
 .row{display:flex;gap:8px;margin-bottom:5px;}.lbl{color:#666;width:160px;flex-shrink:0;}.val{font-weight:bold;}
 .tags{display:flex;flex-wrap:wrap;gap:5px;}.tag{font-family:monospace;font-size:10pt;padding:2px 8px;background:#e8f0fb;border-radius:4px;}
 .email{background:#f5f5f5;border:1px solid #ddd;border-radius:6px;padding:14px;font-family:'Courier New',monospace;font-size:10pt;white-space:pre-wrap;line-height:1.8;}
-@media print{body{margin:16px;}}</style></head><body>
+@media print{body{margin:16px;}}
+/* ── BD ADICIONALES ── */
+.extra-bds-wrap{margin-top:14px;display:none;}
+.extra-bds-wrap.show{display:block;}
+.num-selector{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:12px 14px;background:var(--bg);border-radius:var(--r);border:1px solid var(--border);}
+.num-label{font-size:13px;font-weight:600;color:var(--text);flex:1;}
+.num-ctrl{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.num-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--bg);border:none;cursor:pointer;font-size:18px;color:var(--text);transition:background .15s;}
+.num-btn:hover{background:var(--border);}
+.num-val{width:40px;text-align:center;font-family:var(--mono);font-size:14px;font-weight:600;border-left:1px solid var(--border);border-right:1px solid var(--border);padding:6px 0;background:#fff;color:var(--navy);}
+.bd-block{border:1px solid var(--border-hi);border-radius:var(--r-lg);margin-bottom:10px;overflow:hidden;background:var(--card);}
+.bd-block-head{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;background:#EEF3FC;transition:background .1s;-webkit-tap-highlight-color:transparent;}
+.bd-block-head:hover{background:#E0EAF8;}
+.bd-num{width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:var(--mono);}
+.bd-block-title{font-size:13px;font-weight:600;flex:1;color:var(--navy);}
+.bd-block-arrow{font-size:12px;color:var(--text-3);transition:transform .2s;}
+.bd-block.open .bd-block-arrow{transform:rotate(180deg);}
+.bd-block-body{display:none;padding:14px;border-top:1px solid var(--border-hi);}
+.bd-block.open .bd-block-body{display:block;}
+.bd-fields-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.bd-field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:4px;color:var(--text-2);}
+.bd-field input{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--r);font-family:var(--mono);font-size:12px;color:var(--text);background:#fff;outline:none;transition:border .15s;}
+.bd-field input:focus{border-color:var(--sky);}
+.bd-tabla-title{font-size:12.5px;font-weight:600;color:var(--text-2);margin-bottom:6px;padding-top:4px;}
+@media(max-width:640px){
+  .bd-fields-row{grid-template-columns:1fr;}
+  .num-selector{flex-wrap:wrap;}
+}
+</style></head><body>
 <div class="hdr"><h1>Formulario de Levantamiento</h1><p>Creación Nueva BD (Réplica) · ${new Date().toLocaleString('es-CL')} · Manager ERP</p></div>
 <div class="sec"><div class="st">Cliente</div>
 <div class="row"><span class="lbl">Razón Social</span><span class="val">${v('f-razon')||'—'}</span></div>
