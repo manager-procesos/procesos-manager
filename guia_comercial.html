@@ -39,8 +39,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .sec-desc{color:var(--text-2);font-size:15px;line-height:1.65;margin-bottom:32px;max-width:680px;}
 
 /* STEPS CARDS */
-.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative;}
-.steps-grid::before{content:'';position:absolute;top:44px;left:calc(12.5% + 8px);right:calc(12.5% + 8px);height:2px;background:linear-gradient(90deg,var(--sky),var(--blue));z-index:0;}
+.steps-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;position:relative;}
+.steps-grid::before{content:'';position:absolute;top:44px;left:calc(10% + 8px);right:calc(10% + 8px);height:2px;background:linear-gradient(90deg,var(--sky),var(--blue));z-index:0;}
 .step-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 20px;text-align:center;position:relative;z-index:1;transition:transform .2s,box-shadow .2s;}
 .step-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(30,50,100,.12);}
 .step-card.yours{border-top:3px solid var(--sky);}
@@ -158,6 +158,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     </div>
     <div class="step-card yours">
       <div class="step-num">2</div>
+      <div class="step-icon" style="background:linear-gradient(135deg,#1F3864,#5B2C8D);">📝</div>
+      <div class="step-title">Creación de OT</div>
+      <div class="step-desc">Con el formulario listo, genera la OT y la envías a las áreas que correspondan para iniciar el proceso.</div>
+      <span class="step-tag tag-you">● Tu responsabilidad</span>
+      <div class="step-result">OT generada y enviada</div>
+    </div>
+    <div class="step-card yours">
+      <div class="step-num">3</div>
       <div class="step-icon" style="background:linear-gradient(135deg,#2E6DA4,#00B0F0);">📨</div>
       <div class="step-title">Solicitar BD a IT</div>
       <div class="step-desc">Envía el correo a IT con el formulario completado. Indica las tablas acordadas y los datos del ambiente.</div>
@@ -165,7 +173,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div class="step-result">Correo enviado a it@manager.cl</div>
     </div>
     <div class="step-card theirs">
-      <div class="step-num">3</div>
+      <div class="step-num">4</div>
       <div class="step-icon" style="background:linear-gradient(135deg,#7B3F00,#C47A10);">⚙️</div>
       <div class="step-title">IT Crea la BD</div>
       <div class="step-desc">IT crea el ambiente, la BD y los usuarios. Envía correo de bienvenida al cliente con sus credenciales.</div>
@@ -173,7 +181,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div class="step-result">BD lista + correo al cliente</div>
     </div>
     <div class="step-card theirs">
-      <div class="step-num">4</div>
+      <div class="step-num">5</div>
       <div class="step-icon" style="background:linear-gradient(135deg,#1A6B42,#2E9A5A);">✅</div>
       <div class="step-title">Verificación y Entrega</div>
       <div class="step-desc">Proyectos Onboarding verifica la BD, accesos y formatos. Presenta la BD al cliente y cierra el proceso.</div>
@@ -186,17 +194,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <div class="sec-label">Tiempos del proceso</div>
   <div class="flow-row">
     <div class="flow-col">
-      <div class="flow-day" style="background:#EEF3FC;color:#1F3864;">Día 1</div>
+      <div class="flow-day" style="background:#EEF3FC;color:#1F3864;">Comercial</div>
       <div class="flow-who" style="color:#1F3864;">Tú (Comercial)</div>
-      <div class="flow-what">Levantamiento con cliente + envío de correo a IT</div>
+      <div class="flow-what">Levantamiento → OT → Solicitud a IT</div>
     </div>
     <div class="flow-col">
-      <div class="flow-day" style="background:#FEF0E6;color:#7B3F00;">Día 1-2</div>
+      <div class="flow-day" style="background:#FEF0E6;color:#7B3F00;">IT Manager</div>
       <div class="flow-who" style="color:#7B3F00;">IT Manager</div>
       <div class="flow-what">Crea BD, ambiente y usuarios</div>
     </div>
     <div class="flow-col">
-      <div class="flow-day" style="background:#E8F4EE;color:#1A6B42;">Día 2-3</div>
+      <div class="flow-day" style="background:#E8F4EE;color:#1A6B42;">Onboarding</div>
       <div class="flow-who" style="color:#1A6B42;">Proyectos Onboarding</div>
       <div class="flow-what">Verifica BD y presenta al cliente</div>
     </div>
@@ -206,7 +214,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div class="flow-what">Opera en nueva BD con sus datos replicados</div>
     </div>
   </div>
-  <div class="flow-note">Tu parte (Comercial) se completa en el Día 1. El resto lo gestionan IT y Onboarding.</div>
+  <div class="flow-note">Tu parte (Comercial) termina al enviar la solicitud a IT. El resto lo gestionan IT y Onboarding.</div>
 </div>
 
 <!-- CHECKLIST COMERCIAL -->
