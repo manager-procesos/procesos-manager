@@ -255,14 +255,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <span class="mm-badge" id="mb3">Pendiente</span>
       <span class="mm-arrow">›</span>
     </div>
-    <div class="mm-item" onclick="openPanel('p4')">
-      <div class="mm-icon" style="background:#F4EEF8;">📊</div>
-      <div class="mm-label">
-        <div class="mm-title">4. Tablas a Copiar</div>
-        <div class="mm-sub">Seleccionar tablas con el cliente</div>
-      </div>
-      <span class="mm-badge" id="mb4">Pendiente</span>
-      <span class="mm-arrow">›</span>
     </div>
   </div>
 
@@ -294,14 +286,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     </div>
     <div class="sec-body" id="body-s3"></div>
   </div>
-  <div class="sec" id="s4">
-    <div class="sec-head" onclick="togSec('s4')">
-      <div class="sec-icon" style="background:#F4EEF8;">📊</div>
-      <div class="sec-title">4. Tablas a Copiar</div>
-      <span class="sec-badge" id="b4">Pendiente</span>
-      <span class="sec-arrow">▼</span>
-    </div>
-    <div class="sec-body" id="body-s4"></div>
   </div>
 
   <!-- SUMMARY -->
@@ -342,12 +326,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   </div>
   <div class="panel-body" id="pbody-p3"></div>
 </div>
-<div class="mobile-panel" id="p4">
-  <div class="panel-topbar">
-    <button class="panel-back" onclick="closePanel('p4')">Volver</button>
-    <div class="panel-title">Tablas a Copiar</div>
-  </div>
-  <div class="panel-body" id="pbody-p4"></div>
+
 </div>
 <div class="mobile-panel" id="p-summ">
   <div class="panel-topbar">
@@ -721,10 +700,10 @@ function buildEmail(){
   // Build BD creation lines
   let bdCreacion=`1. Crear base denominada "${v('f-bdnueva')||'[NOMBRE_BD]'}" y en el campo "Descripción" indicar: ${v('f-desc')||'[descripción]'}`;
 
-  const extraBlocks=document.querySelectorAll('.bd-block');
+  const extraBlocks=document.querySelectorAll('#bd-extra-blocks .bd-block');
   if(masBD==='si'&&extraBlocks.length>0){
     extraBlocks.forEach((bl,i)=>{
-      const nm=bl.querySelector('.bd-nombre')?.value||`[BD_ADICIONAL_${i+2}]`;
+      const nm=bl.querySelector('.bd-nombre')?.value||`[BD ${i+2}]`;
       const rut=bl.querySelector('.bd-rut')?.value||'';
       const dc=bl.querySelector('.bd-desc')?.value||`[descripción BD ${i+2}]`;
       const rutLine=rut?` — RUT: ${rut}`:'';
@@ -738,7 +717,7 @@ function buildEmail(){
   // Tables for extra BDs
   if(masBD==='si'&&extraBlocks.length>0){
     extraBlocks.forEach((bl,i)=>{
-      const nm=bl.querySelector('.bd-nombre')?.value||`[BD_ADICIONAL_${i+2}]`;
+      const nm=bl.querySelector('.bd-nombre')?.value||`[BD ${i+2}]`;
       const extSel=getExtTablas(i);
       tablasSection+=`\n\nCopiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a "${nm}" las siguientes tablas:\n${fmtTablas(extSel)}`;
     });
@@ -832,7 +811,7 @@ function downloadResumen(){
   const emailText=buildEmail();
   const obs=v('f-obs');
   const masBD=togState['mas'];
-  const extraBlocks=document.querySelectorAll('.bd-block');
+  const extraBlocks=document.querySelectorAll('#bd-extra-blocks .bd-block');
 
   // Extra BDs HTML for resumen
   let extraBDsHtml='';
@@ -883,10 +862,17 @@ ${extraBDsHtml}
 ${obs?`<div class="sec"><div class="st">Observaciones</div><div class="obs-box">${obs}</div></div>`:''}
 <div class="sec"><div class="st">Correo para IT</div><div class="email">${emailText}</div></div>
 </body></html>`;
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
-  a.download=`Levantamiento_${cliente.replace(/[^a-zA-Z0-9]/g,'_')}_${fecha}.html`;
-  a.click();
+  const ifrm=document.createElement('iframe');
+  ifrm.style.cssText='position:fixed;top:-9999px;left:-9999px;width:210mm;height:297mm;border:none;';
+  document.body.appendChild(ifrm);
+  ifrm.contentDocument.open();
+  ifrm.contentDocument.write(html);
+  ifrm.contentDocument.close();
+  setTimeout(()=>{
+    ifrm.contentWindow.focus();
+    ifrm.contentWindow.print();
+    setTimeout(()=>document.body.removeChild(ifrm),1000);
+  },500);
 }
 
 injectContent();
