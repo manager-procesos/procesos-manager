@@ -567,26 +567,28 @@ function genPDF(){
   });
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Levantamiento ${cliente}</title>
 <style>
-*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
 body{font-family:Calibri,Arial,sans-serif;font-size:11pt;max-width:700px;margin:20px auto;padding:0 20px;color:#18243C;}
-.hdr{background:#1F3864!important;color:#fff;padding:18px 22px;border-radius:8px;margin-bottom:20px;}
-h1{font-size:15pt;margin:0 0 4px;color:#fff;}
-.hdr p{color:rgba(255,255,255,.7);font-size:9pt;margin:0;}
-.st{background:#1F3864!important;color:#fff!important;padding:6px 12px;border-radius:5px;margin:16px 0 8px;font-size:9pt;font-weight:bold;text-transform:uppercase;letter-spacing:.05em;}
-.st-num{display:inline-block;width:18px;height:18px;background:#00B0F0!important;color:#1F3864!important;border-radius:50%;text-align:center;line-height:18px;font-size:8pt;font-weight:700;margin-right:6px;vertical-align:middle;}
-table.data{width:100%;border-collapse:collapse;margin-bottom:4px;}
-table.data td{padding:3px 0;font-size:11pt;vertical-align:top;}
+.hdr{border:3px solid #1F3864;border-radius:8px;padding:16px 20px;margin-bottom:20px;position:relative;}
+.hdr::before{content:'';display:block;height:8px;background:#1F3864;border-radius:4px 4px 0 0;margin:-16px -20px 12px -20px;}
+h1{font-size:15pt;margin:0 0 3px;color:#1F3864;}
+.hdr p{color:#4A5A78;font-size:9pt;margin:0;}
+.hdr-badge{display:inline-block;border:2px solid #00B0F0;color:#00B0F0;font-size:8pt;font-weight:700;padding:2px 8px;border-radius:4px;margin-top:6px;letter-spacing:.05em;text-transform:uppercase;}
+.st{border-left:5px solid #1F3864;padding:5px 10px;margin:16px 0 8px;font-size:9.5pt;font-weight:bold;text-transform:uppercase;letter-spacing:.05em;color:#1F3864;background:#F0F4FA;}
+.st-num{display:inline-block;width:20px;height:20px;border:2px solid #00B0F0;color:#1F3864;border-radius:50%;text-align:center;line-height:17px;font-size:8pt;font-weight:700;margin-right:6px;vertical-align:middle;}
+table.data{width:100%;border-collapse:collapse;margin-bottom:6px;}
+table.data td{padding:4px 0;font-size:11pt;vertical-align:top;border-bottom:1px solid #F0F4FA;}
 table.data td.lbl{color:#4A5A78;width:150px;}
 table.data td.val{font-weight:600;color:#18243C;}
 .tags{margin-top:4px;}
-.tag{display:inline-block;font-family:monospace;font-size:9pt;padding:2px 7px;background:#EEF3FC!important;color:#1F3864;border-radius:4px;border:1px solid #B4C6E7;margin:2px 2px 2px 0;}
-.bd-extra{background:#F0F4FA!important;border-radius:6px;padding:10px 14px;margin-bottom:8px;border-left:4px solid #2E6DA4!important;}
-.obs-box{background:#FFF8F0!important;border-left:4px solid #C47A10!important;padding:10px 14px;border-radius:0 6px 6px 0;color:#7A4A00;}
-.email{background:#F7FAFD!important;border:1px solid #DDE4EE;border-radius:6px;padding:14px;font-family:'Courier New',monospace;font-size:9pt;white-space:pre-wrap;line-height:1.8;color:#4A5A78;}
-@media print{body{margin:0;}}
+.tag{display:inline-block;font-family:monospace;font-size:9pt;padding:2px 7px;border:1px solid #1F3864;color:#1F3864;border-radius:4px;margin:2px 2px 2px 0;}
+.bd-extra{border-left:4px solid #2E6DA4;padding:8px 14px;margin-bottom:8px;background:#F8FAFD;}
+.bd-extra b{color:#1F3864;}
+.obs-box{border-left:4px solid #C47A10;padding:10px 14px;color:#7A4A00;background:#FFFBF5;}
+.email{border:1px solid #DDE4EE;border-left:4px solid #1F3864;border-radius:6px;padding:14px;font-family:'Courier New',monospace;font-size:9pt;white-space:pre-wrap;line-height:1.8;color:#4A5A78;background:#F7FAFD;}
+@media print{body{margin:0;}.hdr::before{display:none;}.hdr{border:3px solid #1F3864;}}
 </style>
 </head><body>
-<div class="hdr"><h1>Formulario de Levantamiento</h1><p>Creación Nueva BD · ${new Date().toLocaleString('es-CL')} · Manager ERP</p></div>
+<div class="hdr"><h1>Formulario de Levantamiento</h1><p>Creación Nueva BD · ${new Date().toLocaleString('es-CL')} · Manager ERP</p><span class="hdr-badge">Manager ERP</span></div>
 <div class="st"><span class="st-num">1</span>Cliente</div>
 <table class="data"><tr><td class="lbl">Razón Social</td><td class="val">${v('f-razon')||'—'}</td></tr><tr><td class="lbl">RUT</td><td class="val">${v('f-rut')||'—'}</td></tr><tr><td class="lbl">Contacto</td><td class="val">${v('f-contacto')||'—'}</td></tr><tr><td class="lbl">Correo</td><td class="val">${v('f-email')||'—'}</td></tr><tr><td class="lbl">Teléfono</td><td class="val">${v('f-tel')||'—'}</td></tr></table>
 <div class="st"><span class="st-num">2</span>Base de Datos Principal</div>
