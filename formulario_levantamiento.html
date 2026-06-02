@@ -8,7 +8,7 @@
 :root{--navy:#1F3864;--blue:#2E6DA4;--sky:#00B0F0;--bg:#F0F4FA;--card:#fff;--border:#DDE4EE;--border-hi:#B4C6E7;--text:#18243C;--text-2:#4A5A78;--text-3:#8898B8;--green:#1A6B42;--red:#C0001A;--orange:#C47A10;--font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--r:8px;--r-lg:12px;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;max-width:560px;margin:0 auto;position:relative;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
 
 /* TOPBAR */
 .topbar{background:var(--navy);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
@@ -25,7 +25,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .prog-fill{height:100%;background:var(--sky);transition:width .4s;width:0%;}
 
 /* CONTENT */
-.wrap{padding:20px 14px 100px;}
+.wrap{max-width:680px;margin:0 auto;padding:20px 20px 100px;}
 
 /* HERO */
 .hero{background:linear-gradient(135deg,var(--navy),#2557A7);border-radius:var(--r-lg);padding:20px 22px;margin-bottom:16px;text-align:center;}
@@ -141,7 +141,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .ab-green{background:#E6F4EC;color:#0A6A32;border-color:#A8DCBC;}
 
 /* STICKY FOOTER */
-.sticky-footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:560px;background:var(--card);border-top:1px solid var(--border);padding:11px 14px;display:flex;align-items:center;justify-content:space-between;z-index:100;}
+.sticky-footer{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;z-index:100;}
 .sf-left{display:flex;align-items:center;gap:9px;}
 .sf-pct{font-size:15px;font-weight:700;color:var(--navy);font-family:var(--mono);}
 .sf-mini{width:80px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
@@ -168,7 +168,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div class="tb-sub">Creación Nueva BD · Réplica</div>
     </div>
   </div>
-  <a class="tb-back" href="guia_comercial.html">Volver a la Guía</a>
+  <a class="tb-back" href="guia_comercial.html">Volver</a>
 </div>
 <div class="prog-wrap"><div class="prog-fill" id="tp"></div></div>
 
@@ -425,11 +425,11 @@ function renderExtras(){
       </div>
       <div class="bd-block-body">
         <div class="bd-fields">
-          <div class="bd-field"><label>Nombre BD nueva</label><input class="bd-nm" placeholder="NOMBRE_BD_${i+2}" value="${p.nm}" oninput="updBDTitle(${i},this.value)"></div>
-          <div class="bd-field"><label>RUT cliente</label><input class="bd-rut" placeholder="XX.XXX.XXX-X" value="${p.rut}"></div>
+          <div class="bd-field"><label>Nombre BD nueva</label><input class="bd-nm" placeholder="NOMBRE_BD" value="${p.nm||''}" oninput="updBDTitle(${i},this.value)"></div>
+          <div class="bd-field"><label>RUT cliente</label><input class="bd-rut" placeholder="XX.XXX.XXX-X" value="${p.rut||''}"></div>
         </div>
         <div class="bd-fields">
-          <div class="bd-field" style="grid-column:1/-1;"><label>Descripción (máx. 30)</label><input class="bd-dc" placeholder="Descripción BD ${i+2}" maxlength="30" value="${p.dc}"></div>
+          <div class="bd-field" style="grid-column:1/-1;"><label>Descripción (máx. 30)</label><input class="bd-dc" placeholder="Descripción" maxlength="30" value="${p.dc||''}"></div>
         </div>
         <div class="bd-tabla-title">Tablas a copiar para esta BD</div>
         <div class="tabla-wrap">
@@ -475,9 +475,8 @@ function buildEmail(){
   const extras=document.querySelectorAll('#extra-blocks .bd-block');
   if(ts['mas']==='si') extras.forEach((bl,i)=>{
     const nm=bl.querySelector('.bd-nm')?.value||`[BD ${i+2}]`;
-    const rut=bl.querySelector('.bd-rut')?.value||'';
     const dc=bl.querySelector('.bd-dc')?.value||`[descripción BD ${i+2}]`;
-    crea+=`\n${i+2}. Crear base denominada "${nm}"${rut?' — RUT: '+rut:''} y en el campo "Descripción" indicar: ${dc}`;
+    crea+=`\n${i+2}. Crear base denominada "${nm}" y en el campo "Descripción" indicar: ${dc}`;
   });
 
   // Tables section
@@ -568,37 +567,41 @@ function genPDF(){
     </div>`;
   });
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Levantamiento ${cliente}</title>
-<style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;max-width:700px;margin:24px auto;padding:0 20px;color:#000;}
-.hdr{background:#1F3864;color:#fff;padding:16px 20px;border-radius:8px;margin-bottom:20px;}
-h1{font-size:15pt;margin:0 0 3px;}
-.hdr p{opacity:.7;font-size:9pt;margin:0;}
-.st{font-size:8.5pt;font-weight:bold;text-transform:uppercase;color:#888;border-bottom:1px solid #ddd;padding-bottom:4px;margin:16px 0 8px;}
+<style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;max-width:700px;margin:24px auto;padding:0 20px;color:#18243C;}
+.hdr{background:#1F3864;color:#fff;padding:18px 22px;border-radius:8px;margin-bottom:22px;}
+h1{font-size:15pt;margin:0 0 4px;}
+.hdr p{opacity:.65;font-size:9pt;margin:0;}
+.sec-block{margin-bottom:18px;}
+.st{display:flex;align-items:center;gap:8px;font-size:9pt;font-weight:bold;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#1F3864;padding:5px 10px;border-radius:4px;margin-bottom:9px;}
+.st-num{width:18px;height:18px;border-radius:50%;background:#00B0F0;color:#1F3864;display:inline-flex;align-items:center;justify-content:center;font-size:8pt;font-weight:700;flex-shrink:0;}
 .row{display:flex;gap:6px;margin-bottom:4px;}
-.lbl{color:#666;width:140px;flex-shrink:0;}
-.val{font-weight:bold;}
+.lbl{color:#4A5A78;width:140px;flex-shrink:0;font-size:10.5pt;}
+.val{font-weight:600;color:#18243C;}
 .tags{display:flex;flex-wrap:wrap;gap:4px;}
-.tag{font-family:monospace;font-size:9.5pt;padding:2px 6px;background:#e8f0fb;border-radius:4px;}
-.email{background:#f5f5f5;border:1px solid #ddd;border-radius:5px;padding:12px;font-family:'Courier New',monospace;font-size:9pt;white-space:pre-wrap;line-height:1.8;}
+.tag{font-family:monospace;font-size:9pt;padding:2px 7px;background:#EEF3FC;color:#1F3864;border-radius:4px;border:1px solid #B4C6E7;}
+.bd-extra{background:#F0F4FA;border-radius:6px;padding:10px 14px;margin-bottom:8px;border-left:3px solid #2E6DA4;}
+.obs-box{background:#FFF8F0;border-left:3px solid #C47A10;padding:10px 14px;border-radius:0 6px 6px 0;color:#7A4A00;}
+.email{background:#F7FAFD;border:1px solid #DDE4EE;border-radius:6px;padding:14px;font-family:'Courier New',monospace;font-size:9pt;white-space:pre-wrap;line-height:1.8;color:#4A5A78;}
 @media print{body{margin:0;}}</style>
 </head><body>
 <div class="hdr"><h1>Formulario de Levantamiento</h1><p>Creación Nueva BD · ${new Date().toLocaleString('es-CL')} · Manager ERP</p></div>
-<div class="st">Cliente</div>
+<div class="st"><span class="st-num">1</span>Cliente</div>
 <div class="row"><span class="lbl">Razón Social</span><span class="val">${v('f-razon')||'—'}</span></div>
 <div class="row"><span class="lbl">RUT</span><span class="val">${v('f-rut')||'—'}</span></div>
 <div class="row"><span class="lbl">Contacto</span><span class="val">${v('f-contacto')||'—'}</span></div>
 <div class="row"><span class="lbl">Correo</span><span class="val">${v('f-email')||'—'}</span></div>
 <div class="row"><span class="lbl">Teléfono</span><span class="val">${v('f-tel')||'—'}</span></div>
-<div class="st">Base de Datos Principal</div>
+<div class="st"><span class="st-num">2</span>Base de Datos Principal</div>
 <div class="row"><span class="lbl">BD Nueva</span><span class="val" style="font-family:monospace">${v('f-bdnueva')||'—'}</span></div>
 <div class="row"><span class="lbl">Descripción</span><span class="val">${v('f-desc')||'—'}</span></div>
 <div class="row"><span class="lbl">BD Origen</span><span class="val" style="font-family:monospace">${v('f-bdorigen')||'—'}</span></div>
 <div class="row"><span class="lbl">Ambiente</span><span class="val" style="font-family:monospace;font-size:9pt">${v('f-amb')||'—'}</span></div>
 <div class="row"><span class="lbl">Módulos</span><span class="val">${getMods()}</span></div>
-<div class="st">Tablas BD Principal (${mainSel.length})</div>
+<div class="st"><span class="st-num">3</span>Tablas BD Principal (${mainSel.length})</div>
 <div class="tags">${mainSel.map(t=>`<span class="tag">${t.c}</span>`).join('')}</div>
-${extraHTML?`<div class="st">Bases de Datos Adicionales</div>${extraHTML}`:''}
-${obs?`<div class="st">Observaciones</div><div style="background:#fff8f0;border-left:3px solid #C47A10;padding:8px 12px;font-size:10pt;">${obs}</div>`:''}
-<div class="st">Correo para IT</div>
+${extraHTML?`<div class="st"><span class="st-num">4</span>Bases de Datos Adicionales</div>${extraHTML}`:''}
+${obs?`<div class="st"><span class="st-num">5</span>Observaciones</div><div style="background:#fff8f0;border-left:3px solid #C47A10;padding:8px 12px;font-size:10pt;">${obs}</div>`:''}
+<div class="st"><span class="st-num">6</span>Correo para IT</div>
 <div class="email">${emailText}</div>
 </body></html>`;
   const fr=document.createElement('iframe');
