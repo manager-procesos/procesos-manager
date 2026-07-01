@@ -169,25 +169,25 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <div class="sec-title">Acciones rápidas</div>
     <div class="sec-desc">Elige lo que necesitas hacer. Te llevamos directo.</div>
     <div class="action-grid">
-      <a class="action-card blue" href="checklist_comercial.html">
+      <a class="action-card blue" href="checklist_comercial.html" onmouseenter="showDesc('checklist')" onmouseleave="showDesc(null)">
         <div class="ac-icon blue">📊</div>
         <div class="ac-title">Checklist Comercial</div>
         <div class="ac-desc">Levantamiento completo de requerimientos del cliente. Genera OT y PDF automáticamente.</div>
         <div class="ac-arrow">→</div>
       </a>
-      <a class="action-card orange" href="formulario_levantamiento.html">
+      <a class="action-card orange" href="formulario_levantamiento.html" onmouseenter="showDesc('replica')" onmouseleave="showDesc(null)">
         <div class="ac-icon orange">🗄️</div>
         <div class="ac-title">Creación BD Réplica</div>
         <div class="ac-desc">Formulario para solicitar creación de nueva BD a IT. Genera el correo con tablas automáticamente.</div>
         <div class="ac-arrow">→</div>
       </a>
-      <a class="action-card" href="https://manager-procesos.github.io/formulario-comercial-v2/plan_trabajo_gex.html" style="border-top:4px solid #5B2C8D;">
+      <a class="action-card" href="https://manager-procesos.github.io/formulario-comercial-v2/plan_trabajo_gex.html" style="border-top:4px solid #5B2C8D;" onmouseenter="showDesc('gex')" onmouseleave="showDesc(null)">
         <div class="ac-icon" style="background:#F4EEF8;">📝</div>
         <div class="ac-title">Plan de Trabajo GEX</div>
         <div class="ac-desc">Plan de trabajo por módulos con sesiones y capacitaciones. Conectado a CRM.</div>
         <div class="ac-arrow">→</div>
       </a>
-      <a class="action-card green" href="#proceso">
+      <a class="action-card green" href="#proceso" onmouseenter="showDesc('proceso')" onmouseleave="showDesc(null)">
         <div class="ac-icon green">🗺</div>
         <div class="ac-title">Ver el proceso completo</div>
         <div class="ac-desc">Revisa los 5 pasos del proceso de creación de BD. Qué hace quién y cuándo.</div>
@@ -394,6 +394,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <script>
+const DESCS={
+  checklist:'Levanta los requerimientos del cliente: módulos, generalidades e integraciones. Genera la OT y PDF automáticamente.',
+  replica:'Solicita la creación de nueva BD réplica a IT. Selecciona tablas y genera el correo con los datos del ambiente.',
+  gex:'Plan de trabajo por módulo con sesiones y capacitaciones. Conectado a CRM — autocompleta datos del cliente.',
+  proceso:'Revisa los 5 pasos: qué hace Comercial, IT y Onboarding en la creación de una BD.'
+};
+function showDesc(k){
+  const el=document.getElementById('card-detail');
+  if(!k){el.style.display='none';return;}
+  el.textContent=DESCS[k]||'';el.style.display='block';
+}
 function setNav(el){
   document.querySelectorAll('.bn-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
