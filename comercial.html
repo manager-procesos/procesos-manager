@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Portal Comercial · Manager ERP</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1F3864;--blue:#2E6DA4;--sky:#00B0F0;--green:#1A6B42;--orange:#C47A10;--purple:#5B2C8D;
+  --bg:#F0F4FA;--card:#fff;--border:#DDE4EE;--text:#18243C;--text-2:#4A5A78;--text-3:#8898B8;
+  --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--r:12px;--r-lg:16px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--navy);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.tb-brand{display:flex;align-items:center;gap:10px;}
+.tb-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--sky),var(--blue));border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;}
+.tb-name{font-size:14px;font-weight:600;color:#fff;}
+.tb-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px;}
+.tb-badge{background:rgba(0,176,240,.2);color:var(--sky);font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;border:1px solid rgba(0,176,240,.3);}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#1F3864 0%,#2557A7 60%,#3A72B0 100%);padding:48px 20px 56px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;left:50%;top:-60px;transform:translateX(-50%);width:600px;height:600px;border-radius:50%;background:rgba(0,176,240,.06);pointer-events:none;}
+.hero-tag{display:inline-block;background:rgba(0,176,240,.2);color:var(--sky);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 14px;border-radius:20px;border:1px solid rgba(0,176,240,.3);margin-bottom:14px;}
+.hero-title{font-size:32px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:10px;}
+.hero-title em{color:rgba(255,255,255,.55);font-style:normal;font-weight:300;}
+.hero-desc{color:rgba(255,255,255,.65);font-size:15px;max-width:480px;margin:0 auto 24px;line-height:1.6;}
+.hero-greeting{display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.9);font-size:13px;padding:6px 16px;border-radius:20px;}
+
+/* ── MAIN CONTENT ── */
+.content{max-width:900px;margin:0 auto;padding:32px 20px 80px;}
+
+/* ── SECTION HEADER ── */
+.sec-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--sky);text-transform:uppercase;margin-bottom:6px;}
+.sec-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.sec-desc{color:var(--text-2);font-size:14px;line-height:1.6;margin-bottom:24px;max-width:600px;}
+
+/* ── ACCION CARDS (¿Qué hago hoy?) ── */
+.action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:48px;}
+.action-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:28px 22px;cursor:pointer;transition:all .2s;text-decoration:none;display:block;position:relative;overflow:hidden;}
+.action-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
+.action-card.blue::before{background:linear-gradient(90deg,var(--navy),var(--sky));}
+.action-card.green::before{background:linear-gradient(90deg,var(--green),#2EBD6E);}
+.action-card.purple::before{background:linear-gradient(90deg,var(--purple),#8B5CF6);}
+.action-card.orange::before{background:linear-gradient(90deg,var(--orange),#F59E0B);}
+.action-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(30,50,100,.12);border-color:var(--border);}
+.ac-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px;}
+.ac-icon.blue{background:#EEF3FC;}
+.ac-icon.green{background:#E6F4EC;}
+.ac-icon.purple{background:#F4EEF8;}
+.ac-icon.orange{background:#FFF3E0;}
+.ac-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.ac-desc{font-size:13px;color:var(--text-2);line-height:1.5;}
+.ac-arrow{position:absolute;bottom:20px;right:20px;font-size:18px;color:var(--border);}
+.action-card:hover .ac-arrow{color:var(--sky);}
+
+/* ── PROCESO EN 5 PASOS ── */
+.proceso-section{margin-bottom:48px;}
+.steps-wrap{display:flex;flex-direction:column;gap:0;}
+.step-row{display:flex;align-items:stretch;gap:0;position:relative;}
+.step-connector{width:60px;display:flex;flex-direction:column;align-items:center;flex-shrink:0;}
+.step-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:2px solid var(--border);background:var(--card);z-index:1;position:relative;}
+.step-circle.you{border-color:var(--sky);background:#EEF3FC;}
+.step-circle.it{border-color:var(--orange);background:#FFF3E0;}
+.step-circle.onb{border-color:var(--green);background:#E6F4EC;}
+.step-line{width:2px;flex:1;background:var(--border);margin:2px auto;}
+.step-row:last-child .step-line{display:none;}
+.step-content{flex:1;padding:0 0 24px 16px;}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;transition:all .2s;}
+.step-card:hover{border-color:var(--border-hi,#B4C6E7);box-shadow:0 4px 12px rgba(30,50,100,.08);}
+.step-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.step-num{font-family:var(--mono);font-size:10px;color:var(--text-3);font-weight:500;}
+.step-tag{font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:8px;}
+.tag-you{background:#EEF3FC;color:var(--navy);}
+.tag-it{background:#FFF3E0;color:var(--orange);}
+.tag-onb{background:#E6F4EC;color:var(--green);}
+.step-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.step-desc{font-size:13px;color:var(--text-2);line-height:1.5;}
+.step-result{margin-top:8px;font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:5px;}
+.step-result::before{content:'→';font-weight:700;color:var(--sky);}
+
+/* ── SESIONES ── */
+.sesion-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:48px;}
+.sesion-head{background:var(--navy);padding:16px 20px;display:flex;align-items:center;gap:12px;}
+.sesion-head-icon{width:38px;height:38px;background:rgba(0,176,240,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.sesion-head-title{font-size:14px;font-weight:700;color:#fff;}
+.sesion-head-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;}
+.sesion-badge{margin-left:auto;background:rgba(0,176,240,.2);color:var(--sky);font-size:11px;font-weight:600;padding:3px 10px;border-radius:10px;border:1px solid rgba(0,176,240,.3);}
+.sesion-body{padding:20px;}
+.sesion-items{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
+.sesion-item{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--bg);border-radius:8px;font-size:13px;color:var(--text-2);}
+.sesion-check{color:var(--green);font-weight:700;font-size:14px;}
+.sesion-alert{background:#FFF8F0;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 8px 8px 0;font-size:13px;color:#7A4A00;line-height:1.5;}
+
+/* ── RECURSOS ── */
+.recursos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:48px;}
+.recurso-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;display:flex;align-items:center;gap:14px;text-decoration:none;transition:all .2s;}
+.recurso-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(30,50,100,.1);border-color:var(--border-hi,#B4C6E7);}
+.recurso-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.recurso-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.recurso-desc{font-size:12px;color:var(--text-2);}
+.recurso-arr{margin-left:auto;font-size:18px;color:var(--border);flex-shrink:0;}
+.recurso-card:hover .recurso-arr{color:var(--sky);}
+
+/* ── COMING SOON ── */
+.coming-card{background:var(--card);border:2px dashed var(--border);border-radius:var(--r-lg);padding:28px;text-align:center;opacity:.7;}
+.coming-icon{font-size:28px;margin-bottom:8px;}
+.coming-title{font-size:14px;font-weight:600;color:var(--text-2);margin-bottom:4px;}
+.coming-desc{font-size:13px;color:var(--text-3);}
+
+/* ── MOBILE ── */
+@media(max-width:640px){
+  .hero{padding:36px 16px 44px;}
+  .hero-title{font-size:24px;}
+  .content{padding:24px 16px 80px;}
+  .action-grid{grid-template-columns:1fr;}
+  .sesion-items{grid-template-columns:1fr;}
+  .recursos-grid{grid-template-columns:1fr;}
+  .step-connector{width:40px;}
+  .step-circle{width:36px;height:36px;font-size:15px;}
+}
+
+/* ── BOTTOM NAV MOBILE ── */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);border-top:1px solid rgba(255,255,255,.1);padding:8px 0 10px;z-index:200;}
+.bn-row{display:flex;justify-content:space-around;}
+.bn-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;cursor:pointer;background:none;border:none;font-family:var(--font);-webkit-tap-highlight-color:transparent;}
+.bn-icon{font-size:20px;line-height:1;}
+.bn-label{font-size:10px;color:rgba(255,255,255,.5);font-weight:500;}
+.bn-btn.active .bn-label{color:var(--sky);}
+.bn-dot{width:4px;height:4px;border-radius:50%;background:transparent;margin:2px auto 0;}
+.bn-btn.active .bn-dot{background:var(--sky);}
+@media(max-width:640px){
+  .bottom-nav{display:block;}
+  body{padding-bottom:60px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-brand">
+    <div class="tb-mark">M</div>
+    <div>
+      <div class="tb-name">Manager ERP</div>
+      <div class="tb-sub">Portal Área Comercial</div>
+    </div>
+  </div>
+  <span class="tb-badge">Comercial & GEX</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Portal Comercial · Manager ERP</div>
+  <div class="hero-title">Hola, equipo<br><em>¿Qué necesitas hacer hoy?</em></div>
+  <div class="hero-desc">Todo lo que necesitas para gestionar clientes, levantamientos y solicitudes a IT — en un solo lugar.</div>
+  <div class="hero-greeting">📍 Solo para uso interno · Comercial & GEX</div>
+</div>
+
+<div class="content">
+
+  <!-- ACCIONES RÁPIDAS -->
+  <div style="margin-bottom:40px;" id="inicio">
+    <div class="sec-label">¿Qué hago hoy?</div>
+    <div class="sec-title">Acciones rápidas</div>
+    <div class="sec-desc">Elige lo que necesitas hacer. Te llevamos directo.</div>
+    <div class="action-grid">
+      <a class="action-card blue" href="formulario_levantamiento.html">
+        <div class="ac-icon blue">📋</div>
+        <div class="ac-title">Levantar cliente nuevo</div>
+        <div class="ac-desc">Completa el formulario con el cliente y genera el correo a IT automáticamente.</div>
+        <div class="ac-arrow">→</div>
+      </a>
+      <a class="action-card green" href="#proceso">
+        <div class="ac-icon green">🗺</div>
+        <div class="ac-title">Ver el proceso completo</div>
+        <div class="ac-desc">Revisa los 5 pasos del proceso de creación de BD. Qué hace quién y cuándo.</div>
+        <div class="ac-arrow">→</div>
+      </a>
+      <div class="action-card orange" style="opacity:.6;cursor:default;">
+        <div class="ac-icon orange">📊</div>
+        <div class="ac-title">Levantamiento de Ventas</div>
+        <div class="ac-desc">Formulario para levantar requerimientos del proceso de venta.</div>
+        <div style="margin-top:10px;font-size:11px;font-weight:600;color:var(--orange);">🔧 Próximamente</div>
+        <div class="ac-arrow">→</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROCESO EN 5 PASOS -->
+  <div class="proceso-section" id="proceso">
+    <div class="sec-label">El proceso paso a paso</div>
+    <div class="sec-title">Creación de Nueva BD (Réplica)</div>
+    <div class="sec-desc">5 pasos, 3 áreas involucradas. Los primeros 3 son tuya. Luego IT y Onboarding se encargan.</div>
+    <div class="steps-wrap">
+
+      <div class="step-row">
+        <div class="step-connector">
+          <div class="step-circle you">📋</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-card">
+            <div class="step-header">
+              <span class="step-num">PASO 1</span>
+              <span class="step-tag tag-you">● Tu responsabilidad</span>
+            </div>
+            <div class="step-title">Levantamiento con el cliente</div>
+            <div class="step-desc">Reúnete con el cliente y completa el formulario de levantamiento. Acuerda qué tablas necesita copiar y los datos del ambiente.</div>
+            <div class="step-result">Formulario de levantamiento completado</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-connector">
+          <div class="step-circle you">📝</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-card">
+            <div class="step-header">
+              <span class="step-num">PASO 2</span>
+              <span class="step-tag tag-you">● Tu responsabilidad</span>
+            </div>
+            <div class="step-title">Crear la OT</div>
+            <div class="step-desc">Con el formulario completado, genera la OT y la envías a las áreas que correspondan para iniciar el proceso formal.</div>
+            <div class="step-result">OT generada y enviada a las áreas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-connector">
+          <div class="step-circle you">📨</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-card">
+            <div class="step-header">
+              <span class="step-num">PASO 3</span>
+              <span class="step-tag tag-you">● Tu responsabilidad</span>
+            </div>
+            <div class="step-title">Solicitar BD a IT</div>
+            <div class="step-desc">El formulario genera el correo completo listo para enviar. Solo cópialo y mándalo a it@manager.cl. Incluye todas las tablas y el ambiente.</div>
+            <div class="step-result">Correo enviado a it@manager.cl</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-connector">
+          <div class="step-circle it">⚙️</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-card" style="opacity:.75;">
+            <div class="step-header">
+              <span class="step-num">PASO 4</span>
+              <span class="step-tag tag-it">● IT Manager</span>
+            </div>
+            <div class="step-title">IT crea la BD</div>
+            <div class="step-desc">IT crea el ambiente, la BD y los usuarios. Envía confirmación cuando está lista. Tu trabajo aquí está hecho.</div>
+            <div class="step-result">BD creada en el ambiente ASP</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-connector">
+          <div class="step-circle onb">✅</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-card" style="opacity:.75;">
+            <div class="step-header">
+              <span class="step-num">PASO 5</span>
+              <span class="step-tag tag-onb">● Proyectos Onboarding</span>
+            </div>
+            <div class="step-title">Verificación y entrega al cliente</div>
+            <div class="step-desc">Proyectos Onboarding verifica tablas, parámetros, FTP, Ramaflex y hace prueba de ciclos con el cliente. Mínimo 1 sesión de 2 horas.</div>
+            <div class="step-result">Cliente operando en la nueva BD</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SESIONES -->
+  <div style="margin-bottom:48px;" id="sesiones">
+    <div class="sec-label">Tiempo del proceso</div>
+    <div class="sec-title">¿Cuánto dura?</div>
+    <div class="sec-desc">Tu parte toma aproximadamente 30 minutos. Lo que sigue depende de la agenda de IT y Onboarding.</div>
+    <div class="sesion-card">
+      <div class="sesion-head">
+        <div class="sesion-head-icon">✅</div>
+        <div>
+          <div class="sesion-head-title">Sesión de Verificación y Configuración</div>
+          <div class="sesion-head-sub">Ejecutada por Proyectos Onboarding con el cliente</div>
+        </div>
+        <div class="sesion-badge">1 sesión · 2 hrs</div>
+      </div>
+      <div class="sesion-body">
+        <div class="sesion-items">
+          <div class="sesion-item"><span class="sesion-check">✓</span>Revisión de tablas copiadas</div>
+          <div class="sesion-item"><span class="sesion-check">✓</span>Parámetros del sistema</div>
+          <div class="sesion-item"><span class="sesion-check">✓</span>Verificación FTP</div>
+          <div class="sesion-item"><span class="sesion-check">✓</span>Acceso Ramaflex</div>
+          <div class="sesion-item"><span class="sesion-check">✓</span>Prueba de ciclos con el cliente</div>
+          <div class="sesion-item"><span class="sesion-check">✓</span>Formatos de impresión</div>
+        </div>
+        <div class="sesion-alert">⚠ Si el cliente requiere capacitación de algún módulo, se deben agendar sesiones adicionales. Indícalo en la OT.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECURSOS -->
+  <div style="margin-bottom:48px;" id="recursos">
+    <div class="sec-label">Recursos disponibles</div>
+    <div class="sec-title">Accesos directos</div>
+    <div class="sec-desc">Todo lo que necesitas a un clic.</div>
+    <div class="recursos-grid">
+      <a class="recurso-card" href="formulario_levantamiento.html">
+        <div class="recurso-icon" style="background:#EEF3FC;">📋</div>
+        <div>
+          <div class="recurso-title">Formulario de Levantamiento BD</div>
+          <div class="recurso-desc">Completar con el cliente · Genera correo a IT</div>
+        </div>
+        <div class="recurso-arr">→</div>
+      </a>
+      <a class="recurso-card" href="guia_comercial.html">
+        <div class="recurso-icon" style="background:#E8F4EE;">🗺</div>
+        <div>
+          <div class="recurso-title">Guía Comercial Completa</div>
+          <div class="recurso-desc">Proceso detallado · Checklist · Preguntas frecuentes</div>
+        </div>
+        <div class="recurso-arr">→</div>
+      </a>
+      <div class="recurso-card coming-card" style="border:2px dashed var(--border);cursor:default;">
+        <div class="recurso-icon" style="background:#F4EEF8;">📊</div>
+        <div>
+          <div class="recurso-title" style="color:var(--text-3);">Levantamiento de Ventas</div>
+          <div class="recurso-desc">Próximamente disponible</div>
+        </div>
+        <div class="recurso-arr" style="opacity:.3;">→</div>
+      </div>
+      <a class="recurso-card" href="Guia_ManagerGO_v4.html">
+        <div class="recurso-icon" style="background:#FFF3E0;">📱</div>
+        <div>
+          <div class="recurso-title">Manager GO · Punto de Venta</div>
+          <div class="recurso-desc">Guía de uso · Configuración</div>
+        </div>
+        <div class="recurso-arr">→</div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV MOBILE -->
+<div class="bottom-nav">
+  <div class="bn-row">
+    <button class="bn-btn active" onclick="scrollTo({top:0,behavior:'smooth'});setNav(this)">
+      <span class="bn-icon">🏠</span><span class="bn-label">Inicio</span><span class="bn-dot"></span>
+    </button>
+    <button class="bn-btn" onclick="document.getElementById('proceso').scrollIntoView({behavior:'smooth'});setNav(this)">
+      <span class="bn-icon">🗺</span><span class="bn-label">Proceso</span><span class="bn-dot"></span>
+    </button>
+    <button class="bn-btn" onclick="document.getElementById('sesiones').scrollIntoView({behavior:'smooth'});setNav(this)">
+      <span class="bn-icon">⏱</span><span class="bn-label">Sesiones</span><span class="bn-dot"></span>
+    </button>
+    <button class="bn-btn" onclick="document.getElementById('recursos').scrollIntoView({behavior:'smooth'});setNav(this)">
+      <span class="bn-icon">📁</span><span class="bn-label">Recursos</span><span class="bn-dot"></span>
+    </button>
+  </div>
+</div>
+
+<script>
+function setNav(el){
+  document.querySelectorAll('.bn-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
