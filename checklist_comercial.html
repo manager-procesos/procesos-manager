@@ -176,6 +176,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <div id="vend-status" style="font-size:11px;color:var(--text-3);margin-top:4px;"></div>
   </div>
 
+  <!-- FECHA -->
+  <div class="vendedor-wrap" style="margin-bottom:10px;">
+    <div class="vend-label">Fecha del Checklist <span style="color:var(--red)">*</span></div>
+    <input type="date" id="f-fecha" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-family:var(--font);font-size:14px;color:var(--text);background:#fff;outline:none;" oninput="upd()" value="">
+  </div>
+
   <!-- BUSCADOR ZOHO -->
   <div class="zoho-search-wrap">
     <div class="zoho-label">🔍 Buscar cliente en Zoho CRM <span class="zoho-badge">CRM conectado</span></div>
@@ -497,7 +503,7 @@ async function loadVendedores(){
   const sel = document.getElementById('f-vendedor');
   const status = document.getElementById('vend-status');
   try {
-    const res = await fetch(`${PROXY}?users=true`);
+    const res = await fetch(`${PROXY}?users=1`);
     if(!res.ok) throw new Error();
     const data = await res.json();
     const users = data.users || [];
@@ -638,14 +644,13 @@ function buildOT(){
   const modal = ts['modalidad']||'—';
   return `ORDEN DE TRABAJO — CHECKLIST COMERCIAL
 Manager ERP · ${new Date().toLocaleDateString('es-CL')}
-${'─'.repeat(50)}
+Fecha Checklist: ${v('f-fecha')||new Date().toLocaleDateString('es-CL')}
 
 VENDEDOR    : ${vend}
 PRODUCTO    : ${prod.toUpperCase()}
 MODALIDAD   : ${modal.toUpperCase()}
 
 CLIENTE
-───────────────────────────────────────────────
 Razón Social : ${v('f-razon')||'—'}
 RUT          : ${v('f-rut')||'—'}
 Contacto     : ${v('f-contacto')||'—'}
@@ -655,15 +660,12 @@ Software act.: ${v('f-software')||'—'}
 Empresas     : ${v('f-empresas')||'1'} | Usuarios: ${v('f-usuarios')||'—'} | Sucursales: ${v('f-sucursales')||'1'}
 
 DESCRIPCIÓN DEL NEGOCIO
-───────────────────────────────────────────────
 ${v('f-negocio')||'—'}
 
 MÓDULOS A IMPLEMENTAR
-───────────────────────────────────────────────
 ${modulos.length ? modulos.map((m,i)=>`${i+1}. ${m}`).join('\n') : '— Sin módulos seleccionados'}
 
 GENERALIDADES
-───────────────────────────────────────────────
 Plan de Cuentas   : ${ts['pdc']||'—'}
 IFRS              : ${ts['ifrs']||'—'}
 Centros de Costos : ${ts['cc']||'—'}
@@ -674,19 +676,16 @@ Activo Fijo       : ${ts['af']||'—'}
 ${v('f-otro-gen')?'Adicional: '+v('f-otro-gen'):''}
 
 RESCATE DE INFORMACIÓN
-───────────────────────────────────────────────
 Requiere rescate  : ${ts['rescate']||'—'}
 ${ts['rescate']==='si'?`Software origen   : ${v('f-sw-origen')||'—'}`:''}
 
 INTEGRACIONES / DESARROLLOS
-───────────────────────────────────────────────
 Requiere API      : ${ts['api']||'No'}
 ${ts['api']==='si'?`Sistema a integrar: ${v('f-api-sistema')||'—'}\nDescripción       : ${v('f-api-desc')||'—'}`:''}
 Requiere desarrollo: ${ts['dev']||'No'}
 ${ts['dev']==='si'?`Descripción dev   : ${v('f-dev-desc')||'—'}\nEn Roadmap        : ${ts['roadmap']||'—'}`:''}
 
 OBSERVACIONES
-───────────────────────────────────────────────
 ${v('f-obs')||'—'}
 
 ${v('f-notas')?`NOTAS INTERNAS (no incluir en OT cliente)\n${'─'.repeat(50)}\n${v('f-notas')}`:''}`;
@@ -808,6 +807,8 @@ ${v('f-obs')?`<div class="st"><span class="st-num">6</span>Observaciones</div><d
   win.onload=()=>{win.focus();win.print();};
 }
 
+// Set today date
+document.getElementById('f-fecha').valueAsDate = new Date();
 // Init
 loadVendedores();
 upd();
