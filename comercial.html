@@ -2,611 +2,413 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Formulario de Levantamiento · Creación Nueva BD</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Portal Comercial · Manager ERP</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#1F3864;--blue:#2E6DA4;--sky:#00B0F0;--bg:#F0F4FA;--card:#fff;--border:#DDE4EE;--border-hi:#B4C6E7;--text:#18243C;--text-2:#4A5A78;--text-3:#8898B8;--green:#1A6B42;--red:#C0001A;--orange:#C47A10;--font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--r:8px;--r-lg:12px;}
+:root{
+  --navy:#1F3864;--blue:#2E6DA4;--sky:#00B0F0;--green:#1A6B42;--orange:#C47A10;--purple:#5B2C8D;
+  --bg:#F0F4FA;--card:#fff;--border:#DDE4EE;--text:#18243C;--text-2:#4A5A78;--text-3:#8898B8;
+  --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--r:12px;--r-lg:16px;
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;}
 
-/* TOPBAR */
-.topbar{background:var(--navy);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
-.tb-left{display:flex;align-items:center;gap:9px;}
-.tb-mark{width:30px;height:30px;background:linear-gradient(135deg,var(--sky),var(--blue));border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#fff;flex-shrink:0;}
-.tb-title{font-size:13px;font-weight:600;color:#fff;}
+/* ── TOPBAR ── */
+.topbar{background:var(--navy);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.tb-brand{display:flex;align-items:center;gap:10px;}
+.tb-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--sky),var(--blue));border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;}
+.tb-name{font-size:14px;font-weight:600;color:#fff;}
 .tb-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px;}
-.tb-back{color:rgba(255,255,255,.5);font-size:12px;text-decoration:none;}
-.tb-back:hover{color:#fff;}
-.tb-back::before{content:'← ';}
+.tb-badge{background:rgba(0,176,240,.2);color:var(--sky);font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;border:1px solid rgba(0,176,240,.3);}
 
-/* PROGRESS */
-.prog-wrap{background:rgba(255,255,255,.1);height:3px;}
-.prog-fill{height:100%;background:var(--sky);transition:width .4s;width:0%;}
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#1F3864 0%,#2557A7 60%,#3A72B0 100%);padding:48px 20px 56px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;left:50%;top:-60px;transform:translateX(-50%);width:600px;height:600px;border-radius:50%;background:rgba(0,176,240,.06);pointer-events:none;}
+.hero-tag{display:inline-block;background:rgba(0,176,240,.2);color:var(--sky);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 14px;border-radius:20px;border:1px solid rgba(0,176,240,.3);margin-bottom:14px;}
+.hero-title{font-size:32px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:10px;}
+.hero-title em{color:rgba(255,255,255,.55);font-style:normal;font-weight:300;}
+.hero-desc{color:rgba(255,255,255,.65);font-size:15px;max-width:480px;margin:0 auto 24px;line-height:1.6;}
+.hero-greeting{display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.9);font-size:13px;padding:6px 16px;border-radius:20px;}
 
-/* CONTENT */
-.wrap{max-width:680px;margin:0 auto;padding:20px 20px 100px;}
+/* ── MAIN CONTENT ── */
+.content{max-width:900px;margin:0 auto;padding:32px 20px 80px;}
 
-/* HERO */
-.hero{background:linear-gradient(135deg,var(--navy),#2557A7);border-radius:var(--r-lg);padding:20px 22px;margin-bottom:16px;text-align:center;}
-.hero-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;}
-.hero-desc{font-size:12px;color:rgba(255,255,255,.6);line-height:1.5;}
+/* ── SECTION HEADER ── */
+.sec-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--sky);text-transform:uppercase;margin-bottom:6px;}
+.sec-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.sec-desc{color:var(--text-2);font-size:14px;line-height:1.6;margin-bottom:24px;max-width:600px;}
 
-/* SECTIONS */
-.sec{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);margin-bottom:8px;overflow:hidden;}
-.sec-head{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;transition:background .1s;-webkit-tap-highlight-color:transparent;}
-.sec-head:hover{background:#FAFBFD;}
-.sec-icon{width:34px;height:34px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-.sec-title{font-size:13.5px;font-weight:600;flex:1;}
-.sec-badge{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:8px;background:#F0F4FA;color:var(--text-3);}
-.sec-badge.done{background:#E6F4EC;color:#0A6A32;}
-.sec-arrow{font-size:12px;color:var(--text-3);transition:transform .2s;margin-left:4px;}
-.sec.open .sec-arrow{transform:rotate(180deg);}
-.sec-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border);}
-.sec.open .sec-body{display:block;}
+/* ── ACCION CARDS (¿Qué hago hoy?) ── */
+.action-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:48px;}
+.action-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:28px 22px;cursor:pointer;transition:all .2s;text-decoration:none;display:block;position:relative;overflow:hidden;}
+.action-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
+.action-card.blue::before{background:linear-gradient(90deg,var(--navy),var(--sky));}
+.action-card.green::before{background:linear-gradient(90deg,var(--green),#2EBD6E);}
+.action-card.purple::before{background:linear-gradient(90deg,var(--purple),#8B5CF6);}
+.action-card.orange::before{background:linear-gradient(90deg,var(--orange),#F59E0B);}
+.action-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(30,50,100,.12);border-color:var(--border);}
+.ac-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px;}
+.ac-icon.blue{background:#EEF3FC;}
+.ac-icon.green{background:#E6F4EC;}
+.ac-icon.purple{background:#F4EEF8;}
+.ac-icon.orange{background:#FFF3E0;}
+.ac-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.ac-desc{font-size:13px;color:var(--text-2);line-height:1.5;}
+.ac-arrow{position:absolute;bottom:20px;right:20px;font-size:18px;color:var(--border);}
+.action-card:hover .ac-arrow{color:var(--sky);}
 
-/* FIELDS */
-.field{margin-top:12px;}
-.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:4px;color:var(--text);}
-.hint{font-size:11px;color:var(--text-3);margin-bottom:4px;}
-.req{color:var(--red);}
-.field input,.field textarea{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:var(--r);font-family:var(--font);font-size:14px;color:var(--text);background:#fff;outline:none;transition:border .15s;}
-.field input:focus,.field textarea:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(0,176,240,.1);}
-.field textarea{min-height:68px;resize:vertical;}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;}
-.char-count{font-size:11px;color:var(--text-3);text-align:right;margin-top:3px;}
+/* ── PROCESO EN 5 PASOS ── */
+.proceso-section{margin-bottom:48px;}
+.steps-wrap{display:flex;flex-direction:column;gap:0;}
+.step-row{display:flex;align-items:stretch;gap:0;position:relative;}
+.step-connector{width:60px;display:flex;flex-direction:column;align-items:center;flex-shrink:0;}
+.step-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:2px solid var(--border);background:var(--card);z-index:1;position:relative;}
+.step-circle.you{border-color:var(--sky);background:#EEF3FC;}
+.step-circle.it{border-color:var(--orange);background:#FFF3E0;}
+.step-circle.onb{border-color:var(--green);background:#E6F4EC;}
+.step-line{width:2px;flex:1;background:var(--border);margin:2px auto;}
+.step-row:last-child .step-line{display:none;}
+.step-content{flex:1;padding:0 0 24px 16px;}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;transition:all .2s;}
+.step-card:hover{border-color:var(--border-hi,#B4C6E7);box-shadow:0 4px 12px rgba(30,50,100,.08);}
+.step-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.step-num{font-family:var(--mono);font-size:10px;color:var(--text-3);font-weight:500;}
+.step-tag{font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:8px;}
+.tag-you{background:#EEF3FC;color:var(--navy);}
+.tag-it{background:#FFF3E0;color:var(--orange);}
+.tag-onb{background:#E6F4EC;color:var(--green);}
+.step-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.step-desc{font-size:13px;color:var(--text-2);line-height:1.5;}
+.step-result{margin-top:8px;font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:5px;}
+.step-result::before{content:'→';font-weight:700;color:var(--sky);}
 
-/* TOGGLES */
-.togs{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;}
-.tog{display:flex;align-items:center;gap:6px;padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;font-size:13px;color:var(--text-2);user-select:none;-webkit-tap-highlight-color:transparent;transition:all .15s;}
-.tog:hover{border-color:var(--border-hi);}
-.tog.on{border-color:var(--sky);background:#EEF3FC;color:var(--navy);font-weight:600;}
-.tog-dot{width:12px;height:12px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.tog.on .tog-dot::after{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;}
+/* ── SESIONES ── */
+.sesion-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:48px;}
+.sesion-head{background:var(--navy);padding:16px 20px;display:flex;align-items:center;gap:12px;}
+.sesion-head-icon{width:38px;height:38px;background:rgba(0,176,240,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.sesion-head-title{font-size:14px;font-weight:700;color:#fff;}
+.sesion-head-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;}
+.sesion-badge{margin-left:auto;background:rgba(0,176,240,.2);color:var(--sky);font-size:11px;font-weight:600;padding:3px 10px;border-radius:10px;border:1px solid rgba(0,176,240,.3);}
+.sesion-body{padding:20px;}
+.sesion-items{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
+.sesion-item{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--bg);border-radius:8px;font-size:13px;color:var(--text-2);}
+.sesion-check{color:var(--green);font-weight:700;font-size:14px;}
+.sesion-alert{background:#FFF8F0;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 8px 8px 0;font-size:13px;color:#7A4A00;line-height:1.5;}
 
-/* ALERTS */
-.alert{border-radius:var(--r);padding:9px 12px;font-size:12.5px;line-height:1.5;margin-top:10px;display:flex;gap:7px;}
-.alert-blue{background:#EEF3FC;border-left:3px solid var(--blue);color:#1A3060;}
-.alert-orange{background:#FFF8F0;border-left:3px solid var(--orange);color:#7A4A00;}
+/* ── RECURSOS ── */
+.recursos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:48px;}
+.recurso-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;display:flex;align-items:center;gap:14px;text-decoration:none;transition:all .2s;}
+.recurso-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(30,50,100,.1);border-color:var(--border-hi,#B4C6E7);}
+.recurso-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.recurso-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.recurso-desc{font-size:12px;color:var(--text-2);}
+.recurso-arr{margin-left:auto;font-size:18px;color:var(--border);flex-shrink:0;}
+.recurso-card:hover .recurso-arr{color:var(--sky);}
 
-/* BD BLOCKS */
-.bd-block{border:1px solid var(--border-hi);border-radius:var(--r-lg);margin-bottom:8px;overflow:hidden;background:var(--card);}
-.bd-block-head{display:flex;align-items:center;gap:9px;padding:11px 13px;cursor:pointer;transition:background .1s;-webkit-tap-highlight-color:transparent;}
-.bd-block-head:hover{background:#F0F4FC;}
-.bd-num{width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;font-family:var(--mono);}
-.bd-block-title{font-size:12.5px;font-weight:600;flex:1;color:var(--navy);}
-.bd-block-arrow{font-size:11px;color:var(--text-3);transition:transform .2s;}
-.bd-block.open .bd-block-arrow{transform:rotate(180deg);}
-.bd-block-body{display:none;padding:12px 13px;border-top:1px solid var(--border-hi);}
-.bd-block.open .bd-block-body{display:block;}
-.bd-fields{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px;}
-.bd-field label{display:block;font-size:11.5px;font-weight:600;margin-bottom:3px;color:var(--text-2);}
-.bd-field input{width:100%;padding:7px 9px;border:1.5px solid var(--border);border-radius:var(--r);font-family:var(--mono);font-size:11.5px;color:var(--text);background:#fff;outline:none;}
-.bd-field input:focus{border-color:var(--sky);}
-.bd-tabla-title{font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:5px;}
+/* ── COMING SOON ── */
+.coming-card{background:var(--card);border:2px dashed var(--border);border-radius:var(--r-lg);padding:28px;text-align:center;opacity:.7;}
+.coming-icon{font-size:28px;margin-bottom:8px;}
+.coming-title{font-size:14px;font-weight:600;color:var(--text-2);margin-bottom:4px;}
+.coming-desc{font-size:13px;color:var(--text-3);}
 
-/* EXTRA BDs */
-.extra-wrap{margin-top:12px;display:none;}
-.extra-wrap.show{display:block;}
-.num-sel{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:var(--r);border:1px solid var(--border);margin-bottom:10px;}
-.num-lbl{font-size:12.5px;font-weight:600;flex:1;}
-.num-ctrl{display:flex;align-items:center;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
-.num-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--bg);border:none;cursor:pointer;font-size:16px;color:var(--text);}
-.num-btn:hover{background:var(--border);}
-.num-val{width:36px;text-align:center;font-family:var(--mono);font-size:13px;font-weight:700;border-left:1px solid var(--border);border-right:1px solid var(--border);padding:5px 0;background:#fff;color:var(--navy);}
+/* ── MOBILE ── */
+@media(max-width:640px){
+  .hero{padding:36px 16px 44px;}
+  .hero-title{font-size:24px;}
+  .content{padding:24px 16px 80px;}
+  .action-grid{grid-template-columns:1fr 1fr;}
+  .sesion-items{grid-template-columns:1fr;}
+  .recursos-grid{grid-template-columns:1fr;}
+  .step-connector{width:40px;}
+  .step-circle{width:36px;height:36px;font-size:15px;}
+}
 
-/* TABLA */
-.tabla-wrap{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-top:6px;}
-.t-head{display:grid;grid-template-columns:28px 1fr 46px 46px;background:#F0F4FA;padding:6px 0;border-bottom:1px solid var(--border);}
-.th{text-align:center;font-size:10.5px;font-weight:600;color:var(--text-3);}
-.th.tl{text-align:left;padding-left:7px;}
-.th.si{color:var(--green);}
-.th.no{color:var(--red);}
-.tr{display:grid;grid-template-columns:28px 1fr 46px 46px;align-items:center;border-bottom:1px solid var(--border);}
-.tr:last-child{border-bottom:none;}
-.tr.ob{background:#EEF3FC;}
-.tr:not(.ob):nth-child(even){background:#FAFBFD;}
-.tr:hover{background:#F0F4FC;}
-.td-n{text-align:center;font-size:10px;color:var(--text-3);padding:6px 0;}
-.td-i{padding:6px 5px;}
-.td-cod{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--navy);}
-.td-desc{font-size:10.5px;color:var(--text-2);margin-top:1px;}
-.ob-b{font-size:8.5px;font-weight:700;color:var(--orange);background:#FFF3E0;padding:1px 4px;border-radius:3px;border:1px solid #F0C898;display:inline-block;}
-.td-cb{text-align:center;padding:4px 0;}
-.cb{width:20px;height:20px;border-radius:4px;border:1.5px solid;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .12s;}
-.cb-si{border-color:#A8D4B8;background:#F0FAF4;}
-.cb-si.on{background:var(--green);border-color:var(--green);}
-.cb-si.on::after{content:'✓';color:#fff;font-size:11px;font-weight:700;}
-.cb-no{border-color:#F0B4BC;background:#FFF0F2;}
-.cb-no.on{background:var(--red);border-color:var(--red);}
-.cb-no.on::after{content:'✗';color:#fff;font-size:11px;font-weight:700;}
-
-/* SUMMARY */
-.summ{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-top:10px;display:none;}
-.summ.show{display:block;}
-.summ-title{font-size:14px;font-weight:700;margin-bottom:12px;}
-.summ-sec{margin-bottom:12px;}
-.summ-sec-t{font-size:10.5px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--border);padding-bottom:4px;margin-bottom:7px;}
-.summ-row{display:flex;gap:6px;margin-bottom:4px;font-size:12.5px;}
-.summ-lbl{color:var(--text-3);width:130px;flex-shrink:0;}
-.summ-val{color:var(--text);font-weight:600;}
-.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
-.tag{font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:4px;background:#EEF3FC;color:var(--navy);border:1px solid var(--border-hi);}
-.email-pre{background:#F7FAFD;border:1px solid var(--border);border-radius:var(--r);padding:12px;font-family:var(--mono);font-size:11.5px;line-height:1.8;white-space:pre-wrap;word-break:break-word;margin-top:8px;color:var(--text-2);}
-.action-btns{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;}
-.ab{padding:9px 14px;border-radius:var(--r);font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--font);border:1px solid var(--border);background:var(--card);color:var(--text);display:inline-flex;align-items:center;gap:5px;transition:all .15s;}
-.ab:hover{border-color:var(--border-hi);background:#F8FAFD;}
-.ab.ok{background:#E6F4EC;color:#0A6A32;border-color:#A8DCBC;}
-.ab-blue{background:#EEF3FC;color:var(--navy);border-color:var(--border-hi);}
-.ab-green{background:#E6F4EC;color:#0A6A32;border-color:#A8DCBC;}
-
-/* STICKY FOOTER */
-.sticky-footer{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;z-index:100;}
-.sf-left{display:flex;align-items:center;gap:9px;}
-.sf-pct{font-size:15px;font-weight:700;color:var(--navy);font-family:var(--mono);}
-.sf-mini{width:80px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
-.sf-fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--sky));border-radius:2px;transition:width .4s;}
-.sf-label{font-size:10.5px;color:var(--text-3);margin-bottom:2px;}
-.btn-gen{padding:10px 18px;background:var(--navy);color:#fff;border:none;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:background .15s;}
-.btn-gen:hover{background:var(--blue);}
-
-@media(max-width:500px){
-  .row2,.bd-fields{grid-template-columns:1fr;}
-  .action-btns{flex-direction:column;}
-  .action-btns .ab{width:100%;justify-content:center;}
-  .togs .tog{font-size:12.5px;padding:7px 10px;}
+/* ── BOTTOM NAV MOBILE ── */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);border-top:1px solid rgba(255,255,255,.1);padding:8px 0 10px;z-index:200;}
+.bn-row{display:flex;justify-content:space-around;}
+.bn-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;cursor:pointer;background:none;border:none;font-family:var(--font);-webkit-tap-highlight-color:transparent;}
+.bn-icon{font-size:20px;line-height:1;}
+.bn-label{font-size:10px;color:rgba(255,255,255,.5);font-weight:500;}
+.bn-btn.active .bn-label{color:var(--sky);}
+.bn-dot{width:4px;height:4px;border-radius:50%;background:transparent;margin:2px auto 0;}
+.bn-btn.active .bn-dot{background:var(--sky);}
+@media(max-width:640px){
+  .bottom-nav{display:block;}
+  body{padding-bottom:60px;}
 }
 </style>
 </head>
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
-  <div class="tb-left">
+  <div class="tb-brand">
     <div class="tb-mark">M</div>
     <div>
-      <div class="tb-title">Formulario de Levantamiento</div>
-      <div class="tb-sub">Creación Nueva BD · Réplica</div>
+      <div class="tb-name">Manager ERP</div>
+      <div class="tb-sub">Portal Área Comercial</div>
     </div>
   </div>
-  <a class="tb-back" href="comercial.html">← Volver</a>
+  <span class="tb-badge">Comercial & GEX</span>
 </div>
-<div class="prog-wrap"><div class="prog-fill" id="tp"></div></div>
 
-<div class="wrap">
-  <div class="hero">
-    <div class="hero-title">Completar con el Cliente</div>
-    <div class="hero-desc">Completa este formulario en la reunión. Al terminar genera el correo listo para enviar a IT.</div>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Portal Comercial · Manager ERP</div>
+  <div class="hero-title">Hola, equipo<br><em>¿Qué necesitas hacer hoy?</em></div>
+  <div class="hero-desc">Todo lo que necesitas para gestionar clientes, levantamientos y solicitudes a IT — en un solo lugar.</div>
+  <div class="hero-greeting">📍 Solo para uso interno · Comercial & GEX</div>
+</div>
+
+<div class="content">
+
+  <!-- ACCIONES RÁPIDAS -->
+  <div style="margin-bottom:40px;" id="inicio">
+    <div class="sec-label">¿Qué hago hoy?</div>
+    <div class="sec-title">Acciones rápidas</div>
+    <div class="sec-desc">Elige lo que necesitas hacer. Te llevamos directo.</div>
+    <div class="action-grid">
+      <a class="action-card blue" href="checklist_comercial.html" onmouseenter="showDesc('checklist')" onmouseleave="showDesc(null)">
+        <div class="ac-icon blue">📊</div>
+        <div class="ac-title">Checklist Comercial</div>
+        <div class="ac-desc">Levantamiento completo de requerimientos del cliente. Genera OT y PDF automáticamente.</div>
+        <div class="ac-arrow">→</div>
+      </a>
+      <a class="action-card orange" href="https://manager-procesos.github.io/formulario-comercial-v2/formulario_levantamiento_final.html" onmouseenter="showDesc('replica')" onmouseleave="showDesc(null)">
+        <div class="ac-icon orange">🗄️</div>
+        <div class="ac-title">Creación BD Réplica</div>
+        <div class="ac-desc">Formulario para solicitar creación de nueva BD a IT. Genera el correo con tablas automáticamente.</div>
+        <div class="ac-arrow">→</div>
+      </a>
+      <a class="action-card" href="https://manager-procesos.github.io/formulario-comercial-v2/plan_trabajo_gex.html" style="border-top:4px solid #5B2C8D;" onmouseenter="showDesc('gex')" onmouseleave="showDesc(null)">
+        <div class="ac-icon" style="background:#F4EEF8;">📝</div>
+        <div class="ac-title">Plan de Trabajo GEX</div>
+        <div class="ac-desc">Plan de trabajo por módulos con sesiones y capacitaciones. Conectado a CRM.</div>
+        <div class="ac-arrow">→</div>
+      </a>
+      <a class="action-card green" href="#proceso" onmouseenter="showDesc('proceso')" onmouseleave="showDesc(null)">
+        <div class="ac-icon green">🗺</div>
+        <div class="ac-title">Ver el proceso completo</div>
+        <div class="ac-desc">Revisa los 5 pasos del proceso de creación de BD. Qué hace quién y cuándo.</div>
+        <div class="ac-arrow">→</div>
+      </a>
+    </div>
   </div>
 
-  <!-- S1: CLIENTE -->
-  <div class="sec open" id="s1">
-    <div class="sec-head" onclick="togSec('s1')">
-      <div class="sec-icon" style="background:#EEF3FC">👤</div>
-      <div class="sec-title">1. Datos del Cliente</div>
-      <span class="sec-badge" id="b1">Pendiente</span><span class="sec-arrow">▼</span>
-    </div>
-    <div class="sec-body">
-      <div class="row2">
-        <div class="field"><label>Razón Social <span class="req">*</span></label><input id="f-razon" placeholder="Nombre empresa" oninput="upd()"></div>
-        <div class="field"><label>RUT <span class="req">*</span></label><input id="f-rut" placeholder="XX.XXX.XXX-X" oninput="upd()"></div>
-      </div>
-      <div class="row2">
-        <div class="field"><label>Contacto <span class="req">*</span></label><input id="f-contacto" placeholder="Nombre y cargo" oninput="upd()"></div>
-        <div class="field"><label>Correo <span class="req">*</span></label><input id="f-email" type="email" placeholder="correo@empresa.cl" oninput="upd()"></div>
-      </div>
-      <div class="field"><label>Teléfono</label><input id="f-tel" placeholder="+56 9 XXXX XXXX" oninput="upd()"></div>
-    </div>
-  </div>
+  <!-- PROCESO EN 5 PASOS -->
+  <div class="proceso-section" id="proceso">
+    <div class="sec-label">El proceso paso a paso</div>
+    <div class="sec-title">Creación de Nueva BD (Réplica)</div>
+    <div class="sec-desc">5 pasos, 3 áreas involucradas. Los primeros 3 son tuya. Luego IT y Onboarding se encargan.</div>
+    <div class="steps-wrap">
 
-  <!-- S2: BD -->
-  <div class="sec" id="s2">
-    <div class="sec-head" onclick="togSec('s2')">
-      <div class="sec-icon" style="background:#FEF0E6">🗄️</div>
-      <div class="sec-title">2. Base de Datos</div>
-      <span class="sec-badge" id="b2">Pendiente</span><span class="sec-arrow">▼</span>
-    </div>
-    <div class="sec-body">
-      <div class="row2">
-        <div class="field">
-          <label>Nombre BD nueva <span class="req">*</span> <span style="font-weight:400;color:var(--text-3);font-size:11px;">(en el Juego de Datos)</span></label>
-          <div class="hint">Máx. 30 caracteres</div>
-          <input id="f-bdnueva" placeholder="NOMBRE_BD" maxlength="30" style="font-family:var(--mono);font-size:12px" oninput="upd();document.getElementById('cc').textContent=this.value.length">
-          <div class="char-count"><span id="cc">0</span>/30</div>
+      <div class="step-row">
+        <div class="step-connector">
+          <div class="step-circle you">📋</div>
+          <div class="step-line"></div>
         </div>
-        <div class="field">
-          <label>BD de Origen <span class="req">*</span></label>
-          <div class="hint">Copiar desde</div>
-          <input id="f-bdorigen" placeholder="NOMBRE_ORIGEN" style="font-family:var(--mono);font-size:12px" oninput="upd()">
-        </div>
-      </div>
-      <div class="field"><label>Descripción <span class="req">*</span></label><div class="hint">Nombre en el sistema · Máx. 30 car.</div><input id="f-desc" placeholder="Empresa Ejemplo 2026" maxlength="30" oninput="upd()"></div>
-      <div class="field"><label>Ambiente ASP <span class="req">*</span></label><input id="f-amb" placeholder="\\MANAGER.LOCAL\MG\[código]\MANAGER8\COMUNES\" style="font-family:var(--mono);font-size:11px" oninput="upd()"></div>
-      <div class="field"><label>Código BD</label><input id="f-cod" placeholder="T969935600A" style="font-family:var(--mono);font-size:12px" oninput="upd()"></div>
-
-      <!-- BD PRINCIPAL — tablas colapsable -->
-      <div style="margin-top:14px;">
-        <div class="bd-block open" id="bd-principal">
-          <div class="bd-block-head" onclick="this.closest('.bd-block').classList.toggle('open')" style="background:#E6F4EC;">
-            <div class="bd-num" style="background:#1A6B42;">1</div>
-            <div class="bd-block-title" style="color:#1A6B42;">BD Principal — Tablas a copiar</div>
-            <span class="bd-block-arrow" style="color:#1A6B42;">▼</span>
-          </div>
-          <div class="bd-block-body">
-            <div class="alert alert-blue">ℹ Las OBLIGATORIAS se copian siempre. Marca SÍ/NO en las demás.</div>
-            <div class="tabla-wrap">
-              <div class="t-head"><div class="th">N°</div><div class="th tl">Tabla</div><div class="th si">SÍ</div><div class="th no">NO</div></div>
-              <div id="tabla-main"></div>
+        <div class="step-content">
+          <div class="step-card">
+            <div class="step-header">
+              <span class="step-num">PASO 1</span>
+              <span class="step-tag tag-you">● Tu responsabilidad</span>
             </div>
+            <div class="step-title">Levantamiento con el cliente</div>
+            <div class="step-desc">Reúnete con el cliente y completa el formulario de levantamiento. Acuerda qué tablas necesita copiar y los datos del ambiente.</div>
+            <div class="step-result">Formulario de levantamiento completado</div>
           </div>
         </div>
       </div>
 
-      <!-- MÁS BDs -->
-      <div class="field" style="margin-top:14px;">
-        <label>¿El cliente tiene más de una BD?</label>
-        <div class="togs">
-          <div class="tog" onclick="selTog(this,'mas','no');ocultarExtra()"><div class="tog-dot"></div>No, solo esta</div>
-          <div class="tog" onclick="selTog(this,'mas','si');mostrarExtra()"><div class="tog-dot"></div>Sí, tiene más</div>
+      <div class="step-row">
+        <div class="step-connector">
+          <div class="step-circle you">📝</div>
+          <div class="step-line"></div>
         </div>
-      </div>
-      <div class="extra-wrap" id="extra-wrap">
-        <div class="num-sel">
-          <span class="num-lbl">¿Cuántas BD adicionales?</span>
-          <div class="num-ctrl">
-            <button class="num-btn" onclick="chgNum(-1)">−</button>
-            <div class="num-val" id="num-val">1</div>
-            <button class="num-btn" onclick="chgNum(1)">+</button>
+        <div class="step-content">
+          <div class="step-card">
+            <div class="step-header">
+              <span class="step-num">PASO 2</span>
+              <span class="step-tag tag-you">● Tu responsabilidad</span>
+            </div>
+            <div class="step-title">Crear la OT</div>
+            <div class="step-desc">Con el formulario completado, genera la OT y la envías a las áreas que correspondan para iniciar el proceso formal.</div>
+            <div class="step-result">OT generada y enviada a las áreas</div>
           </div>
         </div>
-        <div id="extra-blocks"></div>
       </div>
 
-      <!-- MÓDULOS -->
-      <div class="field" style="margin-top:14px;">
-        <label>Módulos contratados en ASP</label>
-        <div class="togs mods">
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Abastecimiento</div>
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Existencias</div>
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Producción</div>
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Servicios</div>
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Ventas</div>
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Finanzas</div>
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Gestión Comercial</div>
-          <div class="tog" onclick="togMod(this)"><div class="tog-dot"></div>Gestión Financiera</div>
+      <div class="step-row">
+        <div class="step-connector">
+          <div class="step-circle you">📨</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-card">
+            <div class="step-header">
+              <span class="step-num">PASO 3</span>
+              <span class="step-tag tag-you">● Tu responsabilidad</span>
+            </div>
+            <div class="step-title">Solicitar BD a IT</div>
+            <div class="step-desc">El formulario genera el correo completo listo para enviar. Solo cópialo y mándalo a it@manager.cl. Incluye todas las tablas y el ambiente.</div>
+            <div class="step-result">Correo enviado a it@manager.cl</div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- S3: PREGUNTAS -->
-  <div class="sec" id="s3">
-    <div class="sec-head" onclick="togSec('s3')">
-      <div class="sec-icon" style="background:#E8F4EE">❓</div>
-      <div class="sec-title">3. Preguntas Clave</div>
-      <span class="sec-badge" id="b3">Pendiente</span><span class="sec-arrow">▼</span>
-    </div>
-    <div class="sec-body">
-      <div class="field"><label>¿Tiene IT interno para el respaldo?</label><div class="togs"><div class="tog" onclick="selTog(this,'it','si')"><div class="tog-dot"></div>Sí</div><div class="tog" onclick="selTog(this,'it','no')"><div class="tog-dot"></div>No, necesita apoyo</div></div></div>
-      <div class="field">
-        <label>¿Factura con Acepta?</label>
-        <div class="togs">
-          <div class="tog" onclick="selTog(this,'acepta','si');document.getElementById('dte-note').style.display='flex'"><div class="tog-dot"></div>Sí</div>
-          <div class="tog" onclick="selTog(this,'acepta','no');document.getElementById('dte-note').style.display='none'"><div class="tog-dot"></div>No</div>
-          <div class="tog" onclick="selTog(this,'acepta','otra');document.getElementById('dte-note').style.display='none'"><div class="tog-dot"></div>Otra entidad</div>
+      <div class="step-row">
+        <div class="step-connector">
+          <div class="step-circle it">⚙️</div>
+          <div class="step-line"></div>
         </div>
-        <div class="alert alert-orange" id="dte-note" style="display:none;">⚠ Notificar al área DTE.</div>
+        <div class="step-content">
+          <div class="step-card" style="opacity:.75;">
+            <div class="step-header">
+              <span class="step-num">PASO 4</span>
+              <span class="step-tag tag-it">● IT Manager</span>
+            </div>
+            <div class="step-title">IT crea la BD</div>
+            <div class="step-desc">IT crea el ambiente, la BD y los usuarios. Envía confirmación cuando está lista. Tu trabajo aquí está hecho.</div>
+            <div class="step-result">BD creada en el ambiente ASP</div>
+          </div>
+        </div>
       </div>
-      <div class="field"><label>¿Formatos de impresión personalizados?</label><div class="togs"><div class="tog" onclick="selTog(this,'fmt','si')"><div class="tog-dot"></div>Sí</div><div class="tog" onclick="selTog(this,'fmt','no')"><div class="tog-dot"></div>No, estándar</div></div></div>
-      <div class="field"><label>Observaciones</label><textarea id="f-obs" placeholder="Detalles adicionales relevantes..." oninput="upd()"></textarea></div>
+
+      <div class="step-row">
+        <div class="step-connector">
+          <div class="step-circle onb">✅</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-card" style="opacity:.75;">
+            <div class="step-header">
+              <span class="step-num">PASO 5</span>
+              <span class="step-tag tag-onb">● Proyectos Onboarding</span>
+            </div>
+            <div class="step-title">Verificación y entrega al cliente</div>
+            <div class="step-desc">Proyectos Onboarding verifica tablas, parámetros, FTP, Ramaflex y hace prueba de ciclos con el cliente. Mínimo 1 sesión de 2 horas.</div>
+            <div class="step-result">Cliente operando en la nueva BD</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- SUMMARY -->
-  <div class="summ" id="summ">
-    <div class="summ-title">📋 Resumen del Levantamiento</div>
-    <div id="summ-data"></div>
-    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
-      <div style="font-size:12.5px;font-weight:700;margin-bottom:6px;">Correo para IT</div>
-      <div class="email-pre" id="email-pre"></div>
-      <div class="action-btns">
-        <button class="ab" id="btn-copy" onclick="copyEmail()">📋 Copiar correo</button>
-        <button class="ab ab-blue" onclick="openOutlook()">✉ Abrir en Outlook</button>
-        <button class="ab ab-green" onclick="genPDF()">⬇ Descargar PDF</button>
+  <!-- SESIONES -->
+  <div style="margin-bottom:48px;" id="sesiones">
+    <div class="sec-label">Tiempo del proceso</div>
+    <div class="sec-title">¿Cuánto dura?</div>
+    <div class="sec-desc">Tu parte toma aproximadamente 30 minutos. Lo que sigue depende de la agenda de IT y Onboarding.</div>
+    <div class="sesion-card">
+      <div class="sesion-head">
+        <div class="sesion-head-icon">✅</div>
+        <div>
+          <div class="sesion-head-title">Sesión de Verificación y Configuración</div>
+          <div class="sesion-head-sub">Ejecutada por Proyectos Onboarding con el cliente</div>
+        </div>
+        <div class="sesion-badge">1 sesión · 2 hrs</div>
+      </div>
+      <div class="sesion-body">
+        <div class="sesion-items">
+          <div class="sesion-item"><span class="sesion-check">✓</span>Revisión de tablas copiadas</div>
+          <div class="sesion-item"><span class="sesion-check">✓</span>Parámetros del sistema</div>
+          <div class="sesion-item"><span class="sesion-check">✓</span>Verificación FTP</div>
+          <div class="sesion-item"><span class="sesion-check">✓</span>Acceso Ramaflex</div>
+          <div class="sesion-item"><span class="sesion-check">✓</span>Prueba de ciclos con el cliente</div>
+          <div class="sesion-item"><span class="sesion-check">✓</span>Formatos de impresión</div>
+        </div>
+        <div class="sesion-alert">⚠ Si el cliente requiere capacitación de algún módulo, se deben agendar sesiones adicionales. Indícalo en la OT.</div>
       </div>
     </div>
   </div>
+
+  <!-- RECURSOS -->
+  <div style="margin-bottom:48px;" id="recursos">
+    <div class="sec-label">Recursos disponibles</div>
+    <div class="sec-title">Accesos directos</div>
+    <div class="sec-desc">Todo lo que necesitas a un clic.</div>
+    <div class="recursos-grid">
+      <a class="recurso-card" href="checklist_comercial.html">
+        <div class="recurso-icon" style="background:#EEF3FC;">📊</div>
+        <div>
+          <div class="recurso-title">Checklist Comercial</div>
+          <div class="recurso-desc">Levantamiento de ventas · Genera OT y PDF</div>
+        </div>
+        <div class="recurso-arr">→</div>
+      </a>
+      <a class="recurso-card" href="https://manager-procesos.github.io/formulario-comercial-v2/formulario_levantamiento_final.html">
+        <div class="recurso-icon" style="background:#FEF0E6;">🗄️</div>
+        <div>
+          <div class="recurso-title">Formulario Creación BD Réplica</div>
+          <div class="recurso-desc">Solicitud a IT · Genera correo con tablas</div>
+        </div>
+        <div class="recurso-arr">→</div>
+      </a>
+      <a class="recurso-card" href="guia_comercial.html">
+        <div class="recurso-icon" style="background:#E8F4EE;">🗺</div>
+        <div>
+          <div class="recurso-title">Guía Comercial Completa</div>
+          <div class="recurso-desc">Proceso detallado · Checklist · Preguntas frecuentes</div>
+        </div>
+        <div class="recurso-arr">→</div>
+      </a>
+      <a class="recurso-card" href="https://manager-procesos.github.io/formulario-comercial-v2/plan_trabajo_gex.html">
+        <div class="recurso-icon" style="background:#F4EEF8;">📝</div>
+        <div>
+          <div class="recurso-title">Plan de Trabajo GEX</div>
+          <div class="recurso-desc">Plan por módulos · Conectado a CRM</div>
+        </div>
+        <div class="recurso-arr">→</div>
+      </a>
+      <a class="recurso-card" href="Guia_ManagerGO_v4.html">
+        <div class="recurso-icon" style="background:#FFF3E0;">📱</div>
+        <div>
+          <div class="recurso-title">Manager GO · Punto de Venta</div>
+          <div class="recurso-desc">Guía de uso · Configuración</div>
+        </div>
+        <div class="recurso-arr">→</div>
+      </a>
+    </div>
+  </div>
+
 </div>
 
-<!-- STICKY FOOTER -->
-<div class="sticky-footer">
-  <div class="sf-left">
-    <div class="sf-pct" id="sf-pct">0%</div>
-    <div>
-      <div class="sf-label">Completado</div>
-      <div class="sf-mini"><div class="sf-fill" id="sf-fill"></div></div>
-    </div>
+<!-- BOTTOM NAV MOBILE -->
+<div class="bottom-nav">
+  <div class="bn-row">
+    <button class="bn-btn active" onclick="scrollTo({top:0,behavior:'smooth'});setNav(this)">
+      <span class="bn-icon">🏠</span><span class="bn-label">Inicio</span><span class="bn-dot"></span>
+    </button>
+    <button class="bn-btn" onclick="document.getElementById('proceso').scrollIntoView({behavior:'smooth'});setNav(this)">
+      <span class="bn-icon">🗺</span><span class="bn-label">Proceso</span><span class="bn-dot"></span>
+    </button>
+    <button class="bn-btn" onclick="document.getElementById('sesiones').scrollIntoView({behavior:'smooth'});setNav(this)">
+      <span class="bn-icon">⏱</span><span class="bn-label">Sesiones</span><span class="bn-dot"></span>
+    </button>
+    <button class="bn-btn" onclick="document.getElementById('recursos').scrollIntoView({behavior:'smooth'});setNav(this)">
+      <span class="bn-icon">📁</span><span class="bn-label">Recursos</span><span class="bn-dot"></span>
+    </button>
   </div>
-  <button class="btn-gen" onclick="generate()">✨ Generar resumen</button>
 </div>
 
 <script>
-const TABLAS=[
-  {n:1,c:"ACCESS",d:"Control de acceso y permisos",ob:true},
-  {n:2,c:"AUTOR_DB",d:"Autorizaciones del sistema",ob:true},
-  {n:3,c:"GRUPOS_DB",d:"Grupos de permisos",ob:true},
-  {n:4,c:"PARAM_DB",d:"Parámetros generales",ob:true},
-  {n:5,c:"PARAMAPP_DB",d:"Parámetros web",ob:true},
-  {n:6,c:"SQL_DB",d:"Consultas SQL personalizados",ob:true},
-  {n:7,c:"EMP1_DB",d:"Datos empresa (parte 1)",ob:true},
-  {n:8,c:"EMP2_DB",d:"Datos empresa (parte 2)",ob:true},
-  {n:9,c:"EMP3_DB",d:"Datos empresa (parte 3)",ob:true},
-  {n:10,c:"PLAN_DB",d:"Plan de cuentas contable",ob:true},
-  {n:11,c:"TIDOC_DB",d:"Tipos de documentos",ob:true},
-  {n:12,c:"CHOI_DB",d:"Comunas, ciudades, LP y otros",ob:true},
-  {n:13,c:"USER_DB",d:"Usuarios y configuración de acceso",ob:true},
-  {n:14,c:"PERSO_DB",d:"Tabla de personal",ob:true},
-  {n:15,c:"ART_DB",d:"Artículos / catálogo",ob:false},
-  {n:16,c:"CENT_DB",d:"Centros de costo",ob:false},
-  {n:17,c:"CLASE_DB",d:"Direcciones de despacho",ob:false},
-  {n:18,c:"CLIEN_DB",d:"Clientes y proveedores",ob:false},
-  {n:19,c:"COMUNAS_DB",d:"Comunas y regiones",ob:false},
-  {n:20,c:"CONTA_DB",d:"Contactos",ob:false},
-  {n:21,c:"RECET_DB",d:"Recetas / producción",ob:false},
-  {n:22,c:"DESCT_DB",d:"Descuentos y LP (si aplica)",ob:false},
-];
-
-const ts={};
-let numExtra=1;
-
-function renderTbl(containerId,prefix){
-  const el=document.getElementById(containerId);
-  if(!el)return;
-  el.innerHTML=TABLAS.map((t,i)=>`
-    <div class="tr ${t.ob?'ob':''}">
-      <div class="td-n">${t.ob?'★':t.n}</div>
-      <div class="td-i"><div class="td-cod">${t.c}${t.ob?' <span class="ob-b">OBL</span>':''}</div><div class="td-desc">${t.d}</div></div>
-      <div class="td-cb"><div class="cb cb-si ${t.ob?'on':''}" id="${prefix}si${i}" onclick="tCb('${prefix}',${i},'si')"></div></div>
-      <div class="td-cb"><div class="cb cb-no" id="${prefix}no${i}" onclick="tCb('${prefix}',${i},'no')"></div></div>
-    </div>`).join('');
+const DESCS={
+  checklist:'Levanta los requerimientos del cliente: módulos, generalidades e integraciones. Genera la OT y PDF automáticamente.',
+  replica:'Solicita la creación de nueva BD réplica a IT. Selecciona tablas y genera el correo con los datos del ambiente.',
+  gex:'Plan de trabajo por módulo con sesiones y capacitaciones. Conectado a CRM — autocompleta datos del cliente.',
+  proceso:'Revisa los 5 pasos: qué hace Comercial, IT y Onboarding en la creación de una BD.'
+};
+function showDesc(k){
+  const el=document.getElementById('card-detail');
+  if(!k){el.style.display='none';return;}
+  el.textContent=DESCS[k]||'';el.style.display='block';
 }
-
-function tCb(prefix,i,type){
-  if(TABLAS[i].ob)return;
-  const si=document.getElementById(prefix+'si'+i);
-  const no=document.getElementById(prefix+'no'+i);
-  if(type==='si'){si.classList.toggle('on');if(si.classList.contains('on'))no.classList.remove('on');}
-  else{no.classList.toggle('on');if(no.classList.contains('on'))si.classList.remove('on');}
+function setNav(el){
+  document.querySelectorAll('.bn-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
 }
-
-function getSel(prefix){
-  return TABLAS.filter((t,i)=>t.ob||document.getElementById(prefix+'si'+i)?.classList.contains('on'));
-}
-
-function togSec(id){document.getElementById(id).classList.toggle('open');}
-
-function selTog(el,group,val){
-  document.querySelectorAll(`[onclick*="'${group}'"]`).forEach(o=>o.classList.remove('on'));
-  el.classList.add('on');ts[group]=val;upd();
-}
-function togMod(el){el.classList.toggle('on');upd();}
-function getMods(){return[...document.querySelectorAll('.mods .tog.on')].map(o=>o.textContent.trim()).join(', ')||'—';}
-function v(id){return(document.getElementById(id)?.value||'').trim();}
-
-function mostrarExtra(){
-  document.getElementById('extra-wrap').classList.add('show');
-  renderExtras();
-}
-function ocultarExtra(){document.getElementById('extra-wrap').classList.remove('show');}
-
-function chgNum(d){
-  numExtra=Math.max(1,Math.min(6,numExtra+d));
-  document.getElementById('num-val').textContent=numExtra;
-  renderExtras();
-}
-
-function renderExtras(){
-  const cont=document.getElementById('extra-blocks');
-  const saved={};
-  cont.querySelectorAll('.bd-block').forEach(b=>{
-    const i=b.dataset.i;
-    saved[i]={nm:b.querySelector('.bd-nm')?.value||'',rut:b.querySelector('.bd-rut')?.value||'',dc:b.querySelector('.bd-dc')?.value||''};
-  });
-  cont.innerHTML='';
-  for(let i=0;i<numExtra;i++){
-    const p=saved[i]||{};
-    const b=document.createElement('div');
-    b.className='bd-block open';b.dataset.i=i;
-    b.innerHTML=`
-      <div class="bd-block-head" onclick="this.closest('.bd-block').classList.toggle('open')">
-        <div class="bd-num">${i+2}</div>
-        <div class="bd-block-title" id="bdt${i}">${p.nm||'BD Adicional '+(i+1)}</div>
-        <span class="bd-block-arrow">▼</span>
-      </div>
-      <div class="bd-block-body">
-        <div class="bd-fields">
-          <div class="bd-field"><label>Nombre BD nueva</label><input class="bd-nm" placeholder="NOMBRE_BD" value="${p.nm||''}" oninput="updBDTitle(${i},this.value)"></div>
-          <div class="bd-field"><label>RUT cliente</label><input class="bd-rut" placeholder="XX.XXX.XXX-X" value="${p.rut||''}"></div>
-        </div>
-        <div class="bd-fields">
-          <div class="bd-field" style="grid-column:1/-1;"><label>Descripción (máx. 30)</label><input class="bd-dc" placeholder="Descripción" maxlength="30" value="${p.dc||''}"></div>
-        </div>
-        <div class="bd-tabla-title">Tablas a copiar para esta BD</div>
-        <div class="tabla-wrap">
-          <div class="t-head"><div class="th">N°</div><div class="th tl">Tabla</div><div class="th si">SÍ</div><div class="th no">NO</div></div>
-          <div id="tbl_ext_${i}"></div>
-        </div>
-      </div>`;
-    cont.appendChild(b);
-    renderTbl('tbl_ext_'+i,'ext'+i+'_');
-  }
-}
-
-function updBDTitle(i,v){const el=document.getElementById('bdt'+i);if(el)el.textContent=v.trim()||'BD Adicional '+(i+1);}
-
-function upd(){
-  const req=[v('f-razon'),v('f-rut'),v('f-contacto'),v('f-email'),v('f-bdnueva'),v('f-bdorigen'),v('f-desc'),v('f-amb')];
-  const pct=Math.round(req.filter(x=>x).length/req.length*100);
-  document.getElementById('tp').style.width=pct+'%';
-  document.getElementById('sf-fill').style.width=pct+'%';
-  document.getElementById('sf-pct').textContent=pct+'%';
-  const c1=v('f-razon')&&v('f-contacto');
-  const c2=v('f-bdnueva')&&v('f-bdorigen');
-  setBadge('b1',c1);setBadge('b2',c2);
-}
-
-function setBadge(id,done){
-  const el=document.getElementById(id);
-  el.textContent=done?'✓ Listo':'Pendiente';
-  el.className='sec-badge'+(done?' done':'');
-}
-
-function fmtTablas(sel){
-  const mx=Math.max(...TABLAS.map(t=>t.c.length));
-  return sel.map((t,j)=>`   ${String(j+1).padStart(2,' ')}. ${t.c.padEnd(mx+2,' ')}${t.d}`).join('\n');
-}
-
-function buildEmail(){
-  const codigo=(v('f-cod')||'[código BD]').split('//')[0].trim();
-  const mainSel=getSel('main_');
-
-  // BD creation lines
-  let crea=`1. Crear base denominada "${v('f-bdnueva')||'[NOMBRE_BD]'}" y en el campo "Descripción" indicar: ${v('f-desc')||'[descripción]'}`;
-  const extras=document.querySelectorAll('#extra-blocks .bd-block');
-  if(ts['mas']==='si') extras.forEach((bl,i)=>{
-    const nm=bl.querySelector('.bd-nm')?.value||`[BD ${i+2}]`;
-    const dc=bl.querySelector('.bd-dc')?.value||`[descripción BD ${i+2}]`;
-    crea+=`\n${i+2}. Crear base denominada "${nm}" y en el campo "Descripción" indicar: ${dc}`;
-  });
-
-  // Tables section
-  let tbls=`Copiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a "${v('f-bdnueva')||'[NOMBRE_BD]'}" las siguientes tablas (debe ser desde esa base, no otra):\n${fmtTablas(mainSel)}`;
-  if(ts['mas']==='si') extras.forEach((bl,i)=>{
-    const nm=bl.querySelector('.bd-nm')?.value||`[BD ${i+2}]`;
-    const sel=getSel('ext'+i+'_');
-    tbls+=`\n\nCopiar desde base "${v('f-bdorigen')||'[BD_ORIGEN]'}" a "${nm}" las siguientes tablas:\n${fmtTablas(sel)}`;
-  });
-
-  return `Para: it@manager.cl
-Asunto: Solicitud Creación BD – ${v('f-razon')||'[CLIENTE]'} – ${v('f-bdnueva')||'[BD]'}
-Área Solicitante: Comercial / GEX
-
-Estimados, muy buenas tardes,
-
-Junto con saludar, solicito lo siguiente:
-
-${crea}
-
-AMBIENTE : ${v('f-amb')||'[ruta del ambiente]'}
-BD       : ${codigo}
-
-${tbls}
-
-Nota: Todas las bases deben quedar actualizadas a la última versión disponible.
-
-Estaré atenta a sus comentarios. Saludos cordiales.`;
-}
-
-function generate(){
-  const mainSel=getSel('main_');
-  document.getElementById('summ-data').innerHTML=`
-    <div class="summ-sec"><div class="summ-sec-t">Cliente</div>
-      <div class="summ-row"><span class="summ-lbl">Razón Social</span><span class="summ-val">${v('f-razon')||'—'}</span></div>
-      <div class="summ-row"><span class="summ-lbl">RUT</span><span class="summ-val">${v('f-rut')||'—'}</span></div>
-      <div class="summ-row"><span class="summ-lbl">Contacto</span><span class="summ-val">${v('f-contacto')||'—'}</span></div>
-      <div class="summ-row"><span class="summ-lbl">Correo</span><span class="summ-val">${v('f-email')||'—'}</span></div>
-    </div>
-    <div class="summ-sec"><div class="summ-sec-t">Base de Datos</div>
-      <div class="summ-row"><span class="summ-lbl">BD Nueva</span><span class="summ-val" style="font-family:var(--mono)">${v('f-bdnueva')||'—'}</span></div>
-      <div class="summ-row"><span class="summ-lbl">Descripción</span><span class="summ-val">${v('f-desc')||'—'}</span></div>
-      <div class="summ-row"><span class="summ-lbl">BD Origen</span><span class="summ-val" style="font-family:var(--mono)">${v('f-bdorigen')||'—'}</span></div>
-      <div class="summ-row"><span class="summ-lbl">Módulos</span><span class="summ-val">${getMods()}</span></div>
-    </div>
-    <div class="summ-sec"><div class="summ-sec-t">Tablas BD Principal (${mainSel.length})</div>
-      <div class="tags">${mainSel.map(t=>`<span class="tag">${t.c}</span>`).join('')}</div>
-    </div>
-    ${v('f-obs')?`<div class="summ-sec"><div class="summ-sec-t">Observaciones</div><div style="font-size:13px;color:var(--text-2);line-height:1.6;">${v('f-obs')}</div></div>`:''}`;
-  document.getElementById('email-pre').textContent=buildEmail();
-  const s=document.getElementById('summ');
-  s.classList.add('show');
-  s.scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-function copyEmail(){
-  navigator.clipboard.writeText(buildEmail()).then(()=>{
-    const b=document.getElementById('btn-copy');
-    b.textContent='✓ Copiado';b.classList.add('ok');
-    setTimeout(()=>{b.textContent='📋 Copiar correo';b.classList.remove('ok');},2000);
-  });
-}
-
-function openOutlook(){
-  const email=buildEmail();
-  const lines=email.split('\n');
-  const asunto=lines.find(l=>l.startsWith('Asunto:'))?.replace('Asunto:','').trim()||'Solicitud Creación BD';
-  const body=lines.slice(lines.findIndex(l=>l.trim()==='')+1).join('\n');
-  window.location.href=`mailto:it@manager.cl?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(body)}`;
-}
-
-function genPDF(){
-  const mainSel=getSel('main_');
-  const cliente=v('f-razon')||'Cliente';
-  const emailText=buildEmail();
-  const obs=v('f-obs');
-  const extras=document.querySelectorAll('#extra-blocks .bd-block');
-  let extraHTML='';
-  if(ts['mas']==='si') extras.forEach((bl,i)=>{
-    const nm=bl.querySelector('.bd-nm')?.value||'—';
-    const rut=bl.querySelector('.bd-rut')?.value||'—';
-    const dc=bl.querySelector('.bd-dc')?.value||'—';
-    const sel=getSel('ext'+i+'_');
-    extraHTML+=`<div style="margin-bottom:10px;padding:10px;background:#f0f4fa;border-radius:6px;">
-      <b style="color:#1F3864;">BD ${i+2}: ${nm}</b><br>
-      <span style="color:#666;">RUT: ${rut} · Descripción: ${dc}</span><br>
-      <span style="font-size:9pt;">Tablas: ${sel.map(t=>`<span style="font-family:monospace;background:#e8f0fb;padding:1px 5px;border-radius:3px;margin-right:2px;">${t.c}</span>`).join('')}</span>
-    </div>`;
-  });
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Levantamiento ${cliente}</title>
-<style>
-body{font-family:Calibri,Arial,sans-serif;font-size:11pt;max-width:700px;margin:20px auto;padding:0 20px;color:#18243C;}
-.hdr{border:3px solid #1F3864;border-radius:8px;padding:16px 20px;margin-bottom:20px;position:relative;}
-.hdr::before{content:'';display:block;height:8px;background:#1F3864;border-radius:4px 4px 0 0;margin:-16px -20px 12px -20px;}
-h1{font-size:15pt;margin:0 0 3px;color:#1F3864;}
-.hdr p{color:#4A5A78;font-size:9pt;margin:0;}
-.hdr-badge{display:inline-block;border:2px solid #00B0F0;color:#00B0F0;font-size:8pt;font-weight:700;padding:2px 8px;border-radius:4px;margin-top:6px;letter-spacing:.05em;text-transform:uppercase;}
-.st{border-left:5px solid #1F3864;padding:5px 10px;margin:16px 0 8px;font-size:9.5pt;font-weight:bold;text-transform:uppercase;letter-spacing:.05em;color:#1F3864;background:#F0F4FA;}
-.st-num{display:inline-block;width:20px;height:20px;border:2px solid #00B0F0;color:#1F3864;border-radius:50%;text-align:center;line-height:17px;font-size:8pt;font-weight:700;margin-right:6px;vertical-align:middle;}
-table.data{width:100%;border-collapse:collapse;margin-bottom:6px;}
-table.data td{padding:4px 0;font-size:11pt;vertical-align:top;border-bottom:1px solid #F0F4FA;}
-table.data td.lbl{color:#4A5A78;width:150px;}
-table.data td.val{font-weight:600;color:#18243C;}
-.tags{margin-top:4px;}
-.tag{display:inline-block;font-family:monospace;font-size:9pt;padding:2px 7px;border:1px solid #1F3864;color:#1F3864;border-radius:4px;margin:2px 2px 2px 0;}
-.bd-extra{border-left:4px solid #2E6DA4;padding:8px 14px;margin-bottom:8px;background:#F8FAFD;}
-.bd-extra b{color:#1F3864;}
-.obs-box{border-left:4px solid #C47A10;padding:10px 14px;color:#7A4A00;background:#FFFBF5;}
-.email{border:1px solid #DDE4EE;border-left:4px solid #1F3864;border-radius:6px;padding:14px;font-family:'Courier New',monospace;font-size:9pt;white-space:pre-wrap;line-height:1.8;color:#4A5A78;background:#F7FAFD;}
-@media print{body{margin:0;}.hdr::before{display:none;}.hdr{border:3px solid #1F3864;}}
-</style>
-</head><body>
-<div class="hdr"><h1>Formulario de Levantamiento</h1><p>Creación Nueva BD · ${new Date().toLocaleString('es-CL')} · Manager ERP</p><span class="hdr-badge">Manager ERP</span></div>
-<div class="st"><span class="st-num">1</span>Cliente</div>
-<table class="data"><tr><td class="lbl">Razón Social</td><td class="val">${v('f-razon')||'—'}</td></tr><tr><td class="lbl">RUT</td><td class="val">${v('f-rut')||'—'}</td></tr><tr><td class="lbl">Contacto</td><td class="val">${v('f-contacto')||'—'}</td></tr><tr><td class="lbl">Correo</td><td class="val">${v('f-email')||'—'}</td></tr><tr><td class="lbl">Teléfono</td><td class="val">${v('f-tel')||'—'}</td></tr></table>
-<div class="st"><span class="st-num">2</span>Base de Datos Principal</div>
-<table class="data"><tr><td class="lbl">BD Nueva</td><td class="val" style="font-family:monospace">${v('f-bdnueva')||'—'}</td></tr><tr><td class="lbl">Descripción</td><td class="val">${v('f-desc')||'—'}</td></tr><tr><td class="lbl">BD Origen</td><td class="val" style="font-family:monospace">${v('f-bdorigen')||'—'}</td></tr><tr><td class="lbl">Ambiente</td><td class="val" style="font-family:monospace;font-size:9pt">${v('f-amb')||'—'}</td></tr><tr><td class="lbl">Módulos</td><td class="val">${getMods()}</td></tr></table>
-<div class="st"><span class="st-num">3</span>Tablas BD Principal (${mainSel.length})</div>
-<div class="tags">${mainSel.map(t=>`<span class="tag">${t.c}</span>`).join('')}</div>
-${extraHTML?`<div class="st"><span class="st-num">4</span>Bases de Datos Adicionales</div>${extraHTML}`:''}
-${obs?`<div class="st"><span class="st-num">5</span>Observaciones</div><div style="background:#fff8f0;border-left:3px solid #C47A10;padding:8px 12px;font-size:10pt;">${obs}</div>`:''}
-<div class="st"><span class="st-num">6</span>Correo para IT</div>
-<div class="email">${emailText}</div>
-</body></html>`;
-  const win=window.open('','_blank','width=800,height=900');
-  win.document.open();win.document.write(html);win.document.close();
-  win.onload=()=>{win.focus();win.print();};
-}
-
-renderTbl('tabla-main','main_');
-upd();
 </script>
 </body>
 </html>
