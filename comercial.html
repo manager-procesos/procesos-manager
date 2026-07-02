@@ -198,97 +198,60 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
   <!-- PROCESO EN 5 PASOS -->
   <div class="proceso-section" id="proceso">
-    <div class="sec-label">El proceso paso a paso</div>
-    <div class="sec-title">Creación de Nueva BD (Réplica)</div>
-    <div class="sec-desc">5 pasos, 3 áreas involucradas. Los primeros 3 son tuya. Luego IT y Onboarding se encargan.</div>
-    <div class="steps-wrap">
+    <div class="sec-label">Procesos por formulario</div>
+    <div class="sec-title">¿Cómo funciona cada proceso?</div>
+    <div class="sec-desc">Selecciona el formulario para ver su flujo completo.</div>
 
-      <div class="step-row">
-        <div class="step-connector">
-          <div class="step-circle you">📋</div>
-          <div class="step-line"></div>
+    <!-- ACORDEONES -->
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:32px;">
+
+      <!-- CHECKLIST COMERCIAL -->
+      <div class="proc-acc" id="acc-checklist">
+        <div class="proc-acc-head" onclick="togAcc('checklist')" style="background:#EEF3FC;border:1px solid #B4C6E7;border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;">
+          <div style="width:38px;height:38px;background:#1F3864;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📊</div>
+          <div style="flex:1;"><div style="font-size:15px;font-weight:700;color:#1F3864;">Checklist Comercial</div><div style="font-size:12px;color:#4A5A78;margin-top:2px;">Levantamiento de requerimientos del cliente</div></div>
+          <span id="arr-checklist" style="font-size:18px;color:#8898B8;transition:transform .2s;">▼</span>
         </div>
-        <div class="step-content">
-          <div class="step-card">
-            <div class="step-header">
-              <span class="step-num">PASO 1</span>
-              <span class="step-tag tag-you">● Tu responsabilidad</span>
-            </div>
-            <div class="step-title">Levantamiento con el cliente</div>
-            <div class="step-desc">Reúnete con el cliente y completa el formulario de levantamiento. Acuerda qué tablas necesita copiar y los datos del ambiente.</div>
-            <div class="step-result">Formulario de levantamiento completado</div>
+        <div id="body-checklist" style="display:none;padding:16px 20px;border:1px solid #B4C6E7;border-top:none;border-radius:0 0 12px 12px;background:#fff;">
+          <div class="steps-wrap">
+            <div class="step-row"><div class="step-connector"><div class="step-circle you">📋</div><div class="step-line"></div></div><div class="step-content"><div class="step-card"><div class="step-header"><span class="step-num">PASO 1</span><span class="step-tag tag-you">● Vendedor</span></div><div class="step-title">Reunión con el cliente</div><div class="step-desc">Abre el Checklist Comercial y complétalo con el cliente: módulos, generalidades, integraciones y observaciones.</div><div class="step-result">Checklist completado</div></div></div></div>
+            <div class="step-row"><div class="step-connector"><div class="step-circle you">📝</div><div class="step-line"></div></div><div class="step-content"><div class="step-card"><div class="step-header"><span class="step-num">PASO 2</span><span class="step-tag tag-you">● Vendedor</span></div><div class="step-title">Generar OT</div><div class="step-desc">Al terminar el formulario genera la OT automáticamente. Cópiala y envíala a las áreas correspondientes.</div><div class="step-result">OT generada y enviada</div></div></div></div>
+            <div class="step-row"><div class="step-connector"><div class="step-circle onb">✅</div><div class="step-line"></div></div><div class="step-content"><div class="step-card" style="opacity:.75;"><div class="step-header"><span class="step-num">PASO 3</span><span class="step-tag tag-onb">● GEX / Onboarding</span></div><div class="step-title">Plan de trabajo y propuesta</div><div class="step-desc">GEX recibe la OT, genera el plan de trabajo con sesiones y lo presenta al cliente.</div><div class="step-result">Plan de trabajo entregado</div></div></div></div>
           </div>
         </div>
       </div>
 
-      <div class="step-row">
-        <div class="step-connector">
-          <div class="step-circle you">📝</div>
-          <div class="step-line"></div>
+      <!-- CREACIÓN BD RÉPLICA -->
+      <div class="proc-acc" id="acc-replica">
+        <div class="proc-acc-head" onclick="togAcc('replica')" style="background:#FFF3E0;border:1px solid #F0C898;border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;">
+          <div style="width:38px;height:38px;background:#C47A10;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🗄️</div>
+          <div style="flex:1;"><div style="font-size:15px;font-weight:700;color:#7A4A00;">Creación BD Réplica</div><div style="font-size:12px;color:#7A4A00;margin-top:2px;opacity:.8;">Solicitud de nueva BD a IT</div></div>
+          <span id="arr-replica" style="font-size:18px;color:#F0C898;transition:transform .2s;">▼</span>
         </div>
-        <div class="step-content">
-          <div class="step-card">
-            <div class="step-header">
-              <span class="step-num">PASO 2</span>
-              <span class="step-tag tag-you">● Tu responsabilidad</span>
-            </div>
-            <div class="step-title">Crear la OT</div>
-            <div class="step-desc">Con el formulario completado, genera la OT y la envías a las áreas que correspondan para iniciar el proceso formal.</div>
-            <div class="step-result">OT generada y enviada a las áreas</div>
+        <div id="body-replica" style="display:none;padding:16px 20px;border:1px solid #F0C898;border-top:none;border-radius:0 0 12px 12px;background:#fff;">
+          <div class="steps-wrap">
+            <div class="step-row"><div class="step-connector"><div class="step-circle you">📋</div><div class="step-line"></div></div><div class="step-content"><div class="step-card"><div class="step-header"><span class="step-num">PASO 1</span><span class="step-tag tag-you">● Tu responsabilidad</span></div><div class="step-title">Levantamiento con el cliente</div><div class="step-desc">Completa el formulario de levantamiento con el cliente. Acuerda las tablas y datos del ambiente ASP.</div><div class="step-result">Formulario completado</div></div></div></div>
+            <div class="step-row"><div class="step-connector"><div class="step-circle you">📝</div><div class="step-line"></div></div><div class="step-content"><div class="step-card"><div class="step-header"><span class="step-num">PASO 2</span><span class="step-tag tag-you">● Tu responsabilidad</span></div><div class="step-title">Crear la OT</div><div class="step-desc">Genera la OT y la envías a las áreas que correspondan para iniciar el proceso formal.</div><div class="step-result">OT generada y enviada</div></div></div></div>
+            <div class="step-row"><div class="step-connector"><div class="step-circle you">📨</div><div class="step-line"></div></div><div class="step-content"><div class="step-card"><div class="step-header"><span class="step-num">PASO 3</span><span class="step-tag tag-you">● Tu responsabilidad</span></div><div class="step-title">Solicitar BD a IT</div><div class="step-desc">El formulario genera el correo completo listo para enviar a it@manager.cl con todas las tablas.</div><div class="step-result">Correo enviado a IT</div></div></div></div>
+            <div class="step-row"><div class="step-connector"><div class="step-circle it">⚙️</div><div class="step-line"></div></div><div class="step-content"><div class="step-card" style="opacity:.75;"><div class="step-header"><span class="step-num">PASO 4</span><span class="step-tag tag-it">● IT Manager</span></div><div class="step-title">IT crea la BD</div><div class="step-desc">IT crea el ambiente, la BD y los usuarios.</div><div class="step-result">BD creada en el ambiente ASP</div></div></div></div>
+            <div class="step-row"><div class="step-connector"><div class="step-circle onb">✅</div></div><div class="step-content"><div class="step-card" style="opacity:.75;"><div class="step-header"><span class="step-num">PASO 5</span><span class="step-tag tag-onb">● Proyectos Onboarding</span></div><div class="step-title">Verificación y entrega</div><div class="step-desc">Proyectos Onboarding verifica tablas, parámetros, FTP, Ramaflex y prueba de ciclos con el cliente.</div><div class="step-result">Cliente operando en la nueva BD</div></div></div></div>
           </div>
         </div>
       </div>
 
-      <div class="step-row">
-        <div class="step-connector">
-          <div class="step-circle you">📨</div>
-          <div class="step-line"></div>
+      <!-- PLAN DE TRABAJO GEX -->
+      <div class="proc-acc" id="acc-gex">
+        <div class="proc-acc-head" onclick="togAcc('gex')" style="background:#F4EEF8;border:1px solid #C9B4E0;border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;">
+          <div style="width:38px;height:38px;background:#5B2C8D;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📝</div>
+          <div style="flex:1;"><div style="font-size:15px;font-weight:700;color:#5B2C8D;">Plan de Trabajo GEX</div><div style="font-size:12px;color:#5B2C8D;margin-top:2px;opacity:.8;">Plan de implementación por módulos</div></div>
+          <span id="arr-gex" style="font-size:18px;color:#C9B4E0;transition:transform .2s;">▼</span>
         </div>
-        <div class="step-content">
-          <div class="step-card">
-            <div class="step-header">
-              <span class="step-num">PASO 3</span>
-              <span class="step-tag tag-you">● Tu responsabilidad</span>
-            </div>
-            <div class="step-title">Solicitar BD a IT</div>
-            <div class="step-desc">El formulario genera el correo completo listo para enviar. Solo cópialo y mándalo a it@manager.cl. Incluye todas las tablas y el ambiente.</div>
-            <div class="step-result">Correo enviado a it@manager.cl</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-row">
-        <div class="step-connector">
-          <div class="step-circle it">⚙️</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-content">
-          <div class="step-card" style="opacity:.75;">
-            <div class="step-header">
-              <span class="step-num">PASO 4</span>
-              <span class="step-tag tag-it">● IT Manager</span>
-            </div>
-            <div class="step-title">IT crea la BD</div>
-            <div class="step-desc">IT crea el ambiente, la BD y los usuarios. Envía confirmación cuando está lista. Tu trabajo aquí está hecho.</div>
-            <div class="step-result">BD creada en el ambiente ASP</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-row">
-        <div class="step-connector">
-          <div class="step-circle onb">✅</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-content">
-          <div class="step-card" style="opacity:.75;">
-            <div class="step-header">
-              <span class="step-num">PASO 5</span>
-              <span class="step-tag tag-onb">● Proyectos Onboarding</span>
-            </div>
-            <div class="step-title">Verificación y entrega al cliente</div>
-            <div class="step-desc">Proyectos Onboarding verifica tablas, parámetros, FTP, Ramaflex y hace prueba de ciclos con el cliente. Mínimo 1 sesión de 2 horas.</div>
-            <div class="step-result">Cliente operando en la nueva BD</div>
+        <div id="body-gex" style="display:none;padding:16px 20px;border:1px solid #C9B4E0;border-top:none;border-radius:0 0 12px 12px;background:#fff;">
+          <div class="steps-wrap">
+            <div class="step-row"><div class="step-connector"><div class="step-circle you">📋</div><div class="step-line"></div></div><div class="step-content"><div class="step-card"><div class="step-header"><span class="step-num">PASO 1</span><span class="step-tag tag-you">● GEX / Comercial</span></div><div class="step-title">Recibir la OT del Checklist</div><div class="step-desc">GEX recibe la OT con el Checklist Comercial completado. Revisa los módulos y requerimientos del cliente.</div><div class="step-result">OT revisada</div></div></div></div>
+            <div class="step-row"><div class="step-connector"><div class="step-circle you">📝</div><div class="step-line"></div></div><div class="step-content"><div class="step-card"><div class="step-header"><span class="step-num">PASO 2</span><span class="step-tag tag-you">● GEX / Comercial</span></div><div class="step-title">Crear el Plan de Trabajo</div><div class="step-desc">Abre el formulario Plan de Trabajo GEX. Busca el cliente en CRM, selecciona módulos y define las sesiones de implementación.</div><div class="step-result">Plan de trabajo generado</div></div></div></div>
+            <div class="step-row"><div class="step-connector"><div class="step-circle you">📨</div><div class="step-line"></div></div><div class="step-content"><div class="step-card"><div class="step-header"><span class="step-num">PASO 3</span><span class="step-tag tag-you">● GEX / Comercial</span></div><div class="step-title">Presentar al cliente</div><div class="step-desc">Descarga el PDF del plan de trabajo y lo presenta al cliente. El cliente aprueba las sesiones y fechas.</div><div class="step-result">Plan aprobado por el cliente</div></div></div></div>
+            <div class="step-row"><div class="step-connector"><div class="step-circle onb">✅</div></div><div class="step-content"><div class="step-card" style="opacity:.75;"><div class="step-header"><span class="step-num">PASO 4</span><span class="step-tag tag-onb">● Proyectos Onboarding</span></div><div class="step-title">Ejecución del plan</div><div class="step-desc">Onboarding ejecuta las sesiones según el plan aprobado. Capacitación por módulo con el cliente.</div><div class="step-result">Implementación completada</div></div></div></div>
           </div>
         </div>
       </div>
@@ -404,6 +367,21 @@ function showDesc(k){
   const el=document.getElementById('card-detail');
   if(!k){el.style.display='none';return;}
   el.textContent=DESCS[k]||'';el.style.display='block';
+}
+function togAcc(key){
+  const body=document.getElementById('body-'+key);
+  const arr=document.getElementById('arr-'+key);
+  const isOpen=body.style.display!=='none';
+  // Close all
+  ['checklist','replica','gex'].forEach(k=>{
+    document.getElementById('body-'+k).style.display='none';
+    document.getElementById('arr-'+k).style.transform='rotate(0deg)';
+  });
+  // Open clicked if was closed
+  if(!isOpen){
+    body.style.display='block';
+    arr.style.transform='rotate(180deg)';
+  }
 }
 function setNav(el){
   document.querySelectorAll('.bn-btn').forEach(b=>b.classList.remove('active'));
