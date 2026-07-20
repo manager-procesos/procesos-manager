@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Plan Comercial Manager · Levantamiento & Sesiones (Legos)</title>
+<title>Formulario Comercial · Manager ERP</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#1F3864;--blue:#2E6DA4;--sky:#00B0F0;--bg:#F0F4FA;--card:#fff;--border:#DDE4EE;--border-hi:#B4C6E7;--text:#18243C;--text-2:#4A5A78;--text-3:#8898B8;--green:#1A6B42;--red:#C0001A;--orange:#C47A10;--font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--r:8px;--r-lg:12px;}
@@ -170,6 +170,67 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .lt-row.lt-main b{font-size:17px;color:var(--sky);}
 .lt-scen-title{font-size:10.5px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;}
 .lego-flag{font-size:10.5px;color:var(--text-3);margin-top:8px;font-style:italic;line-height:1.5;}
+
+/* VENDEDOR / GEX PILLS (estilo réplica BD) */
+.vend-pills{display:flex;flex-wrap:wrap;gap:6px;}
+.vend-group-lbl{width:100%;font-size:10.5px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin:10px 0 5px;}
+.vend-group-lbl:first-child{margin-top:0;}
+
+/* CRM BLOCK (estilo formulario Réplica BD) */
+.crm-block{background:var(--card);border:2px solid var(--sky);border-radius:var(--r-lg);margin-bottom:10px;overflow:visible;position:relative;}
+.crm-head{display:flex;align-items:center;gap:10px;padding:14px 16px;}
+.crm-icon{width:36px;height:36px;background:linear-gradient(135deg,#EEF9FF,#D0F0FF);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:1px solid var(--sky);}
+.crm-title{font-size:13.5px;font-weight:700;flex:1;color:var(--navy);}
+.crm-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--sky);color:#fff;}
+.crm-body{padding:0 14px 14px;}
+.search-wrap{position:relative;}
+.search-input{width:100%;padding:11px 44px 11px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-family:var(--font);font-size:14px;color:var(--text);background:#FAFBFD;outline:none;transition:all .2s;}
+.search-input:focus{border-color:var(--sky);background:#fff;box-shadow:0 0 0 3px rgba(0,176,240,.12);}
+.search-ico{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--text-3);pointer-events:none;}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--sky);border-radius:50%;animation:spin2 .7s linear infinite;}
+@keyframes spin2{to{transform:rotate(360deg)}}
+.ac-drop{position:absolute;top:calc(100% + 5px);left:0;right:0;background:#fff;border:1.5px solid var(--border);border-radius:var(--r-lg);box-shadow:0 12px 32px rgba(0,0,0,.14);z-index:500;max-height:240px;overflow-y:auto;display:none;}
+.ac-drop.open{display:block;}
+.ac-item{padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .12s;display:flex;align-items:center;gap:10px;}
+.ac-item:last-child{border-bottom:none;}
+.ac-item:hover,.ac-item.hi{background:#EEF9FF;}
+.ac-dot{width:8px;height:8px;border-radius:50%;background:var(--sky);flex-shrink:0;}
+.ac-name{font-size:13.5px;font-weight:600;color:var(--text);}
+.ac-rut{font-size:11px;color:var(--text-3);font-family:var(--mono);margin-top:1px;}
+.ac-empty{padding:16px;text-align:center;color:var(--text-3);font-size:13px;}
+.ac-error{padding:16px;text-align:center;color:var(--red);font-size:12.5px;}
+.crm-sel{display:none;align-items:center;gap:8px;background:#EEF9FF;border:1px solid #A8DDF8;border-radius:var(--r);padding:9px 12px;margin-top:8px;}
+.crm-sel.show{display:flex;}
+.crm-sel-name{font-size:13px;font-weight:700;color:var(--navy);flex:1;}
+.crm-clear{background:none;border:none;cursor:pointer;color:var(--text-3);font-size:20px;line-height:1;padding:0 2px;font-family:var(--font);}
+.crm-clear:hover{color:var(--red);}
+.crm-pills{display:none;flex-wrap:wrap;gap:7px;margin-top:10px;}
+.crm-pills.show{display:flex;}
+.crm-pill{display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:20px;font-size:12px;font-weight:600;}
+.crm-pill-vendedor{background:#E6F4EC;border:1px solid #A8DCBC;color:#0A6A32;}
+.crm-pill-gex{background:#EEF3FC;border:1px solid var(--border-hi);color:var(--navy);}
+.contact-sel{margin-top:10px;display:none;}
+.contact-sel.show{display:block;}
+.contact-label{font-size:11.5px;font-weight:600;color:var(--text-2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;}
+.contact-list{display:flex;flex-wrap:wrap;gap:6px;}
+.contact-pill{padding:7px 13px;border:1.5px solid var(--border);border-radius:20px;font-size:12.5px;cursor:pointer;color:var(--text-2);transition:all .15s;background:#fff;}
+.contact-pill:hover{border-color:var(--sky);color:var(--navy);}
+.contact-pill.on{border-color:var(--sky);background:#EEF9FF;color:var(--navy);font-weight:600;}
+.new-badge{font-size:9.5px;background:var(--orange);color:#fff;padding:1px 5px;border-radius:6px;margin-left:3px;}
+.btn-add-contact-wrap{margin-top:8px;}
+.btn-add-contact{background:none;border:1.5px dashed var(--border-hi);color:var(--navy);font-family:var(--font);font-size:12px;font-weight:600;padding:7px 12px;border-radius:var(--r);cursor:pointer;}
+.btn-add-contact:hover{border-color:var(--sky);background:#F7FCFF;}
+.add-contact-form{margin-top:10px;background:#F7FAFD;border:1px solid var(--border);border-radius:var(--r);padding:12px;}
+.add-contact-form input{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font);font-size:13px;margin-bottom:8px;outline:none;}
+.add-contact-form input:focus{border-color:var(--sky);}
+.add-contact-actions{display:flex;gap:8px;}
+.add-contact-note{font-size:10.5px;color:var(--text-3);margin-top:8px;line-height:1.5;font-style:italic;}
+.crm-status{display:flex;align-items:center;gap:8px;padding:8px 14px;background:#F7FAFD;border-top:1px solid var(--border);border-radius:0 0 var(--r-lg) var(--r-lg);font-size:11.5px;color:var(--text-3);}
+.st-dot{width:7px;height:7px;border-radius:50%;background:var(--border);flex-shrink:0;}
+.st-dot.ok{background:var(--green);}
+.st-dot.err{background:var(--red);}
+.st-dot.warn{background:var(--orange);}
+.st-dot.loading{background:var(--sky);}
 </style>
 </head>
 <body>
@@ -178,7 +239,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <div class="tb-left">
     <div class="tb-mark">M</div>
     <div>
-      <div class="tb-title">Plan Comercial Manager</div>
+      <div class="tb-title">Formulario Comercial</div>
       <div class="tb-sub">Levantamiento + Cálculo de Sesiones (Legos) · v2</div>
     </div>
   </div>
@@ -188,17 +249,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
 <div class="wrap">
   <div class="hero">
-    <div class="hero-title">Plan Comercial Manager</div>
+    <div class="hero-title">Formulario Comercial</div>
     <div class="hero-desc">Un solo formulario para Vendedores y GEX: levanta los datos del cliente (nuevo o base instalada), busca en Zoho CRM y calcula al instante las sesiones de implementación según los Legos oficiales de Manager+ y Manager Time.</div>
   </div>
 
-  <!-- VENDEDOR -->
+  <!-- VENDEDOR / GEX -->
   <div class="vendedor-wrap">
-    <div class="vend-label">Vendedor / GEX responsable <span style="color:var(--red)">*</span></div>
-    <select id="f-vendedor" onchange="upd()">
-      <option value="">Selecciona tu nombre...</option>
-    </select>
-    <div id="vend-status" style="font-size:11px;color:var(--text-3);margin-top:4px;"></div>
+    <div class="vend-label">¿Quién completa este formulario? <span style="color:var(--red)">*</span></div>
+    <div class="vend-pills" id="vend-pills"></div>
+    <input type="hidden" id="f-vendedor">
+    <div id="vend-status" style="font-size:11px;color:var(--text-3);margin-top:8px;"></div>
   </div>
 
   <!-- FECHA -->
@@ -207,16 +267,58 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <input type="date" id="f-fecha" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-family:var(--font);font-size:14px;color:var(--text);background:#fff;outline:none;" oninput="upd()" value="">
   </div>
 
-  <!-- BUSCADOR ZOHO -->
-  <div class="zoho-search-wrap">
-    <div class="zoho-label">🔍 Buscar cliente en Zoho CRM <span class="zoho-badge">CRM conectado</span></div>
-    <div class="zoho-input-wrap">
-      <input type="text" id="zoho-q" class="zoho-input" placeholder="Escribe nombre de empresa o RUT..." autocomplete="off" oninput="zohoSearch(this.value)">
-      <span class="zoho-spin" id="zoho-spin">⟳</span>
-      <div class="zoho-dropdown" id="zoho-drop"></div>
+  <!-- BUSCADOR ZOHO / CRM (estilo formulario Réplica BD) -->
+  <div class="crm-block">
+    <div class="crm-head">
+      <div class="crm-icon">🔍</div>
+      <div class="crm-title">Buscar cliente en Zoho CRM</div>
+      <span class="crm-badge">ZOHO CRM</span>
     </div>
-    <div id="zoho-pills" style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;"></div>
-    <div style="margin-top:8px;font-size:11.5px;color:var(--text-3);">¿No encuentras el cliente? <span style="color:var(--sky);cursor:pointer;font-weight:600;" onclick="modoManual()">Ingresar manualmente →</span></div>
+    <div class="crm-body">
+      <div class="search-wrap">
+        <input type="text" class="search-input" id="zoho-q" placeholder="Escribe nombre de empresa o RUT..." autocomplete="off" oninput="zohoSearch(this.value)">
+        <div class="search-ico" id="zoho-search-ico">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <div class="ac-drop" id="zoho-drop"></div>
+      </div>
+      <div class="crm-sel" id="crm-sel">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sky)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <span class="crm-sel-name" id="crm-sel-name"></span>
+        <button class="crm-clear" type="button" onclick="clearCRM()">×</button>
+      </div>
+      <div class="crm-pills" id="zoho-pills">
+        <div class="crm-pill crm-pill-vendedor"><span id="pill-vendedor-text"></span></div>
+        <div class="crm-pill crm-pill-gex"><span id="pill-gex-text"></span></div>
+      </div>
+      <div class="contact-sel" id="contact-sel">
+        <div class="contact-label">Contacto del cliente</div>
+        <div class="contact-list" id="contact-list"></div>
+        <div class="btn-add-contact-wrap">
+          <button type="button" class="btn-add-contact" onclick="toggleAddContact()">+ Agregar contacto</button>
+        </div>
+        <div class="add-contact-form" id="add-contact-form" style="display:none;">
+          <div class="row2">
+            <input type="text" id="nc-nombre" placeholder="Nombre del contacto">
+            <input type="text" id="nc-cargo" placeholder="Cargo (opcional)">
+          </div>
+          <div class="row2">
+            <input type="email" id="nc-email" placeholder="Correo">
+            <input type="text" id="nc-tel" placeholder="Teléfono">
+          </div>
+          <div class="add-contact-actions">
+            <button type="button" class="ab ab-green" onclick="saveNewContact()">Guardar contacto</button>
+            <button type="button" class="ab" onclick="toggleAddContact()">Cancelar</button>
+          </div>
+          <div class="add-contact-note">Se guarda en este formulario y queda marcado como "nuevo" en la OT. La sincronización automática con Zoho CRM todavía no está disponible (el conector actual solo permite lectura; para crear contactos hace falta habilitar un endpoint de escritura).</div>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:11.5px;color:var(--text-3);">¿No encuentras el cliente? <span style="color:var(--sky);cursor:pointer;font-weight:600;" onclick="modoManual()">Ingresar manualmente →</span></div>
+    </div>
+    <div class="crm-status">
+      <div class="st-dot" id="zoho-st-dot"></div>
+      <span id="zoho-st-msg">Escribe al menos 2 caracteres para buscar</span>
+    </div>
   </div>
 
   <!-- S1: DATOS CLIENTE -->
@@ -254,9 +356,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div class="field">
         <label>Producto ofrecido</label>
         <div class="togs">
-          <div class="tog" onclick="selTog(this,'producto','managerplus');renderLegos()"><div class="tog-dot"></div>Manager+</div>
-          <div class="tog" onclick="selTog(this,'producto','time');renderLegos()"><div class="tog-dot"></div>Manager Time</div>
-          <div class="tog" onclick="selTog(this,'producto','flexline');renderLegos()"><div class="tog-dot"></div>Flexline</div>
+          <div class="tog producto-tog" onclick="pickProducto(this,'managerplus')"><div class="tog-dot"></div>Manager+</div>
+          <div class="tog producto-tog" onclick="pickProducto(this,'time')"><div class="tog-dot"></div>Manager Time</div>
+          <div class="tog producto-tog" onclick="pickProducto(this,'flexline')"><div class="tog-dot"></div>Flexline</div>
         </div>
       </div>
       <div class="field">
@@ -486,6 +588,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <button class="ab" id="btn-copy" onclick="copyOT()">📋 Copiar OT</button>
         <button class="ab ab-blue" onclick="openOutlook()">✉ Enviar por correo</button>
         <button class="ab ab-green" onclick="genPDF()">⬇ Descargar PDF</button>
+        <button class="ab ab-purple" onclick="agregarOportunidad()">🎯 Agregar Oportunidad</button>
         <button class="ab ab-purple" onclick="generarOT()">🗂 Generar OT</button>
       </div>
     </div>
@@ -524,17 +627,24 @@ const VENDEDORES = [
 ];
 
 function loadVendedores(){
-  const sel = document.getElementById('f-vendedor');
+  const cont = document.getElementById('vend-pills');
   const status = document.getElementById('vend-status');
   const groups = {};
   VENDEDORES.forEach(p => { (groups[p.group] = groups[p.group] || []).push(p.name); });
-  let html = '<option value="">Selecciona tu nombre...</option>';
+  let html = '';
   Object.keys(groups).forEach(g => {
-    html += `<optgroup label="${g}">` + groups[g].map(n => `<option>${n}</option>`).join('') + `</optgroup>`;
+    html += `<div class="vend-group-lbl">${g}</div>`;
+    html += groups[g].map(n => `<div class="tog vend-tog" onclick="selVendedor(this,'${n}')"><div class="tog-dot"></div>${n}</div>`).join('');
   });
-  sel.innerHTML = html;
+  cont.innerHTML = html;
   status.textContent = `${VENDEDORES.length} vendedores (Comercial + GEX)`;
-  status.style.color = 'var(--green)';
+}
+
+function selVendedor(el, name){
+  document.querySelectorAll('.vend-tog').forEach(o=>o.classList.remove('on-green'));
+  el.classList.add('on-green');
+  document.getElementById('f-vendedor').value = name;
+  upd();
 }
 
 // ── LEGOS: datos oficiales de las planillas Manager+ / Manager Time ──
@@ -550,6 +660,23 @@ function currentLegoCtx(){
   const prod = LEGO_PROD_MAP[ts['producto']];
   const tipo = ts['tipocliente']==='existente' ? 'productivo' : 'nuevo';
   return {prod, tipo, ready: !!(prod && ts['tipocliente'])};
+}
+
+// Selecciona Producto y, si todavía no se eligió Tipo de Oportunidad, lo deja
+// en "Cliente Nuevo" por defecto para que el cálculo de sesiones parta de inmediato
+// (antes había que tocar 2 toggles distintos y si solo se tocaba uno no calculaba nada).
+function pickProducto(el, val){
+  document.querySelectorAll('.producto-tog').forEach(o=>o.classList.remove('on','on-green'));
+  selTog(el, 'producto', val);
+  if(!ts['tipocliente']){
+    ts['tipocliente'] = 'nuevo';
+    const nuevoPill = document.querySelector(`[onclick*="'tipocliente','nuevo'"]`);
+    if(nuevoPill){
+      document.querySelectorAll(`[onclick*="'tipocliente'"]`).forEach(o=>o.classList.remove('on','on-green'));
+      nuevoPill.classList.add('on-green');
+    }
+  }
+  renderLegos();
 }
 
 function toggleLego(key){
@@ -684,50 +811,130 @@ function buildLegoText(){
   return `Producto: ${prodLbl} · Tipo de Oportunidad: ${tipoLbl}\n\nÍtems seleccionados:\n${itemsTxt}\n\n${totalsTxt}`;
 }
 
-// ── ZOHO SEARCH ──
+// ── ZOHO / CRM (estilo formulario Réplica BD) ──
+let currentContacts = [];
+let newContacts = [];
+
+function setZohoStatus(state, msg){
+  document.getElementById('zoho-st-dot').className = 'st-dot' + (state?' '+state:'');
+  document.getElementById('zoho-st-msg').textContent = msg;
+}
+function showZohoSpinner(on){
+  document.getElementById('zoho-search-ico').innerHTML = on
+    ? '<div class="spin"></div>'
+    : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+}
+
 function zohoSearch(q){
   clearTimeout(zohoTimer);
   const drop = document.getElementById('zoho-drop');
-  if(q.length < 2){drop.classList.remove('show');return;}
+  if(q.length < 2){ drop.classList.remove('open'); setZohoStatus('','Escribe al menos 2 caracteres para buscar'); return; }
+  showZohoSpinner(true); setZohoStatus('loading','Buscando en Zoho CRM…');
   zohoTimer = setTimeout(async()=>{
-    document.getElementById('zoho-spin').classList.add('show');
-    drop.innerHTML='';drop.classList.add('show');
     try {
       const res = await fetch(`${PROXY}?q=${encodeURIComponent(q)}`);
       const data = await res.json();
+      showZohoSpinner(false);
       const accounts = data.accounts || [];
       if(accounts.length === 0){
-        drop.innerHTML = `<div class="zoho-manual">Sin resultados · <b>Ingresar manualmente</b></div>`;
+        drop.innerHTML = `<div class="ac-empty">No se encontraron empresas</div>`;
+        setZohoStatus('','Sin resultados');
       } else {
         drop.innerHTML = accounts.map(a=>`
-          <div class="zoho-item" onclick="selectAccount(${JSON.stringify(a).replace(/"/g,'&quot;')})">
-            <div class="zoho-item-name">${a.name||''}</div>
-            <div class="zoho-item-rut">${a.rut||'Sin RUT'}</div>
-          </div>`).join('') +
-          `<div class="zoho-manual" onclick="modoManual()">No es ninguno · Ingresar manualmente</div>`;
+          <div class="ac-item" onclick="selectAccount(${JSON.stringify(a).replace(/"/g,'&quot;')})">
+            <div class="ac-dot"></div>
+            <div><div class="ac-name">${a.name||''}</div><div class="ac-rut">${a.rut||'Sin RUT'}</div></div>
+          </div>`).join('');
+        setZohoStatus('ok', accounts.length+' empresa(s) encontrada(s)');
       }
+      drop.classList.add('open');
     } catch(e){
-      drop.innerHTML = `<div class="zoho-manual">Error de conexión · <b>Ingresar manualmente</b></div>`;
+      showZohoSpinner(false);
+      drop.innerHTML = `<div class="ac-error">⚠ Error al conectar con Zoho CRM</div>`;
+      drop.classList.add('open');
+      setZohoStatus('err','Error de conexión');
     }
-    document.getElementById('zoho-spin').classList.remove('show');
   }, 400);
 }
 
-function selectAccount(a){
+async function selectAccount(a){
   selectedAccount = a;
-  document.getElementById('zoho-drop').classList.remove('show');
+  currentContacts = []; newContacts = [];
+  document.getElementById('zoho-drop').classList.remove('open');
   document.getElementById('zoho-q').value = a.name||'';
-  // Autocomplete fields
+
+  document.getElementById('crm-sel-name').textContent = a.name + (a.rut?' · '+a.rut:'');
+  document.getElementById('crm-sel').classList.add('show');
+
+  document.getElementById('pill-vendedor-text').textContent = 'Vendedor CRM: '+(a.vendedor||'—');
+  document.getElementById('pill-gex-text').textContent = 'GEX CRM: '+(a.gex||'—');
+  document.getElementById('zoho-pills').classList.add('show');
+
   setField('f-razon', a.name);
   setField('f-rut', a.rut);
   setField('f-tel', a.phone);
   setField('f-email', a.email);
-  // Show pills
-  const pills = document.getElementById('zoho-pills');
-  pills.innerHTML = `<span class="zoho-pill pill-green">✓ ${a.name}</span>` +
-    (a.vendedor ? `<span class="zoho-pill pill-blue">Vendedor: ${a.vendedor}</span>` : '') +
-    (a.gex ? `<span class="zoho-pill pill-blue">GEX: ${a.gex}</span>` : '');
+
+  setZohoStatus('loading','Cargando contactos…');
+  try {
+    const res = await fetch(`${PROXY}?account_id=${a.id}`);
+    const data = await res.json();
+    currentContacts = data.contacts || [];
+    renderContactList();
+    document.getElementById('contact-sel').classList.add('show');
+    setZohoStatus('ok', currentContacts.length ? 'Selecciona un contacto' : 'Cliente cargado ✓ (sin contactos registrados en CRM)');
+  } catch(e){
+    currentContacts = [];
+    renderContactList();
+    document.getElementById('contact-sel').classList.add('show');
+    setZohoStatus('ok','Cliente cargado ✓');
+  }
   upd();
+}
+
+function renderContactList(){
+  const all = [...currentContacts, ...newContacts];
+  const list = document.getElementById('contact-list');
+  if(!all.length){
+    list.innerHTML = '<span style="font-size:12px;color:var(--text-3);">Sin contactos registrados en CRM.</span>';
+    return;
+  }
+  list.innerHTML = all.map((c,i)=>`<div class="contact-pill" onclick="selectContact(${i})">${c.name}${c.isNew?' <span class="new-badge">nuevo</span>':''}</div>`).join('');
+}
+
+function selectContact(idx){
+  const all = [...currentContacts, ...newContacts];
+  const c = all[idx]; if(!c) return;
+  document.querySelectorAll('.contact-pill').forEach((p,i)=>p.classList.toggle('on', i===idx));
+  setField('f-contacto', c.name);
+  if(c.email) setField('f-email', c.email);
+  if(c.phone) setField('f-tel', c.phone);
+  setZohoStatus('ok','Contacto: '+c.name+' ✓');
+  upd();
+}
+
+function toggleAddContact(){
+  const f = document.getElementById('add-contact-form');
+  f.style.display = (f.style.display==='none' || !f.style.display) ? 'block' : 'none';
+}
+
+function saveNewContact(){
+  const nombre = document.getElementById('nc-nombre').value.trim();
+  if(!nombre){ alert('Ingresa al menos el nombre del contacto.'); return; }
+  const cargo = document.getElementById('nc-cargo').value.trim();
+  const c = {
+    id: 'new_'+Date.now(),
+    name: nombre + (cargo ? ' ('+cargo+')' : ''),
+    email: document.getElementById('nc-email').value.trim(),
+    phone: document.getElementById('nc-tel').value.trim(),
+    isNew: true
+  };
+  newContacts.push(c);
+  renderContactList();
+  selectContact(currentContacts.length + newContacts.length - 1);
+  ['nc-nombre','nc-cargo','nc-email','nc-tel'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('add-contact-form').style.display='none';
+  setZohoStatus('warn','Contacto nuevo agregado (pendiente de sincronizar con CRM)');
 }
 
 function setField(id, val){
@@ -735,10 +942,21 @@ function setField(id, val){
   if(el && val) el.value = val;
 }
 
-function modoManual(){
-  document.getElementById('zoho-drop').classList.remove('show');
+function clearCRM(){
+  selectedAccount = null; currentContacts = []; newContacts = [];
   document.getElementById('zoho-q').value = '';
-  document.getElementById('zoho-pills').innerHTML = '<span class="zoho-pill" style="background:#FFF8F0;color:var(--orange);border-color:var(--orange);">⚠ Modo manual</span>';
+  document.getElementById('crm-sel').classList.remove('show');
+  document.getElementById('zoho-pills').classList.remove('show');
+  document.getElementById('contact-sel').classList.remove('show');
+  document.getElementById('contact-list').innerHTML = '';
+  setZohoStatus('','Escribe al menos 2 caracteres para buscar');
+  upd();
+}
+
+function modoManual(){
+  document.getElementById('zoho-drop').classList.remove('open');
+  document.getElementById('zoho-q').value = '';
+  setZohoStatus('warn','Modo manual: completa los datos del cliente en la sección 1.');
 }
 
 // ── SECTIONS ──
@@ -903,6 +1121,10 @@ function generarOT(){
   alert('Funcionalidad de generación de OT directa próximamente disponible.\n\nPor ahora usa "Copiar OT" y pégala en tu sistema.');
 }
 
+function agregarOportunidad(){
+  alert('Funcionalidad de creación de Oportunidad en Zoho CRM próximamente disponible.\n\nRequiere habilitar un endpoint de escritura en el conector (hoy solo permite búsqueda y lectura). Por ahora usa "Copiar OT" y regístrala manualmente en CRM.');
+}
+
 function genPDF(){
   const legoItems=getLegoSelectedItems();
   const legoR=calcLegos();
@@ -991,7 +1213,7 @@ loadVendedores();
 renderLegos();
 upd();
 document.addEventListener('click',e=>{
-  if(!e.target.closest('.zoho-search-wrap')) document.getElementById('zoho-drop').classList.remove('show');
+  if(!e.target.closest('.crm-block')) document.getElementById('zoho-drop').classList.remove('open');
 });
 </script>
 </body>
