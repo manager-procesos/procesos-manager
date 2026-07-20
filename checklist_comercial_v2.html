@@ -572,7 +572,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     </div>
     <div class="sec-body">
       <div class="field"><label>Observaciones generales del cliente</label><textarea id="f-obs" placeholder="Puntos críticos, requerimientos especiales, contexto adicional..." oninput="upd()" style="min-height:100px;"></textarea></div>
-      <div class="field"><label>Notas internas del consultor</label><textarea id="f-notas" placeholder="Notas solo para uso interno del equipo Manager (no se incluye en la OT del cliente)..." oninput="upd()" style="min-height:80px;"></textarea></div>
+      <div class="field"><label>Notas internas del consultor</label><textarea id="f-notas" placeholder="Notas de uso interno del equipo Manager (quedan incluidas en la OT, el correo y el PDF)..." oninput="upd()" style="min-height:80px;"></textarea></div>
       <div class="field"><label>Ciclo o flujo especial</label><textarea id="f-flujo" placeholder="Si el cliente tiene un ciclo documentario especial o un flujo de trabajo particular, descríbelo aquí..." oninput="upd()"></textarea></div>
     </div>
   </div>
@@ -1069,7 +1069,7 @@ ${ts['dev']==='si'?`Descripción dev   : ${v('f-dev-desc')||'—'}\nEn Roadmap  
 OBSERVACIONES
 ${v('f-obs')||'—'}
 
-${v('f-notas')?`NOTAS INTERNAS (no incluir en OT cliente)\n${'─'.repeat(50)}\n${v('f-notas')}`:''}`;
+${v('f-notas')?`NOTAS INTERNAS\n${'─'.repeat(50)}\n${v('f-notas')}`:''}`;
 }
 
 function generate(){
