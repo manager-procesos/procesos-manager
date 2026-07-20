@@ -401,11 +401,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
       <div class="lego-extra-wrap" id="lego-extra-wrap" style="display:none;">
         <div class="lego-mod">Horas Sueltas / Sesiones Adicionales</div>
-        <div id="lego-extra-list"></div>
-        <div class="lego-extra-add">
-          <input type="text" id="extra-desc" placeholder="Descripción (ej: Explicación de maestros)">
-          <input type="number" id="extra-hh" placeholder="Horas" min="0.5" step="0.5">
-          <button type="button" class="btn-add-extra" onclick="addExtraHoras()">+ Agregar</button>
+        <div class="hint" style="margin:-2px 0 6px;">Catálogo oficial de sesiones adicionales según la planilla de Legos. Actívalas si el cliente las requiere.</div>
+        <div id="lego-extra-catalog"></div>
+
+        <div id="lego-extra-free" style="display:none;">
+          <div class="lego-mod" style="margin-top:12px;">A Definir (las horas dependen del requerimiento)</div>
+          <div id="lego-extra-list"></div>
+          <div class="lego-extra-add">
+            <input type="text" id="extra-desc" placeholder="Ej: Creaciones de Query, Levantamiento de Requerimiento">
+            <input type="number" id="extra-hh" placeholder="Horas" min="0.5" step="0.5">
+            <button type="button" class="btn-add-extra" onclick="addExtraHoras()">+ Agregar</button>
+          </div>
         </div>
       </div>
 
@@ -681,6 +687,39 @@ const legoQty = {};
 const extraHoras = [];
 const LEGO_PROD_MAP = {managerplus:'mplus', time:'mtime'};
 
+// ── HORAS SUELTAS / SESIONES ADICIONALES: catálogo oficial ──
+// Manager+ → hoja "LegosSesiones Mmas" (solo define HH Onboarding, sin columna
+// de Cambio de ERP). Manager Time → hoja "Horas sueltas" de LEGOS_MTime_v3.xlsx.
+// Los ítems marcados en la planilla como "las horas dependerán del requerimiento"
+// (Creaciones de Query, Levantamiento de Requerimiento) quedan como texto libre.
+const HORAS_SUELTAS_CATALOG = {
+  mplus:[
+    {mod:'ABASTECIMIENTO', label:'Capacitación ciclo estándar de compras Nacional', hh:2},
+    {mod:'ABASTECIMIENTO', label:'Capacitación ciclo estándar de importaciones', hh:4},
+    {mod:'VENTAS', label:'Capacitación ciclo estándar Ventas Nacionales', hh:2},
+    {mod:'VENTAS', label:'Capacitación ciclo estándar Ventas de Exportación', hh:2},
+    {mod:'TESORERÍA', label:'Capacitación proceso de pago y recaudación', hh:2},
+    {mod:'TESORERÍA', label:'Capacitación Conciliación Bancaria', hh:2},
+    {mod:'EXISTENCIA', label:'Capacitación Existencias', hh:2},
+    {mod:'FINANZAS', label:'Capacitación proceso de Finanzas', hh:2}
+  ],
+  mtime:[
+    {mod:'EXISTENCIAS', label:'Regularización de inventario (ajuste de inventario)', hh:2},
+    {mod:'EXISTENCIAS', label:'Configuración del maestro de productos', hh:2},
+    {mod:'PRODUCCIÓN', label:'Apoyo en regularización de recetas', hh:2},
+    {mod:'CAPACITACIONES', label:'Capacitación Abastecimiento', hh:4},
+    {mod:'CAPACITACIONES', label:'Capacitación Existencias', hh:4},
+    {mod:'CAPACITACIONES', label:'Capacitación Ventas', hh:4},
+    {mod:'CAPACITACIONES', label:'Capacitación Finanzas', hh:8},
+    {mod:'CAPACITACIONES', label:'Funcionalidad del Centro de Información', hh:6},
+    {mod:'CAPACITACIONES', label:'Capacitación Producción', hh:4},
+    {mod:'CAPACITACIONES', label:'Capacitación Servicio Técnico', hh:4},
+    {mod:'CAPACITACIONES', label:'Importación de comprobantes (Rex+)', hh:2}
+  ]
+};
+const horasSueltasState = {};
+function catalogKey(prod, idx){ return `${prod}_${idx}`; }
+
 function legoKey(prod,tipo,gi,ii,isQty){return `${prod}_${tipo}_${isQty?'q':'g'}${gi}_${ii}`;}
 
 function currentLegoCtx(){
@@ -717,19 +756,64 @@ function setLegoQty(key,val){
   upd();
 }
 
+function toggleHorasSuelta(prod, idx){
+  const key = catalogKey(prod, idx);
+  horasSueltasState[key] = !horasSueltasState[key];
+  renderExtraHoras();
+  calcLegos();
+  upd();
+}
+
 function renderExtraHoras(){
-  const cont = document.getElementById('lego-extra-list');
-  if(!cont) return;
-  if(!extraHoras.length){
-    cont.innerHTML = '<div class="lego-extra-empty">Sin horas sueltas agregadas.</div>';
-    return;
+  const {prod, tipo} = currentLegoCtx();
+  const wrap = document.getElementById('lego-extra-wrap');
+  const catBox = document.getElementById('lego-extra-catalog');
+  const freeBox = document.getElementById('lego-extra-free');
+  if(!wrap || !catBox || !freeBox) return;
+
+  // El catálogo de M+ ("LegosSesiones Mmas") es exactamente la misma tabla que ya
+  // se muestra como tabla principal en Base Instalada, así que se oculta ahí para
+  // no duplicar los mismos ítems dos veces.
+  const hideCatalog = (prod==='mplus' && tipo==='productivo');
+  const catalog = hideCatalog ? [] : (HORAS_SUELTAS_CATALOG[prod]||[]);
+  const showFree = (prod === 'mtime');
+
+  if(!catalog.length && !showFree){ wrap.style.display='none'; return; }
+  wrap.style.display='block';
+
+  if(!catalog.length){
+    catBox.innerHTML = '';
+  } else {
+    let html=''; let lastMod=null;
+    catalog.forEach((it,i)=>{
+      if(it.mod!==lastMod){ html += `<div class="lego-mod" style="margin-top:${lastMod?10:0}px;">${it.mod}</div>`; lastMod = it.mod; }
+      const key = catalogKey(prod,i);
+      const on = horasSueltasState[key];
+      html += `<div class="lego-item ${on?'on':''}" onclick="toggleHorasSuelta('${prod}',${i})">
+        <div class="lego-item-lbl">${it.label}</div>
+        <div class="lego-hh">${it.hh}h</div>
+        <div class="lego-sw"></div>
+      </div>`;
+    });
+    catBox.innerHTML = html;
   }
-  cont.innerHTML = extraHoras.map((e,i)=>`
-    <div class="lego-extra-row">
-      <span class="lego-extra-lbl">${e.label}</span>
-      <span class="lego-extra-hh">${e.hh}h</span>
-      <button type="button" class="lego-extra-rm" onclick="removeExtraHoras(${i})">×</button>
-    </div>`).join('');
+
+  if(showFree){
+    freeBox.style.display='block';
+    const list = document.getElementById('lego-extra-list');
+    if(!extraHoras.length){
+      list.innerHTML = '<div class="lego-extra-empty">Sin horas a definir agregadas.</div>';
+    } else {
+      list.innerHTML = extraHoras.map((e,i)=>`
+        <div class="lego-extra-row">
+          <span class="lego-extra-lbl">${e.label}</span>
+          <span class="lego-extra-hh">${e.hh}h</span>
+          <button type="button" class="lego-extra-rm" onclick="removeExtraHoras(${i})">×</button>
+        </div>`).join('');
+    }
+  } else {
+    freeBox.style.display='none';
+  }
 }
 
 function addExtraHoras(){
@@ -774,7 +858,6 @@ function renderLegos(){
     return;
   }
   hint.style.display='none';
-  document.getElementById('lego-extra-wrap').style.display='block';
   renderExtraHoras();
   const data = LEGO_DATA[prod][tipo];
   let html='';
@@ -827,11 +910,20 @@ function calcLegos(){
     const q = legoQty[key]||0;
     hhOn += it.hhOn*q; if(data.hasErp) hhErp += (it.hhErp||0)*q;
   });
-  // Horas sueltas / sesiones adicionales (ad-hoc, no vienen de la planilla): se suman
-  // tal cual a las horas de cada escenario, igual que un ítem más de la planilla.
-  const extraSum = extraHoras.reduce((s,e)=>s+e.hh, 0);
-  hhOn += extraSum;
-  if(data.hasErp) hhErp += extraSum;
+  // Horas Sueltas / Sesiones Adicionales: catálogo oficial de las planillas
+  // ("LegosSesiones Mmas" en M+, "Horas sueltas" en Manager Time). Ambas hojas
+  // solo definen HH de Onboarding (sin columna de Cambio de ERP), por eso se
+  // suman solo a hhOn y no a hhErp.
+  const hideCatalog = (prod==='mplus' && tipo==='productivo');
+  let catalogSum = 0;
+  if(!hideCatalog){
+    (HORAS_SUELTAS_CATALOG[prod]||[]).forEach((it,i)=>{ if(horasSueltasState[catalogKey(prod,i)]) catalogSum += it.hh; });
+  }
+  // Texto libre (solo Manager Time): ítems que la propia planilla marca como
+  // "las horas dependerán del requerimiento" (Creaciones de Query, Levantamiento
+  // de Requerimiento).
+  const freeSum = (prod==='mtime') ? extraHoras.reduce((s,e)=>s+e.hh, 0) : 0;
+  hhOn += catalogSum + freeSum;
   const sesOn = +(hhOn/2).toFixed(2);
   const sesErp = +(hhErp/4).toFixed(2);
   const ufOn = hhOn*2;
@@ -863,7 +955,13 @@ function getLegoSelectedItems(){
   const sel = [];
   data.groups.forEach((g,gi)=>g.items.forEach((it,ii)=>{ if(legoState[legoKey(prod,tipo,gi,ii,false)]) sel.push(`${g.mod} — ${it.label}`); }));
   data.qty.forEach((it,ii)=>{ const q=legoQty[legoKey(prod,tipo,ii,ii,true)]||0; if(q>0) sel.push(`${it.label} (x${q})`); });
-  extraHoras.forEach(e=> sel.push(`Hora suelta — ${e.label} (${e.hh}h)`));
+  const hideCatalog = (prod==='mplus' && tipo==='productivo');
+  if(!hideCatalog){
+    (HORAS_SUELTAS_CATALOG[prod]||[]).forEach((it,i)=>{ if(horasSueltasState[catalogKey(prod,i)]) sel.push(`Hora suelta — ${it.mod}: ${it.label} (${it.hh}h)`); });
+  }
+  if(prod === 'mtime'){
+    extraHoras.forEach(e=> sel.push(`Hora suelta (a definir) — ${e.label} (${e.hh}h)`));
+  }
   return sel;
 }
 
