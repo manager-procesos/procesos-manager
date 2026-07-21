@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROC-RANDOM-VM-001 · POS Móvil – App Random</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1F3864;--blue:#2E6DA4;--sky:#00B0F0;--green:#1A6B42;
+  --amber:#C47A10;--red:#C0001A;--purple:#5B2C8D;
+  --bg:#F3F5F9;--card:#FFFFFF;--border:#DDE4EE;--border-hi:#B4C6E7;
+  --text:#18243C;--text-2:#4A5A78;--text-3:#8898B8;
+  --green-light:#EAF5EE;--amber-light:#FEF3E2;--red-light:#FCEBEB;--blue-light:#E8F1FA;
+  --sidebar-w:252px;
+  --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--disp:'Fraunces',Georgia,serif;
+  --r:8px;--r-lg:12px;
+  --shadow:0 1px 3px rgba(30,50,100,0.07),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 16px rgba(30,50,100,0.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);background:var(--bg);display:flex;min-height:100vh;}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar-w);background:var(--navy);position:fixed;inset:0 auto 0 0;display:flex;flex-direction:column;overflow-y:auto;z-index:200;}
+.sb-brand{padding:22px 18px 16px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sb-back{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:rgba(255,255,255,0.4);text-decoration:none;margin-bottom:12px;letter-spacing:.06em;transition:color .15s;}
+.sb-back:hover{color:var(--sky);}
+.sb-doc-type{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--sky);text-transform:uppercase;margin-bottom:4px;}
+.sb-doc-title{font-size:13px;font-weight:600;color:#fff;line-height:1.35;}
+.sb-doc-meta{font-size:10px;color:rgba(255,255,255,0.38);margin-top:5px;}
+.sb-nav-group{padding:10px 0 4px;}
+.sb-nav-label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.28);padding:0 18px 6px;}
+.sb-nav{display:flex;align-items:center;gap:8px;padding:7px 18px;font-size:12.5px;color:rgba(255,255,255,0.55);cursor:pointer;border-left:2px solid transparent;transition:all .15s;text-decoration:none;}
+.sb-nav:hover{color:#fff;background:rgba(255,255,255,0.05);}
+.sb-nav.active{color:#fff;background:rgba(0,176,240,0.12);border-left-color:var(--sky);}
+.sb-nav-icon{width:16px;text-align:center;font-size:13px;}
+.sb-divider{height:1px;background:rgba(255,255,255,0.07);margin:8px 18px;}
+.sb-tag{font-size:9px;margin-left:auto;background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:3px;font-family:var(--mono);}
+.sb-tag.warn{background:rgba(196,122,16,0.3);color:#FFD080;}
+.sb-footer{padding:14px 18px;border-top:1px solid rgba(255,255,255,0.07);margin-top:auto;}
+.sb-footer-text{font-size:10px;color:rgba(255,255,255,0.25);line-height:1.5;}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.topbar-breadcrumb{font-size:12px;color:var(--text-3);}
+.topbar-breadcrumb span{color:var(--text-2);}
+.topbar-badges{display:flex;gap:8px;align-items:center;}
+.badge{font-size:10.5px;padding:3px 10px;border-radius:4px;font-weight:500;font-family:var(--mono);}
+.badge-green{background:#D1F5DF;color:var(--green);}
+.badge-blue{background:var(--blue-light);color:var(--blue);}
+.badge-amber{background:var(--amber-light);color:var(--amber);}
+
+.content{padding:32px;max-width:960px;}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#2E4E8A 100%);border-radius:var(--r-lg);padding:28px 32px;margin-bottom:28px;color:#fff;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(0,176,240,0.08);}
+.hero-code{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:rgba(255,255,255,0.45);margin-bottom:6px;}
+.hero-title{font-family:var(--disp);font-size:24px;font-weight:700;margin-bottom:6px;}
+.hero-sub{font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:18px;}
+.hero-pills{display:flex;flex-wrap:wrap;gap:8px;}
+.hero-pill{font-size:11px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.75);}
+.hero-pill.sky{background:rgba(0,176,240,0.2);color:#7DE8FF;}
+
+/* ── ALERT BOX ── */
+.alert{border-radius:var(--r);padding:12px 16px;margin-bottom:16px;font-size:13px;line-height:1.6;border-left:3px solid;}
+.alert-red{background:var(--red-light);border-color:var(--red);color:#7a1010;}
+.alert-amber{background:var(--amber-light);border-color:var(--amber);color:#7a4a00;}
+.alert-green{background:var(--green-light);border-color:var(--green);color:#1a4a2a;}
+.alert-blue{background:var(--blue-light);border-color:var(--blue);color:#1a3a6a;}
+.alert strong{font-weight:600;}
+
+/* ── SECTION HEADER ── */
+.sec-header{display:flex;align-items:center;gap:10px;margin:28px 0 14px;}
+.sec-bar{width:3px;height:20px;border-radius:2px;background:var(--blue);}
+.sec-bar.green{background:var(--green);}
+.sec-bar.amber{background:var(--amber);}
+.sec-bar.red{background:var(--red);}
+.sec-bar.navy{background:var(--navy);}
+.sec-title{font-size:15px;font-weight:600;color:var(--text);}
+.sec-count{font-family:var(--mono);font-size:10px;color:var(--text-3);margin-left:auto;}
+
+/* ── STEPS ── */
+.steps{display:flex;flex-direction:column;gap:8px;}
+.step{display:grid;grid-template-columns:36px 1fr;gap:0;background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:box-shadow .15s;}
+.step:hover{box-shadow:var(--shadow-md);}
+.step-num{background:var(--blue);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.step-num.green{background:var(--green);}
+.step-num.navy{background:var(--navy);}
+.step-num.amber{background:var(--amber);}
+.step-body{padding:11px 14px;}
+.step-title{font-weight:600;font-size:13px;color:var(--text);margin-bottom:2px;}
+.step-desc{font-size:12.5px;color:var(--text-2);line-height:1.6;}
+.step-tag{display:inline-block;font-size:10px;font-family:var(--mono);padding:2px 7px;border-radius:3px;margin-top:5px;font-weight:500;}
+.tag-erp{background:var(--blue-light);color:var(--blue);}
+.tag-app{background:var(--green-light);color:var(--green);}
+.tag-random{background:#F0EBF8;color:var(--purple);}
+.tag-warn{background:var(--amber-light);color:var(--amber);}
+
+/* ── FIELD TABLE ── */
+.field-table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin:8px 0;}
+.field-table th{background:var(--bg);color:var(--text-3);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);}
+.field-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+.field-table tr:last-child td{border-bottom:none;}
+.field-table td:first-child{color:var(--text-2);width:38%;}
+.field-table td:last-child{color:var(--text);}
+code{font-family:var(--mono);font-size:11.5px;background:var(--bg);padding:1px 6px;border-radius:3px;color:var(--blue);}
+
+/* ── FUNC GRID ── */
+.func-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:8px;}
+.func-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;}
+.func-card-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.func-item{font-size:12px;color:var(--text-2);padding:3px 0;display:flex;align-items:flex-start;gap:6px;line-height:1.4;}
+.func-item::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px;}
+
+/* ── GEO TABLE ── */
+.geo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.geo-card{border-radius:var(--r);padding:14px 16px;border:1px solid var(--border);}
+.geo-card.yes{background:var(--green-light);border-color:#a8d8b8;}
+.geo-card.no{background:var(--red-light);border-color:#e8b4b4;}
+.geo-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;}
+.geo-card.yes .geo-label{color:var(--green);}
+.geo-card.no .geo-label{color:var(--red);}
+.geo-text{font-size:12.5px;line-height:1.6;}
+.geo-card.yes .geo-text{color:#1a4a2a;}
+.geo-card.no .geo-text{color:#7a1010;}
+
+/* ── FAQ ── */
+.faq-item{border:1px solid var(--border);border-radius:var(--r);background:var(--card);overflow:hidden;margin-bottom:6px;}
+.faq-q{padding:11px 14px;font-weight:500;font-size:13px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .12s;}
+.faq-q:hover{background:var(--bg);}
+.faq-q::after{content:'＋';font-size:14px;color:var(--text-3);transition:transform .2s;flex-shrink:0;}
+.faq-item.open .faq-q::after{content:'－';}
+.faq-a{font-size:12.5px;color:var(--text-2);line-height:1.65;padding:0 14px;max-height:0;overflow:hidden;transition:max-height .25s ease,padding .2s;}
+.faq-item.open .faq-a{max-height:400px;padding:0 14px 12px;}
+
+/* ── CHECKLIST ── */
+.checklist{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.cl-group-header{background:var(--bg);padding:9px 14px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text-2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.cl-prog{font-size:10px;color:var(--text-3);font-family:var(--mono);}
+.cl-item{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;font-size:12.5px;color:var(--text-2);}
+.cl-item:last-child{border-bottom:none;}
+.cl-item:hover{background:var(--bg);}
+.cl-item.done{color:var(--text-3);text-decoration:line-through;}
+.cl-box{width:15px;height:15px;border:1.5px solid var(--border-hi);border-radius:3px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.cl-item.done .cl-box{background:var(--green);border-color:var(--green);color:#fff;font-size:10px;}
+.cl-item.done .cl-box::after{content:'✓';}
+
+/* ── IMAGE SPEC ── */
+.spec-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.spec-row{display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);font-size:12.5px;}
+.spec-row:last-child{border-bottom:none;}
+.spec-key{width:140px;flex-shrink:0;color:var(--text-3);font-size:11.5px;font-weight:500;}
+.spec-val{color:var(--text);}
+
+/* ── BACK TO TOP ── */
+#back-top{position:fixed;bottom:28px;right:28px;width:36px;height:36px;background:var(--navy);color:#fff;border-radius:50%;display:none;align-items:center;justify-content:center;cursor:pointer;font-size:16px;box-shadow:var(--shadow-md);z-index:500;transition:background .15s;}
+#back-top.visible{display:flex;}
+#back-top:hover{background:var(--blue);}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-brand">
+    <a href="portal.html" class="sb-back">← Volver al portal</a>
+    <div class="sb-doc-type">PROC-RANDOM-VM-001</div>
+    <div class="sb-doc-title">POS Móvil – App Random</div>
+    <div class="sb-doc-meta">v1.1 · Jul 2026 · Implementación</div>
+  </div>
+
+  <div class="sb-nav-group">
+    <div class="sb-nav-label">Contenido</div>
+    <a class="sb-nav active" href="#objetivo"><span class="sb-nav-icon">🎯</span> Objetivo y alcance</a>
+    <a class="sb-nav" href="#funcionalidades"><span class="sb-nav-icon">✅</span> Funcionalidades</a>
+    <a class="sb-nav" href="#erp"><span class="sb-nav-icon">⚙️</span> Config ERP</a>
+    <a class="sb-nav" href="#app"><span class="sb-nav-icon">📱</span> Config App</a>
+    <a class="sb-nav" href="#usuarios"><span class="sb-nav-icon">👤</span> Gestión usuarios</a>
+    <a class="sb-nav" href="#imagenes"><span class="sb-nav-icon">🖼️</span> Imágenes productos</a>
+    <a class="sb-nav" href="#geo"><span class="sb-nav-icon">📍</span> Geolocalización</a>
+    <a class="sb-nav" href="#faq"><span class="sb-nav-icon">❓</span> FAQ</a>
+    <a class="sb-nav" href="#checklist"><span class="sb-nav-icon">☑️</span> Checklist</a>
+  </div>
+
+  <div class="sb-divider"></div>
+  <div class="sb-nav-group">
+    <div class="sb-nav-label">Alertas</div>
+    <a class="sb-nav" href="#geo"><span class="sb-nav-icon">⚠️</span> Geoloc. no es en tiempo real <span class="sb-tag warn">crítico</span></a>
+    <a class="sb-nav" href="#dispositivos"><span class="sb-nav-icon">⚠️</span> Solo Samsung / Android <span class="sb-tag warn">crítico</span></a>
+  </div>
+
+  <div class="sb-footer">
+    <div class="sb-footer-text">Repositorio de Procedimientos<br>Manager Software · Consultoría<br>Última actualización Jul 2026</div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-breadcrumb">Portal → Procedimientos → <span>POS Móvil App Random</span></div>
+    <div class="topbar-badges">
+      <span class="badge badge-green">● Vigente</span>
+      <span class="badge badge-blue">v1.1</span>
+      <span class="badge badge-amber">Solo Android</span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-code">PROC-RANDOM-VM-001</div>
+      <div class="hero-title">Implementación POS Móvil</div>
+      <div class="hero-sub">App Random + Manager ERP · Guía para consultores</div>
+      <div class="hero-pills">
+        <span class="hero-pill sky">Android únicamente</span>
+        <span class="hero-pill">Modalidad VENTA</span>
+        <span class="hero-pill">Online + Offline</span>
+        <span class="hero-pill">Contacto Random: Rossi Colina</span>
+      </div>
+    </div>
+
+    <!-- OBJETIVO -->
+    <div id="objetivo">
+      <div class="sec-header"><div class="sec-bar"></div><div class="sec-title">1. Objetivo y alcance</div></div>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:12px;">App para vendedores en terreno conectada vía API al ERP Manager Time. Permite crear Notas de Venta, consultar clientes y catálogo de productos. Opera online y offline.</p>
+      <table class="field-table">
+        <tr><th>Ítem</th><th>Detalle</th></tr>
+        <tr><td>Dispositivo</td><td>Smartphone o tablet <strong>Android</strong> — Samsung recomendado</td></tr>
+        <tr><td>No compatible</td><td>iOS (iPhone), PC, laptop, celulares Honor (solo en inglés)</td></tr>
+        <tr><td>Acceso</td><td>Google Play Store → "Random Móvil"</td></tr>
+        <tr><td>Contacto Random</td><td>Rossi Colina · rcolina@random.cl</td></tr>
+        <tr><td>Eliminar usuarios</td><td>César · Roblé Labs (concentrador) — no lo hace el consultor</td></tr>
+      </table>
+    </div>
+
+    <!-- FUNCIONALIDADES -->
+    <div id="funcionalidades">
+      <div class="sec-header"><div class="sec-bar green"></div><div class="sec-title">2. Funcionalidades disponibles</div></div>
+      <div class="func-grid">
+        <div class="func-card">
+          <div class="func-card-title">Clientes</div>
+          <div class="func-item">Detalle: RUT, dirección, teléfono</div>
+          <div class="func-item">Cartera asociada al vendedor</div>
+          <div class="func-item">Condición y estado crediticio</div>
+          <div class="func-item">Historial de compras</div>
+          <div class="func-item">Bloqueo de venta desde ERP</div>
+        </div>
+        <div class="func-card">
+          <div class="func-card-title">Venta</div>
+          <div class="func-item">Selección cliente + productos</div>
+          <div class="func-item">Últimas compras (llenado rápido)</div>
+          <div class="func-item">Catálogo con búsqueda</div>
+          <div class="func-item">Unidades de venta</div>
+          <div class="func-item">Detalle de lista de precios</div>
+          <div class="func-item">Precio de venta sugerido</div>
+          <div class="func-item">Fecha entrega, N° OC, obs.</div>
+          <div class="func-item">Historial NV con descarga PDF</div>
+        </div>
+        <div class="func-card">
+          <div class="func-card-title">Productos y operación</div>
+          <div class="func-item">Stock físico bodega del vendedor</div>
+          <div class="func-item">Precio según lista del cliente</div>
+          <div class="func-item">Imágenes en catálogo (ver §6)</div>
+          <div class="func-item">Modo offline (lista LOFF)</div>
+          <div class="func-item">Geoloc. diferida → Power BI</div>
+        </div>
+      </div>
+      <div class="alert alert-amber"><strong>Limitaciones clave:</strong> No se emiten NC desde la app · NV emitidas no se modifican en la app · Stock es solo físico (no incluye NV comprometidas) · Una sola bodega por vendedor · Sin descuento por vendedor (va en lista de precios)</div>
+    </div>
+
+    <!-- CONFIG ERP -->
+    <div id="erp">
+      <div class="sec-header"><div class="sec-bar navy"></div><div class="sec-title">3. Configuración previa en Manager ERP</div><div class="sec-count">7 pasos · Responsabilidad del consultor</div></div>
+      <div class="steps">
+        <div class="step"><div class="step-num navy">1</div><div class="step-body"><div class="step-title">Crear vendedor en tabla de personal</div><div class="step-desc">Personal → Ingresar. Código 3 caracteres (ej: <code>VRB</code>), Nombre, Apellido, e-mail. Grupo = Ventas. Marcar checkbox <strong>Vendedor</strong>. Asignar Sucursal y Bodega.</div><span class="step-tag tag-erp">ERP</span></div></div>
+        <div class="step"><div class="step-num navy">2</div><div class="step-body"><div class="step-title">Crear usuario y asociar a grupo Ventas</div><div class="step-desc">Usuarios → Ingresar. Mismo código del vendedor. Clave Secreta. Grupo = Ventas. <strong>Verificar licencia disponible</strong> (Nominal o Concurrente) antes de crear. Si no hay licencias disponibles, escalar al equipo de desarrollo.</div><span class="step-tag tag-erp">ERP</span></div></div>
+        <div class="step"><div class="step-num navy">3</div><div class="step-body"><div class="step-title">Crear listas de precios</div><div class="step-desc">Módulo Múltiple Lista de Precio. Crear: (a) <strong>Lista Offline</strong> código <code>LOFF</code> — precio referencial sin internet; (b) <strong>Lista del cliente</strong> con código propio. Si hay descuentos, se reflejan en la lista del cliente — no existe descuento por vendedor desde la app.</div><span class="step-tag tag-erp">ERP</span></div></div>
+        <div class="step"><div class="step-num navy">4</div><div class="step-body"><div class="step-title">Asociar productos y verificar campo Unidad</div><div class="step-desc">Asociar cada producto a la lista con su precio. <strong>Crítico:</strong> verificar campo <strong>Unidad</strong> en ficha del producto (Productos y Servicios → campo Unidad). Sin este campo el producto no sincroniza. Solo aparecen en la app los productos con stock físico Y en lista activa.</div><span class="step-tag tag-erp">ERP</span><span class="step-tag tag-warn">campo crítico</span></div></div>
+        <div class="step"><div class="step-num navy">5</div><div class="step-body"><div class="step-title">Registrar clientes — asociar vendedor y lista de precios</div><div class="step-desc">Ficha del cliente → asignar campo <strong>Vendedor</strong> y campo <strong>Lista de Precios</strong>. Nota caso Ecovida: si hay múltiples listas por territorio, la llave de asignación es el RUT del cliente (un vendedor puede manejar varias LP).</div><span class="step-tag tag-erp">ERP</span></div></div>
+        <div class="step"><div class="step-num navy">6</div><div class="step-body"><div class="step-title">Verificar condiciones de pago del cliente</div><div class="step-desc">Ficha del cliente → condiciones de pago: confirmar <strong>Glosa de Pago</strong>, <strong>Forma de Pago</strong> y <strong>Vendedor/Comisionista</strong>. Bug conocido: si sale "CONTADO EFECTIVO" en todas las NV independiente del cliente, coordinar con Rossi y Roberto León para revisar servicio API <code>getDetalleSucursal</code>.</div><span class="step-tag tag-erp">ERP</span><span class="step-tag tag-warn">bug conocido</span></div></div>
+        <div class="step"><div class="step-num navy">7</div><div class="step-body"><div class="step-title">Solicitar acceso a plataforma Random</div><div class="step-desc">Solicitar a <strong>Rossi Colina</strong> (rcolina@random.cl) la creación del usuario y contraseña. Formato login: <code>VRB@empresa</code>. Al registrar la máquina en la app se ingresa solo <code>VRB</code> sin el @empresa.</div><span class="step-tag tag-random">Random</span></div></div>
+      </div>
+    </div>
+
+    <!-- CONFIG APP -->
+    <div id="app">
+      <div class="sec-header"><div class="sec-bar green"></div><div class="sec-title">4. Configuración en el dispositivo móvil</div><div class="sec-count">7 pasos · Junto al usuario</div></div>
+      <div class="alert alert-blue"><strong>Orden obligatorio:</strong> sincronizar CLIENTES primero → PRODUCTOS después.</div>
+      <div class="steps">
+        <div class="step"><div class="step-num green">1</div><div class="step-body"><div class="step-title">Descargar desde Google Play Store</div><div class="step-desc">Buscar "Random Móvil" → instalar. Solo Android. Samsung recomendado (los equipos Honor solo funcionan en inglés — no compatibles).</div><span class="step-tag tag-app">APP</span></div></div>
+        <div class="step"><div class="step-num green">2</div><div class="step-body"><div class="step-title">Pulsar el botón (+) verde — Empresas asociadas</div><div class="step-desc">Al abrir, pantalla <em>Empresas asociadas</em>. Pulsar botón verde (+) esquina inferior derecha.</div><span class="step-tag tag-app">APP</span></div></div>
+        <div class="step"><div class="step-num green">3</div><div class="step-body"><div class="step-title">Completar formulario Registrar Empresas</div>
+          <table class="field-table" style="margin-top:8px;">
+            <tr><td>RUT empresa</td><td>Con guión, ej: <code>99554720-1</code></td></tr>
+            <tr><td>Usuario Random</td><td>Solo caracteres SIN @empresa, ej: <code>VRB</code></td></tr>
+            <tr><td>Password Random</td><td>Entregada por Rossi (Random)</td></tr>
+            <tr><td>Modalidad</td><td><code>VENTA</code></td></tr>
+          </table>
+          <span class="step-tag tag-app">APP</span><span class="step-tag tag-warn">usuario sin @empresa</span></div></div>
+        <div class="step"><div class="step-num green">4</div><div class="step-body"><div class="step-title">Pulsar Registrar Máquina</div><div class="step-desc">Verificar en pestaña <strong>Config</strong>: Empresa, Código Vendedor y Registro Máquina correctamente completados.</div><span class="step-tag tag-app">APP</span></div></div>
+        <div class="step"><div class="step-num green">5</div><div class="step-body"><div class="step-title">Sincronizar clientes — PRIMERO ⚠️</div><div class="step-desc">Config → <strong>Sincronizar Clientes</strong>. Esperar que finalice. Verificar cantidad de sucursales y fecha.</div><span class="step-tag tag-app">APP</span></div></div>
+        <div class="step"><div class="step-num green">6</div><div class="step-body"><div class="step-title">Sincronizar productos — SEGUNDO</div><div class="step-desc">Config → <strong>Sincronizar Productos</strong>. Verificar cantidad y fecha. Si faltan productos: revisar campo Unidad y lista de precios en ERP.</div><span class="step-tag tag-app">APP</span></div></div>
+        <div class="step"><div class="step-num green">7</div><div class="step-body"><div class="step-title">Prueba operativa — primera Nota de Venta</div><div class="step-desc">Ventas → seleccionar cliente → agregar producto → generar NV. Verificar que quede registrada en el ERP.</div><span class="step-tag tag-app">APP</span><span class="step-tag tag-erp">ERP</span></div></div>
+      </div>
+    </div>
+
+    <!-- GESTIÓN USUARIOS -->
+    <div id="usuarios">
+      <div class="sec-header"><div class="sec-bar amber"></div><div class="sec-title">5. Gestión de usuarios</div></div>
+      <div class="alert alert-amber"><strong>Agregar usuario nuevo — flujo obligatorio en 3 pasos:</strong></div>
+      <div class="steps">
+        <div class="step"><div class="step-num amber">1</div><div class="step-body"><div class="step-title">Parametrizar en Manager Time</div><div class="step-desc">Crear vendedor + usuario en el ERP (pasos 1 y 2 de la sección Config ERP).</div><span class="step-tag tag-erp">ERP</span></div></div>
+        <div class="step"><div class="step-num amber">2</div><div class="step-body"><div class="step-title">Solicitar usuario en Random — Rossi Colina</div><div class="step-desc">Escribir a rcolina@random.cl para crear o modificar el usuario en la plataforma Random. <strong>Eliminar usuarios</strong> requiere a César (Roblé Labs) — acceso al concentrador. No lo puede hacer el consultor ni el cliente.</div><span class="step-tag tag-random">Random</span></div></div>
+        <div class="step"><div class="step-num amber">3</div><div class="step-body"><div class="step-title">Registrar máquina nueva en la app</div><div class="step-desc">Con el nuevo usuario ya creado, ingresar a la app → formulario Registrar Empresas → completar con nuevo usuario (sin @empresa) → Registrar Máquina.</div><span class="step-tag tag-app">APP</span></div></div>
+      </div>
+      <div class="alert alert-red" style="margin-top:12px;"><strong>Si el usuario queda bloqueado o olvida la contraseña:</strong> requiere apoyo de soporte Manager Y equipo Random. El cliente NO puede gestionarlo de forma independiente.</div>
+    </div>
+
+    <!-- IMÁGENES -->
+    <div id="imagenes">
+      <div class="sec-header"><div class="sec-bar"></div><div class="sec-title">6. Imágenes de productos</div></div>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:12px;">Las imágenes se ven en el listado de productos de la app pero <strong>no se pueden descargar</strong>. No se extraen del ERP — el flujo pasa por Random.</p>
+      <div class="spec-box" style="margin-bottom:12px;">
+        <div class="spec-row"><div class="spec-key">Formato</div><div class="spec-val">JPG únicamente</div></div>
+        <div class="spec-row"><div class="spec-key">Nombre del archivo</div><div class="spec-val">Exactamente el código KOPR del producto — ej: <code>ABcd123.jpg</code></div></div>
+        <div class="spec-row"><div class="spec-key">Peso máximo</div><div class="spec-val">200 KB por archivo</div></div>
+        <div class="spec-row"><div class="spec-key">Entrega</div><div class="spec-val">Todos en una sola carpeta (Google Drive u otro medio compartido)</div></div>
+        <div class="spec-row"><div class="spec-key">Quién carga</div><div class="spec-val">Equipo Random (César · Roblé Labs) — no el consultor ni el cliente</div></div>
+        <div class="spec-row"><div class="spec-key">Coordinación</div><div class="spec-val">El consultor actúa de intermediario — comparte la carpeta con Random</div></div>
+      </div>
+      <div class="alert alert-green"><strong>Instrucción exacta para el cliente:</strong> "Nombre del archivo = código KOPR del producto. Formato JPG, máximo 200 KB. Dejar todos en una carpeta y compartirla con nosotros."</div>
+    </div>
+
+    <!-- GEOLOCALIZACIÓN -->
+    <div id="geo">
+      <div class="sec-header"><div class="sec-bar red"></div><div class="sec-title">7. Geolocalización — aclarar ANTES de iniciar</div></div>
+      <div class="geo-grid" style="margin-bottom:12px;">
+        <div class="geo-card yes">
+          <div class="geo-label">✓ Disponible</div>
+          <div class="geo-text">La app registra la ubicación GPS de cada visita. Se visualiza <strong>al día siguiente</strong> en Power BI (Mapa de Visitas, Seguimiento de Vendedores). Es geolocalización diferida.</div>
+        </div>
+        <div class="geo-card no">
+          <div class="geo-label">✗ No disponible</div>
+          <div class="geo-text">No existe seguimiento en tiempo real. El jefe de ventas NO puede ver la posición actual de los vendedores. Funcionalidad en línea no está desarrollada.</div>
+        </div>
+      </div>
+      <div class="alert alert-red"><strong>Lección aprendida — caso Grupo Latyn:</strong> El cliente fue informado comercialmente de que habría geolocalización en tiempo real (Marcelo Baeza). Esto generó conflicto en la implementación. Confirmar alcance por escrito antes de iniciar cualquier proyecto.</div>
+    </div>
+
+    <!-- DISPOSITIVOS -->
+    <div id="dispositivos" style="margin-top:8px;">
+      <div class="alert alert-amber"><strong>Compatibilidad de dispositivos — caso Grupo Latyn:</strong> Los equipos Honor funcionan solo en inglés y no son compatibles con la app. El cliente tuvo que cambiar todos los equipos a Samsung Android. Rossi confirmó que Samsung no presenta problemas. Verificar modelo del dispositivo antes de instalar.</div>
+    </div>
+
+    <!-- FAQ -->
+    <div id="faq">
+      <div class="sec-header"><div class="sec-bar"></div><div class="sec-title">8. Preguntas frecuentes</div></div>
+      <div id="faq-list"></div>
+    </div>
+
+    <!-- CHECKLIST -->
+    <div id="checklist">
+      <div class="sec-header"><div class="sec-bar green"></div><div class="sec-title">9. Checklist pre-implementación</div></div>
+      <div class="checklist" id="cl-container"></div>
+    </div>
+
+    <div style="height:60px;"></div>
+  </div>
+</main>
+
+<div id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+
+<script>
+// ── FAQ DATA ──────────────────────────────────────────────────────────────
+const faqs = [
+  ["¿La app funciona en iPhone o PC?","No. Solo Android (Google Play Store). No funciona en iOS, PC ni laptop. Los equipos Honor pueden tener problemas de idioma — Samsung recomendado."],
+  ["¿Qué pasa si el usuario olvida la contraseña o queda bloqueado?","Requiere apoyo de soporte Manager Y equipo Random (Rossi Colina). El cliente no puede gestionarlo de forma independiente."],
+  ["¿Se puede modificar una NV ya emitida desde la app?","No. Una NV emitida no se modifica desde la app. Todos los ajustes van en el ERP (ficha cliente, producto, glosas de pago)."],
+  ["¿Qué ocurre si el vendedor no tiene internet?","La app opera offline con la lista LOFF como precio referencial. Los cambios de precio no se actualizan automáticamente — deben ajustarse en el ERP manualmente."],
+  ["¿Por qué no aparecen todos los productos al sincronizar?","La app muestra solo productos que cumplen dos condiciones: (1) stock físico en la bodega del vendedor y (2) estar en la lista de precios activa. Verificar también campo Unidad en la ficha del producto en el ERP."],
+  ["Un producto nuevo no aparece en la app del vendedor. ¿Qué verifico?","En el ERP: (1) producto asociado a la lista de precios con precio asignado, (2) campo Unidad completado, (3) stock físico disponible. Luego el vendedor hace Config → Sincronizar Productos."],
+  ["El stock mostrado es el real disponible para vender?","El stock mostrado es el físico. No incluye unidades comprometidas en NV pendientes — puede ocasionar quiebres de stock. Informar al cliente."],
+  ["¿Se pueden aplicar descuentos desde la app?","No. Descuento por vendedor no está disponible en la integración con Manager ERP. Los descuentos van en la lista de precios del cliente en el ERP."],
+  ["¿Cómo se cargan las imágenes de los productos?","El cliente entrega JPG nombrados con el código KOPR (ej: ABcd123.jpg), máx 200 KB, en una carpeta compartida. El equipo Random (César · Roblé Labs) hace la carga."],
+  ["¿Puedo ver dónde están los vendedores en tiempo real?","No. La geolocalización es diferida — la gestión de hoy se ve mañana en Power BI. No existe visualización en línea."],
+  ["¿Se pueden emitir Notas de Crédito desde la app?","No. Las NC se gestionan directamente en el ERP Manager."],
+  ["¿Se puede elegir desde qué bodega vender?","No. Cada vendedor opera desde una sola bodega configurada en su perfil del ERP."],
+  ["En todas las NV aparece 'CONTADO EFECTIVO' sin importar el cliente, ¿qué hago?","Bug conocido. Coordinar con Rossi Colina (Random) y Roberto León para revisión del servicio API getDetalleSucursal. No es un error de configuración del consultor."],
+];
+
+const faqList = document.getElementById('faq-list');
+faqs.forEach(([q,a]) => {
+  const div = document.createElement('div');
+  div.className = 'faq-item';
+  div.innerHTML = `<div class="faq-q">${q}</div><div class="faq-a">${a}</div>`;
+  div.querySelector('.faq-q').addEventListener('click', () => {
+    div.classList.toggle('open');
+  });
+  faqList.appendChild(div);
+});
+
+// ── CHECKLIST DATA ────────────────────────────────────────────────────────
+const clData = [
+  { group: 'Configuración ERP', items: [
+    'Vendedor creado con checkbox Vendedor marcado y Grupo = Ventas',
+    'Usuario creado con licencia disponible verificada',
+    'Lista Offline (LOFF) creada con productos y precios',
+    'Lista de precios del cliente creada y asociada',
+    'Descuentos reflejados en lista de precios (no aplica descuento por vendedor)',
+    'Todos los productos con campo Unidad completado',
+    'Clientes con Vendedor y Lista de Precios asignados',
+    'Condiciones de pago configuradas en ficha del cliente',
+    'Usuario Random solicitado a Rossi Colina (formato: VRB@empresa)',
+  ]},
+  { group: 'Comunicación al cliente — ANTES de iniciar', items: [
+    'Aclarado: geolocalización es diferida (no en tiempo real), requiere Power BI',
+    'Aclarado: imágenes requieren JPG con código KOPR, máx 200 KB',
+    'Aclarado: descuentos se gestionan en lista de precios ERP, no desde la app',
+    'Informado: NV emitidas no se modifican desde la app',
+    'Informado: stock mostrado es físico, no incluye NV comprometidas',
+    'Informado: app solo Android — verificar modelo de dispositivo (Samsung OK)',
+    'Informado: no se emiten NC desde la app',
+    'Alcance geolocalización confirmado POR ESCRITO',
+  ]},
+  { group: 'Dispositivo del vendedor', items: [
+    'Smartphone o tablet Android (Samsung recomendado)',
+    'Conexión a internet activa para sincronización inicial',
+    'RUT de empresa, usuario y contraseña Random disponibles',
+  ]},
+];
+
+const clContainer = document.getElementById('cl-container');
+clData.forEach(({group, items}) => {
+  const header = document.createElement('div');
+  header.className = 'cl-group-header';
+  header.innerHTML = `${group} <span class="cl-prog">0/${items.length}</span>`;
+  clContainer.appendChild(header);
+  const prog = header.querySelector('.cl-prog');
+  let done = 0;
+
+  items.forEach(text => {
+    const row = document.createElement('div');
+    row.className = 'cl-item';
+    row.innerHTML = `<div class="cl-box"></div><span>${text}</span>`;
+    row.addEventListener('click', () => {
+      row.classList.toggle('done');
+      done = clContainer.querySelectorAll(`[data-group="${group}"].done`).length;
+      const groupItems = clContainer.querySelectorAll(`[data-group="${group}"]`);
+      let cnt = 0;
+      groupItems.forEach(i => { if(i.classList.contains('done')) cnt++; });
+      prog.textContent = `${cnt}/${items.length}`;
+    });
+    row.dataset.group = group;
+    clContainer.appendChild(row);
+  });
+});
+
+// ── SCROLL ACTIVE ─────────────────────────────────────────────────────────
+const navLinks = document.querySelectorAll('.sb-nav[href^="#"]');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.sb-nav[href="#${e.target.id}"]`);
+      if(active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('[id]').forEach(s => observer.observe(s));
+
+window.addEventListener('scroll', () => {
+  document.getElementById('back-top').classList.toggle('visible', window.scrollY > 300);
+}, { passive: true });
+</script>
+</body>
+</html>
