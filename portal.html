@@ -54,43 +54,6 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 /* MAIN */
 .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;}
 
-/* ── DRAWER OVERLAY ── */
-.drawer-overlay{
-  position:fixed;inset:0;background:rgba(10,20,50,0.45);
-  z-index:300;opacity:0;pointer-events:none;
-  transition:opacity 0.28s ease;
-  backdrop-filter:blur(2px);
-}
-.drawer-overlay.open{opacity:1;pointer-events:all;}
-
-.drawer{
-  position:fixed;top:0;right:0;bottom:0;
-  width:calc(100vw - var(--sidebar-w));
-  background:#fff;
-  z-index:400;
-  display:flex;flex-direction:column;
-  transform:translateX(100%);
-  transition:transform 0.30s cubic-bezier(0.4,0,0.2,1);
-  box-shadow:-4px 0 24px rgba(10,20,60,0.15);
-}
-.drawer.open{transform:translateX(0);}
-
-.drawer-header{
-  height:52px;flex-shrink:0;
-  background:#fff;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px 0 24px;
-}
-.drawer-title{font-size:13.5px;font-weight:600;color:var(--text);}
-.drawer-close{
-  width:32px;height:32px;border-radius:8px;border:1px solid var(--border);
-  background:var(--bg);display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:16px;color:var(--text-2);transition:all 0.15s;
-}
-.drawer-close:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
-
-.drawer iframe{flex:1;border:none;width:100%;}
-
 .topbar{background:var(--card);border-bottom:1px solid var(--border);padding:0 36px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .tb-left{display:flex;align-items:center;gap:10px;}
 .tb-title{font-size:13px;font-weight:600;color:var(--text);}
@@ -225,7 +188,6 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 /* Mobile content padding for bottom nav */
 @media(max-width:640px){
   .content{padding-bottom:100px;}
-  .drawer-header .drawer-close{display:none;}
 }
 
 /* ════ MOBILE ════ */
@@ -236,14 +198,6 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 
   /* Topbar adjustments */
   .topbar{padding:0 16px;}
-
-  /* Drawer full screen */
-  .drawer{
-    width:100vw !important;
-    top:0 !important;
-    left:0 !important;
-    right:0 !important;
-  }
 
   /* Content padding for bottom nav */
   .content{padding:20px 16px 90px !important;}
@@ -277,22 +231,6 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 .bn-btn.active .bn-label{color:var(--sky);}
 .bn-indicator{width:5px;height:5px;border-radius:50%;background:transparent;margin:1px auto 0;}
 .bn-btn.active .bn-indicator{background:var(--sky);}
-
-/* Drawer back button */
-.drawer-back{
-  display:none;
-  align-items:center;gap:5px;
-  background:none;border:none;
-  font-family:var(--font);font-size:13px;font-weight:600;
-  color:var(--text-2);cursor:pointer;padding:0;
-}
-@media(max-width:640px){
-  .drawer-back{display:inline-flex;}
-  .drawer-close{display:none !important;}
-}
-@media(min-width:641px){
-  .drawer-back{display:none;}
-}
 </style>
 </head>
 <body>
@@ -320,22 +258,22 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
     Procedimientos
     <span class="sb-section-add" title="Agregar procedimiento">+</span>
   </div>
-  <div class="sb-item" onclick="openDoc('PRO-MIG-ASP-001.html','Migración Local → ASP',this)">
+  <div class="sb-item" onclick="goDoc('PRO-MIG-ASP-001.html')">
     <div class="sb-dot" style="background:#00B0F0;"></div>
     Migración Local → ASP
     <span class="sb-item-badge">v1.0</span>
   </div>
-  <div class="sb-item" onclick="openDoc('PRO-IT-BD-001.html','Creación Nueva BD (Réplica)',this)">
+  <div class="sb-item" onclick="goDoc('PRO-IT-BD-001.html')">
     <div class="sb-dot" style="background:#C47A10;"></div>
     Creación Nueva BD (Réplica)
     <span class="sb-item-badge">v1.0</span>
   </div>
-  <div class="sb-item" onclick="openDoc('FOR-IT-BD-003_Reimplementacion_BD.html','Reimplementación BD',this)">
+  <div class="sb-item" onclick="goDoc('FOR-IT-BD-003_Reimplementacion_BD.html')">
     <div class="sb-dot" style="background:#5B2C8D;"></div>
     Reimplementación BD
     <span class="sb-item-badge">v1.0</span>
   </div>
-  <div class="sb-item" onclick="openDoc('PROC-RANDOM-VM-001_POS_Movil.html','POS Móvil – App Random',this)">
+  <div class="sb-item" onclick="goDoc('PROC-RANDOM-VM-001_POS_Movil.html')">
     <div class="sb-dot" style="background:#6aaa2a;"></div>
     POS Móvil – App Random
     <span class="sb-item-badge">v1.1</span>
@@ -345,7 +283,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
     Guías Técnicas
     <span class="sb-section-add" title="Agregar guía">+</span>
   </div>
-  <div class="sb-item" onclick="openDoc('Guia_ManagerGO_v4.html','Manager GO – Punto de Venta',this)">
+  <div class="sb-item" onclick="goDoc('Guia_ManagerGO_v4.html')">
     <div class="sb-dot" style="background:#00C896;"></div>
     Manager GO – Punto de Venta
     <span class="sb-item-badge">v4</span>
@@ -355,15 +293,14 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
     Área Comercial
     <span class="sb-section-add" title="Agregar">+</span>
   </div>
-  <div class="sb-item" onclick="openDoc('guia_comercial.html','Guía Comercial · Creación BD',this)">
+  <div class="sb-item" onclick="goDoc('guia_comercial.html')">
     <div class="sb-dot" style="background:#00C896;"></div>
     Guía Creación BD
-    <span class="sb-item-badge">nuevo</span>
   </div>
-  <div class="sb-item" onclick="openDoc('https://manager-procesos.github.io/formulario-comercial-v2/formulario_levantamiento_final.html','Formulario de Levantamiento',this)">
-    <div class="sb-dot" style="background:#F5A623;"></div>
-    Formulario Levantamiento
-    <span class="sb-item-badge">nuevo</span>
+  <div class="sb-item" onclick="goDoc('https://manager-procesos.github.io/portal-comercial-unificado/', true)">
+    <div class="sb-dot" style="background:#00B0F0;"></div>
+    Portal Comercial (formularios)
+    <span class="sb-item-badge">↗</span>
   </div>
 
   <div class="sb-section">Áreas</div>
@@ -380,18 +317,6 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
     </div>
   </div>
 </nav>
-
-<!-- DRAWER OVERLAY -->
-<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
-
-<!-- DRAWER PANEL -->
-<div class="drawer" id="drawer">
-  <div class="drawer-header">
-    <div class="drawer-title" id="drawer-title">Documento</div>
-    <div class="drawer-close" onclick="closeDrawer()" title="Cerrar">✕</div>
-  </div>
-  <iframe id="doc-frame" src="" allowfullscreen></iframe>
-</div>
 
 <!-- MAIN -->
 <div class="main">
@@ -414,66 +339,21 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
         <div class="ph-title">Portal de Procedimientos<br><em>y Guías Operativas</em></div>
         <div class="ph-desc">Documentación oficial, actualizada y centralizada de procedimientos y guías operativas para todas las áreas de Manager.</div>
         <div class="ph-stats">
-          <div class="ph-stat"><div class="ph-stat-n">2</div><div class="ph-stat-l">Docs publicados</div></div>
-          <div class="ph-stat"><div class="ph-stat-n">5</div><div class="ph-stat-l">Áreas cubiertas</div></div>
-          <div class="ph-stat"><div class="ph-stat-n">v1.0</div><div class="ph-stat-l">Primera versión</div></div>
-          <div class="ph-stat"><div class="ph-stat-n">∞</div><div class="ph-stat-l">Documentos por venir</div></div>
+          <div class="ph-stat"><div class="ph-stat-n">6</div><div class="ph-stat-l">Docs publicados</div></div>
+          <div class="ph-stat"><div class="ph-stat-n">7</div><div class="ph-stat-l">Áreas involucradas</div></div>
+          <div class="ph-stat"><div class="ph-stat-n">Jul 2026</div><div class="ph-stat-l">Última actualización</div></div>
         </div>
       </div>
 
-      <!-- STATS -->
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-n">5</div>
-          <div class="stat-l">Documentos publicados</div>
-          <div class="stat-sub">Procedimientos + Guías + Área Comercial</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-n">1</div>
-          <div class="stat-l">Guía técnica publicada</div>
-          <div class="stat-sub">Manager GO POS</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-n">4</div>
-          <div class="stat-l">Documentos en camino</div>
-          <div class="stat-sub">POS Móvil y más…</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-n">0</div>
-          <div class="stat-l">Documentos desactualizados</div>
-          <div class="stat-sub">Todo al día ✓</div>
-        </div>
-      </div>
-
-      <!-- DEPT CARD -->
-      <div class="dept-card">
-        <div class="dept-title">📂 ¿Para qué sirve este portal?</div>
-        <div class="dept-body">Contar con procedimientos y guías documentadas permite que todos los equipos trabajen de la misma forma, reduce los errores en la ejecución, facilita la incorporación de personas nuevas y sirve como referencia clara ante cualquier duda operativa. Este portal centraliza esa documentación en un solo lugar, siempre actualizado y disponible para todas las áreas.</div>
-        <div class="dept-pillars">
-          <div class="pillar">
-            <div class="pillar-icon">📋</div>
-            <div class="pillar-title">Estandarizar</div>
-            <div class="pillar-desc">Todos los equipos siguen el mismo proceso, con los mismos pasos y responsabilidades claras.</div>
-          </div>
-          <div class="pillar">
-            <div class="pillar-icon">🔍</div>
-            <div class="pillar-title">Reducir errores</div>
-            <div class="pillar-desc">Al tener el proceso documentado, es más fácil detectar dónde ocurren las fallas y corregirlas.</div>
-          </div>
-          <div class="pillar">
-            <div class="pillar-icon">🚀</div>
-            <div class="pillar-title">Crecer ordenado</div>
-            <div class="pillar-desc">Onboarding de personas nuevas más rápido y base para seguir mejorando los procesos con el tiempo.</div>
-          </div>
-        </div>
+      <!-- SEARCH -->
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="doc-search" placeholder="Buscar un procedimiento, guía o palabra clave…" oninput="filterDocs(this.value)">
       </div>
 
       <!-- PROCEDIMIENTOS -->
-      <div class="sec-title">
+      <div class="sec-title" id="sec-procedimientos">
         Procedimientos Operativos
-        <div class="sec-title-actions">
-          <button class="btn-sm">Filtrar ▾</button>
-        </div>
       </div>
       <div class="docs-grid">
 
@@ -493,7 +373,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
           </div>
           <div class="doc-card-footer">
             <div class="doc-card-code">PRO-MIG-ASP-001</div>
-            <a href="#" onclick="openDoc('PRO-MIG-ASP-001.html','Migración Local → ASP',null);return false;" class="doc-card-link">Abrir →</a>
+            <a href="PRO-MIG-ASP-001.html" class="doc-card-link">Abrir →</a>
           </div>
         </div>
 
@@ -513,7 +393,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
           </div>
           <div class="doc-card-footer">
             <div class="doc-card-code">FOR-IT-BD-001</div>
-            <a href="#" onclick="openDoc('PRO-IT-BD-001.html','Creación Nueva BD (Réplica)',null);return false;" class="doc-card-link">Abrir →</a>
+            <a href="PRO-IT-BD-001.html" class="doc-card-link">Abrir →</a>
           </div>
         </div>
 
@@ -533,7 +413,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
           </div>
           <div class="doc-card-footer">
             <div class="doc-card-code">FOR-IT-BD-003</div>
-            <a href="#" onclick="openDoc('FOR-IT-BD-003_Reimplementacion_BD.html','Reimplementación BD',null);return false;" class="doc-card-link">Abrir →</a>
+            <a href="FOR-IT-BD-003_Reimplementacion_BD.html" class="doc-card-link">Abrir →</a>
           </div>
         </div>
 
@@ -553,7 +433,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
           </div>
           <div class="doc-card-footer">
             <div class="doc-card-code">PROC-RANDOM-VM-001</div>
-            <a href="PROC-RANDOM-VM-001_POS_Movil.html" target="_blank" class="doc-card-link">Abrir →</a>
+            <a href="PROC-RANDOM-VM-001_POS_Movil.html" class="doc-card-link">Abrir →</a>
           </div>
         </div>
 
@@ -578,7 +458,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
           </div>
           <div class="doc-card-footer">
             <div class="doc-card-code">GUI-GO-001</div>
-            <a href="#" onclick="openDoc('Guia_ManagerGO_v4.html','Manager GO – Punto de Venta',null);return false;" class="doc-card-link">Abrir →</a>
+            <a href="Guia_ManagerGO_v4.html" class="doc-card-link">Abrir →</a>
           </div>
         </div>
 
@@ -602,25 +482,24 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
           </div>
           <div class="doc-card-footer">
             <div class="doc-card-code">GUI-COM-BD-001</div>
-            <a href="#" onclick="openDoc('guia_comercial.html','Guía Comercial · Creación BD',null);return false;" class="doc-card-link">Abrir →</a>
+            <a href="guia_comercial.html" class="doc-card-link">Abrir →</a>
           </div>
         </div>
         <div class="doc-card">
-          <div class="doc-card-stripe" style="background:linear-gradient(90deg,#F5A623,#F7C84A);"></div>
+          <div class="doc-card-stripe" style="background:linear-gradient(90deg,#1F3864,#00B0F0);"></div>
           <div class="doc-card-body">
-            <div class="doc-card-type" style="background:#FEF8E6;color:#C47A10;">📋 Formulario</div>
-            <div class="doc-card-title">Formulario de Levantamiento</div>
-            <div class="doc-card-desc">Formulario interactivo para completar con el cliente durante la reunión. Al terminar genera automáticamente el correo listo para enviar a IT con un solo clic.</div>
+            <div class="doc-card-type" style="background:#EEF3FC;color:#1F3864;">↗ Portal Externo</div>
+            <div class="doc-card-title">Portal Comercial Unificado</div>
+            <div class="doc-card-desc">Todos los formularios interactivos del área Comercial y GEX (Formulario Comercial, Plan de Trabajo GEX, Réplica BD, Reimplementación, Migración a ASP) viven en su propio portal, separado de esta documentación de referencia.</div>
             <div class="doc-card-meta">
               <span class="doc-status status-vigente">● Vigente</span>
-              <span class="doc-meta-pill">22 tablas</span>
-              <span class="doc-meta-pill">Genera correo a IT</span>
-              <span class="doc-meta-pill">Nuevo</span>
+              <span class="doc-meta-pill">5 formularios</span>
+              <span class="doc-meta-pill">Genera correo/OT</span>
             </div>
           </div>
           <div class="doc-card-footer">
-            <div class="doc-card-code">FOR-COM-LEV-001</div>
-            <a href="#" onclick="openDoc('https://manager-procesos.github.io/formulario-comercial-v2/formulario_levantamiento_final.html','Formulario de Levantamiento',null);return false;" class="doc-card-link">Abrir →</a>
+            <div class="doc-card-code">PORTAL-COM-001</div>
+            <a href="https://manager-procesos.github.io/portal-comercial-unificado/" target="_blank" class="doc-card-link">Abrir →</a>
           </div>
         </div>
       </div>
@@ -713,26 +592,25 @@ function mobileNavScroll(sectionTitle, el) {
   }, 100);
 }
 
-// Reset bottom nav when closing drawer on mobile
-const _origClose = closeDrawer;
-
-function openDoc(url, title, el) {
-  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
-  if (el) el.classList.add('active');
-
-  document.getElementById('drawer-title').textContent = title;
-  document.getElementById('doc-frame').src = url;
-  document.getElementById('drawer').classList.add('open');
-  document.getElementById('drawer-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+function goDoc(url, external) {
+  if (external) { window.open(url, '_blank'); return; }
+  window.location.href = url;
 }
 
-function closeDrawer() {
-  document.getElementById('drawer').classList.remove('open');
-  document.getElementById('drawer-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-  setTimeout(() => { document.getElementById('doc-frame').src = ''; }, 300);
-  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+function filterDocs(query) {
+  const q = query.trim().toLowerCase();
+  document.querySelectorAll('#view-home .doc-card').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = (!q || text.includes(q)) ? '' : 'none';
+  });
+  document.querySelectorAll('#view-home .docs-grid').forEach(grid => {
+    const anyVisible = [...grid.querySelectorAll('.doc-card')].some(c => c.style.display !== 'none');
+    const heading = grid.previousElementSibling;
+    if (heading && heading.classList.contains('sec-title')) {
+      heading.style.display = anyVisible ? '' : 'none';
+    }
+    grid.style.display = anyVisible ? '' : 'none';
+  });
 }
 
 function showView(viewId, el) {
@@ -742,9 +620,6 @@ function showView(viewId, el) {
   if (el) el.classList.add('active');
   window.scrollTo({ top: 0 });
 }
-
-// Close drawer with Escape key
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 
 window.addEventListener('scroll', () => {
   document.getElementById('back-top').classList.toggle('visible', window.scrollY > 300);
