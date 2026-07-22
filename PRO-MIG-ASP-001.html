@@ -210,7 +210,6 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
         <div class="ficha-row"><div class="ficha-label">Área Propietaria</div><div class="ficha-val">Consultoría Técnica</div></div>
         <div class="ficha-row"><div class="ficha-label">Áreas Involucradas</div><div class="ficha-val">Comercial / GEX · Consultoría Técnica · IT Manager · DTE (condicional)</div></div>
         <div class="ficha-row"><div class="ficha-label">Estado</div><div class="ficha-val"><span class="badge-v">● VIGENTE</span></div></div>
-        <div class="ficha-row"><div class="ficha-label">Cambios v2.0</div><div class="ficha-val" style="font-size:12px;color:var(--text-2);">Incorpora evaluación de factibilidad previa · Onboarding ya no participa · Validación final a cargo de Consultoría Técnica</div></div>
       </div>
     </div>
 
@@ -221,10 +220,6 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
         <div class="sec-title">Objetivo y Alcance</div>
       </div>
       <div class="sec-desc">Este procedimiento establece los pasos para la migración de una BD de cliente desde modalidad Local Manager Time hacia la modalidad ASP. Define las responsabilidades de cada área, los tiempos y los entregables, garantizando la integridad de los datos.</div>
-      <div class="alert alert-blue">
-        <span class="alert-icon">ℹ</span>
-        <div><strong>Cambio v2.0:</strong> El proceso ahora comienza con una solicitud de evaluación de factibilidad a Consultoría Técnica. Onboarding ya no participa del proceso de migración — el Consultor Técnico ejecuta el proceso completo desde la recepción del respaldo hasta la validación final con el cliente.</div>
-      </div>
       <div class="alert alert-orange">
         <span class="alert-icon">⚠</span>
         <div>Este procedimiento aplica a la migración de una BD. Si el cliente migra más de una BD, cada BD adicional suma <strong>2 sesiones más</strong> al proceso. Los plazos deben coordinarse directamente con Consultoría Técnica.</div>
@@ -237,7 +232,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
         <div class="sec-num">2</div>
         <div class="sec-title">Solicitud de Evaluación de Factibilidad</div>
       </div>
-      <div class="sec-desc">El proceso se inicia cuando Comercial o GEX envía un correo a Consultoría Técnica solicitando la evaluación de la migración. Consultoría Técnica responde con la factibilidad y los datos que necesita para calcular las sesiones.</div>
+      <div class="sec-desc">El proceso se inicia cuando Comercial o GEX envía un correo a Consultoría Técnica con los datos del cliente y la información mínima para evaluar la factibilidad. Consultoría Técnica responde ese mismo correo indicando si la migración es factible y la cantidad de sesiones requeridas.</div>
 
       <div class="sub-title">Correo de solicitud (Comercial / GEX → Consultoría Técnica)</div>
       <div class="email-card">
@@ -253,6 +248,13 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
           <strong>Cliente:</strong> [Nombre del cliente]<br>
           <strong>RUT:</strong> [RUT]<br>
           <strong>Contacto:</strong> [Nombre y correo del contacto]<br><br>
+          <strong>Datos para evaluación:</strong><br>
+          — Versión Manager Time instalada: [ej: v8.5.2]<br>
+          — Versión SQL Server: [ej: SQL Server 2019]<br>
+          — Cantidad de BDs a migrar: [N°]<br>
+          — Formatos de impresión personalizados: [Sí / No — cuántos y de qué tipo]<br>
+          — Integraciones con terceros: [Sí / No — detallar cuáles]<br>
+          — ¿Tiene Acepta integrado con Manager?: [Sí / No]<br><br>
           Quedo atenta a sus comentarios. Saludos cordiales.
         </div>
       </div>
@@ -267,31 +269,31 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
     <div class="section" id="s3">
       <div class="sec-header">
         <div class="sec-num">3</div>
-        <div class="sec-title">Factibilidad y Datos Requeridos</div>
+        <div class="sec-title">Respuesta de Factibilidad</div>
       </div>
-      <div class="sec-desc">Una vez recibido el correo, Consultoría Técnica responde con la evaluación de factibilidad. Para calcularla, Comercial o GEX debe proporcionar los siguientes datos mínimos del cliente.</div>
+      <div class="sec-desc">El Consultor Técnico evalúa la información recibida y responde el correo indicando si la migración es factible y el número exacto de sesiones requeridas. Con esta respuesta, Comercial o GEX procede a crear la OT.</div>
 
-      <div class="sub-title">Datos mínimos requeridos para la evaluación</div>
+      <div class="sub-title">La respuesta de Consultoría Técnica incluye</div>
       <div class="datos-grid">
         <div class="dato-card">
-          <div class="dato-icon">🗄️</div>
-          <div class="dato-title">Versión actual de Manager</div>
-          <div class="dato-desc">Versión del software Manager Time instalado en local. Ej: v8.5.2</div>
+          <div class="dato-icon">✅</div>
+          <div class="dato-title">Factibilidad confirmada</div>
+          <div class="dato-desc">Consultoría Técnica confirma si la migración es técnicamente factible con los datos entregados.</div>
         </div>
         <div class="dato-card">
-          <div class="dato-icon">💾</div>
-          <div class="dato-title">Versión SQL Server</div>
-          <div class="dato-desc">Versión del motor de base de datos del cliente. Ej: SQL Server 2019</div>
+          <div class="dato-icon">🔢</div>
+          <div class="dato-title">Número de sesiones</div>
+          <div class="dato-desc">Cantidad exacta de sesiones requeridas. Base: 1 BD. Por cada BD adicional se suman 2 sesiones más.</div>
         </div>
         <div class="dato-card">
-          <div class="dato-icon">📄</div>
-          <div class="dato-title">Formatos de impresión</div>
-          <div class="dato-desc">¿El cliente tiene formatos personalizados? Si/No. En caso de tenerlos, cuántos y de qué tipo.</div>
+          <div class="dato-icon">📅</div>
+          <div class="dato-title">Plazos estimados</div>
+          <div class="dato-desc">Consultoría Técnica indica los plazos estimados del proceso según la complejidad y cantidad de BDs.</div>
         </div>
         <div class="dato-card">
-          <div class="dato-icon">🔗</div>
-          <div class="dato-title">Integraciones</div>
-          <div class="dato-desc">¿El cliente tiene integraciones con terceros (APIs, ERP externos, etc.)? Detallar cuáles.</div>
+          <div class="dato-icon">⚠️</div>
+          <div class="dato-title">Consideraciones especiales</div>
+          <div class="dato-desc">Cualquier condición especial detectada: integraciones complejas, formatos personalizados, requerimientos DTE.</div>
         </div>
       </div>
 
@@ -351,7 +353,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
             <div class="flow-card">
               <div class="flow-meta"><span class="flow-step-num">DATO 3</span><span class="flow-tag tag-comercial">● Obligatorio</span></div>
               <div class="flow-title">Destinatario: Consultoría Técnica</div>
-              <div class="flow-desc">La OT se dirige a Consultoría Técnica, no a Proyectos Onboarding. Onboarding no participa de este proceso.</div>
+              <div class="flow-desc">La OT se dirige a Consultoría Técnica.</div>
             </div>
           </div>
         </div>
@@ -456,7 +458,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 
       <div class="alert alert-blue" style="margin-bottom:20px;">
         <span class="alert-icon">ℹ</span>
-        <div><strong>Nota v2.0:</strong> Esta sesión es ejecutada íntegramente por el Consultor Técnico. Proyectos Onboarding ya no participa del proceso de migración.</div>
+
       </div>
 
       <div class="sub-title">Contenido de la sesión de validación</div>
@@ -535,7 +537,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 
       <div class="alert alert-red" style="margin-top:16px;">
         <span class="alert-icon">🚫</span>
-        <div><strong>Proyectos Onboarding no participa en este proceso.</strong> Todo el proceso de migración, verificación y validación final es responsabilidad de Consultoría Técnica.</div>
+        <div>Todo el proceso de migración, verificación y validación final es responsabilidad de Consultoría Técnica.</div>
       </div>
     </div>
 
