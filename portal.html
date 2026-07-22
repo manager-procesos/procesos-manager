@@ -62,17 +62,17 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 .content{padding:36px 40px 80px;max-width:1120px;}
 
 /* HERO PORTAL */
-.portal-hero{background:linear-gradient(135deg,var(--navy) 0%,#264F8C 60%,#3A72B0 100%);border-radius:var(--r-lg);padding:40px 44px;margin-bottom:36px;position:relative;overflow:hidden;}
+.portal-hero{background:linear-gradient(135deg,#EEF3FC 0%,#F7FAFD 100%);border:1px solid var(--border-hi);border-radius:var(--r-lg);padding:40px 44px;margin-bottom:36px;position:relative;overflow:hidden;}
 .portal-hero::before{content:'';position:absolute;right:-60px;top:-60px;width:280px;height:280px;border-radius:50%;background:rgba(0,176,240,0.07);}
-.portal-hero::after{content:'';position:absolute;right:80px;bottom:-80px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.03);}
-.ph-eyebrow{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;color:var(--sky);text-transform:uppercase;margin-bottom:12px;}
-.ph-title{font-family:var(--font-disp);font-size:36px;color:#fff;line-height:1.15;margin-bottom:12px;}
-.ph-title em{font-style:italic;color:rgba(255,255,255,0.55);}
-.ph-desc{color:rgba(255,255,255,0.6);font-size:14px;max-width:520px;line-height:1.65;margin-bottom:24px;}
+.portal-hero::after{content:'';position:absolute;right:80px;bottom:-80px;width:180px;height:180px;border-radius:50%;background:rgba(0,176,240,0.04);}
+.ph-eyebrow{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;color:var(--blue);text-transform:uppercase;margin-bottom:12px;}
+.ph-title{font-family:var(--font-disp);font-size:36px;color:var(--navy);line-height:1.15;margin-bottom:12px;}
+.ph-title em{font-style:italic;color:var(--text-3);}
+.ph-desc{color:var(--text-2);font-size:14px;max-width:520px;line-height:1.65;margin-bottom:24px;}
 .ph-stats{display:flex;gap:24px;flex-wrap:wrap;}
 .ph-stat{text-align:center;}
-.ph-stat-n{font-family:var(--font-disp);font-size:28px;color:#fff;line-height:1;}
-.ph-stat-l{font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px;}
+.ph-stat-n{font-family:var(--font-disp);font-size:28px;color:var(--navy);line-height:1;}
+.ph-stat-l{font-size:11px;color:var(--text-3);margin-top:2px;}
 
 /* SECTION TITLE */
 .sec-title{font-size:17px;font-weight:600;color:var(--text);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
@@ -147,6 +147,15 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 .search-input{width:100%;padding:10px 14px 10px 36px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;font-family:var(--font);background:var(--card);color:var(--text);outline:none;transition:border 0.15s;}
 .search-input:focus{border-color:var(--border-hi);box-shadow:0 0 0 3px rgba(0,176,240,0.08);}
 .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-3);font-size:14px;}
+
+.step-results{background:var(--card);border:1px solid var(--border-hi);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);}
+.step-results-head{padding:8px 14px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.08em;color:var(--text-3);text-transform:uppercase;background:var(--bg);border-bottom:1px solid var(--border);}
+.step-result-item{display:flex;align-items:center;gap:10px;padding:9px 14px;text-decoration:none;border-bottom:1px solid var(--border);transition:background 0.12s;}
+.step-result-item:last-child{border-bottom:none;}
+.step-result-item:hover{background:#F7FAFD;}
+.step-result-doc{font-size:10.5px;color:var(--text-3);white-space:nowrap;}
+.step-result-title{font-size:13px;color:var(--text);font-weight:500;}
+.step-result-arrow{margin-left:auto;color:var(--sky);font-size:13px;}
 
 /* BACK TO TOP */
 #back-top{position:fixed;bottom:24px;right:24px;width:36px;height:36px;background:var(--navy);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity 0.2s;font-size:16px;box-shadow:var(--shadow-md);z-index:300;border:none;}
@@ -348,8 +357,9 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
       <!-- SEARCH -->
       <div class="search-bar">
         <span class="search-icon">🔍</span>
-        <input type="text" class="search-input" id="doc-search" placeholder="Buscar un procedimiento, guía o palabra clave…" oninput="filterDocs(this.value)">
+        <input type="text" class="search-input" id="doc-search" placeholder="Buscar un procedimiento, guía, o un paso específico (ej: 'sesión de validación', 'correo a IT')…" oninput="filterDocs(this.value)">
       </div>
+      <div id="step-results" style="display:none;margin:-8px 0 20px;"></div>
 
       <!-- PROCEDIMIENTOS -->
       <div class="sec-title" id="sec-procedimientos">
@@ -597,6 +607,52 @@ function goDoc(url, external) {
   window.location.href = url;
 }
 
+// Índice de pasos/secciones de cada documento, para poder saltar directo
+// a un paso específico desde el buscador (no solo abrir el documento entero).
+const SECTION_INDEX = [
+  // Migración Local → ASP
+  {doc:'PRO-MIG-ASP-001.html', docTitle:'Migración Local → ASP', id:'s1', title:'Objetivo y Alcance'},
+  {doc:'PRO-MIG-ASP-001.html', docTitle:'Migración Local → ASP', id:'s2', title:'Solicitud de Evaluación'},
+  {doc:'PRO-MIG-ASP-001.html', docTitle:'Migración Local → ASP', id:'s3', title:'Factibilidad y Datos'},
+  {doc:'PRO-MIG-ASP-001.html', docTitle:'Migración Local → ASP', id:'s4', title:'OT y Sesiones'},
+  {doc:'PRO-MIG-ASP-001.html', docTitle:'Migración Local → ASP', id:'s5', title:'Flujo de Migración'},
+  {doc:'PRO-MIG-ASP-001.html', docTitle:'Migración Local → ASP', id:'s6', title:'Sesión de Validación'},
+  {doc:'PRO-MIG-ASP-001.html', docTitle:'Migración Local → ASP', id:'s7', title:'Responsabilidades'},
+  {doc:'PRO-MIG-ASP-001.html', docTitle:'Migración Local → ASP', id:'s8', title:'Aprobaciones'},
+  // Creación Nueva BD (Réplica)
+  {doc:'PRO-IT-BD-001.html', docTitle:'Creación Nueva BD (Réplica)', id:'s1', title:'Alcance'},
+  {doc:'PRO-IT-BD-001.html', docTitle:'Creación Nueva BD (Réplica)', id:'s2', title:'Ambiente y Tablas'},
+  {doc:'PRO-IT-BD-001.html', docTitle:'Creación Nueva BD (Réplica)', id:'s3', title:'Correo a IT'},
+  {doc:'PRO-IT-BD-001.html', docTitle:'Creación Nueva BD (Réplica)', id:'s4', title:'Verificación'},
+  {doc:'PRO-IT-BD-001.html', docTitle:'Creación Nueva BD (Réplica)', id:'s5', title:'Sesiones'},
+  {doc:'PRO-IT-BD-001.html', docTitle:'Creación Nueva BD (Réplica)', id:'s6', title:'Aprobaciones'},
+  // Reimplementación BD
+  {doc:'FOR-IT-BD-003_Reimplementacion_BD.html', docTitle:'Reimplementación BD', id:'s1', title:'Alcance'},
+  {doc:'FOR-IT-BD-003_Reimplementacion_BD.html', docTitle:'Reimplementación BD', id:'s2', title:'Levantamiento Inicial'},
+  {doc:'FOR-IT-BD-003_Reimplementacion_BD.html', docTitle:'Reimplementación BD', id:'s3', title:'Tablas y Correo a IT'},
+  {doc:'FOR-IT-BD-003_Reimplementacion_BD.html', docTitle:'Reimplementación BD', id:'s4', title:'Verificación'},
+  {doc:'FOR-IT-BD-003_Reimplementacion_BD.html', docTitle:'Reimplementación BD', id:'s5', title:'Sesiones'},
+  {doc:'FOR-IT-BD-003_Reimplementacion_BD.html', docTitle:'Reimplementación BD', id:'s6', title:'Aprobaciones'},
+  // POS Móvil – App Random
+  {doc:'PROC-RANDOM-VM-001_POS_Movil.html', docTitle:'POS Móvil – App Random', id:'objetivo', title:'Objetivo y Alcance'},
+  {doc:'PROC-RANDOM-VM-001_POS_Movil.html', docTitle:'POS Móvil – App Random', id:'funcionalidades', title:'Funcionalidades'},
+  {doc:'PROC-RANDOM-VM-001_POS_Movil.html', docTitle:'POS Móvil – App Random', id:'erp', title:'Config. ERP'},
+  {doc:'PROC-RANDOM-VM-001_POS_Movil.html', docTitle:'POS Móvil – App Random', id:'app', title:'Config. App'},
+  {doc:'PROC-RANDOM-VM-001_POS_Movil.html', docTitle:'POS Móvil – App Random', id:'usuarios', title:'Gestión de usuarios'},
+  {doc:'PROC-RANDOM-VM-001_POS_Movil.html', docTitle:'POS Móvil – App Random', id:'geo', title:'Geolocalización'},
+  {doc:'PROC-RANDOM-VM-001_POS_Movil.html', docTitle:'POS Móvil – App Random', id:'faq', title:'FAQ'},
+  {doc:'PROC-RANDOM-VM-001_POS_Movil.html', docTitle:'POS Móvil – App Random', id:'checklist', title:'Checklist'},
+  // Manager GO – Punto de Venta
+  {doc:'Guia_ManagerGO_v4.html', docTitle:'Manager GO – Punto de Venta', id:'s1', title:'Config. ERP'},
+  {doc:'Guia_ManagerGO_v4.html', docTitle:'Manager GO – Punto de Venta', id:'s2', title:'Instalación GO'},
+  {doc:'Guia_ManagerGO_v4.html', docTitle:'Manager GO – Punto de Venta', id:'s3', title:'Impresoras'},
+  {doc:'Guia_ManagerGO_v4.html', docTitle:'Manager GO – Punto de Venta', id:'s4', title:'Config. POS'},
+  {doc:'Guia_ManagerGO_v4.html', docTitle:'Manager GO – Punto de Venta', id:'s5', title:'Folios DTE'},
+  {doc:'Guia_ManagerGO_v4.html', docTitle:'Manager GO – Punto de Venta', id:'s6', title:'Operación diaria'},
+  {doc:'Guia_ManagerGO_v4.html', docTitle:'Manager GO – Punto de Venta', id:'s8', title:'Errores frecuentes'},
+  {doc:'Guia_ManagerGO_v4.html', docTitle:'Manager GO – Punto de Venta', id:'s11', title:'Corrección KNA'},
+];
+
 function filterDocs(query) {
   const q = query.trim().toLowerCase();
   document.querySelectorAll('#view-home .doc-card').forEach(card => {
@@ -611,6 +667,23 @@ function filterDocs(query) {
     }
     grid.style.display = anyVisible ? '' : 'none';
   });
+  renderStepResults(q);
+}
+
+function renderStepResults(q) {
+  const box = document.getElementById('step-results');
+  if (q.length < 2) { box.style.display = 'none'; box.innerHTML = ''; return; }
+  const matches = SECTION_INDEX.filter(s => s.title.toLowerCase().includes(q) || s.docTitle.toLowerCase().includes(q)).slice(0, 8);
+  if (!matches.length) { box.style.display = 'none'; box.innerHTML = ''; return; }
+  box.innerHTML = `<div class="step-results">
+    <div class="step-results-head">Ir directo a un paso</div>
+    ${matches.map(m => `<a class="step-result-item" href="${m.doc}#${m.id}">
+      <span class="step-result-doc">${m.docTitle}</span>
+      <span class="step-result-title">${m.title}</span>
+      <span class="step-result-arrow">→</span>
+    </a>`).join('')}
+  </div>`;
+  box.style.display = 'block';
 }
 
 function showView(viewId, el) {

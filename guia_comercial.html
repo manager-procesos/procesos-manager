@@ -22,15 +22,15 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .tb-back::before{content:'←';}
 
 /* HERO */
-.hero{background:linear-gradient(135deg,#1F3864 0%,#2557A7 60%,#3A72B0 100%);padding:52px 40px 44px;text-align:center;position:relative;overflow:hidden;}
+.hero{background:linear-gradient(135deg,#EEF3FC 0%,#F7FAFD 100%);border-bottom:1px solid var(--border-hi);padding:52px 40px 44px;text-align:center;position:relative;overflow:hidden;}
 .hero::before{content:'';position:absolute;left:50%;top:-80px;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;background:rgba(0,176,240,.06);}
-.hero-tag{display:inline-block;background:rgba(0,176,240,.2);color:var(--sky);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 12px;border-radius:20px;border:1px solid rgba(0,176,240,.3);margin-bottom:16px;}
-.hero-title{font-family:var(--disp);font-size:38px;color:#fff;line-height:1.15;margin-bottom:12px;}
-.hero-title em{color:rgba(255,255,255,.55);font-style:italic;}
-.hero-desc{color:rgba(255,255,255,.65);font-size:15px;max-width:540px;margin:0 auto 24px;}
+.hero-tag{display:inline-block;background:#EEF9FF;color:var(--blue);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 12px;border-radius:20px;border:1px solid var(--sky);margin-bottom:16px;}
+.hero-title{font-family:var(--disp);font-size:38px;color:var(--navy);line-height:1.15;margin-bottom:12px;}
+.hero-title em{color:var(--text-3);font-style:italic;}
+.hero-desc{color:var(--text-2);font-size:15px;max-width:540px;margin:0 auto 24px;}
 .hero-chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-.hchip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);font-size:12px;padding:5px 14px;border-radius:20px;font-weight:500;}
-.hchip-sky{background:rgba(0,176,240,.2);border-color:rgba(0,176,240,.35);color:var(--sky);}
+.hchip{background:var(--bg);border:1px solid var(--border-hi);color:var(--text-2);font-size:12px;padding:5px 14px;border-radius:20px;font-weight:500;}
+.hchip-sky{background:#EEF9FF;border-color:var(--sky);color:var(--blue);}
 
 /* SECTIONS */
 .section{padding:48px 40px;max-width:1100px;margin:0 auto;}

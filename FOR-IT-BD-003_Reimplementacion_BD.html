@@ -32,15 +32,15 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 .btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text-2);font-family:var(--font);transition:all .15s;}
 .btn:hover{border-color:var(--border-hi);color:var(--text);}
 .content{padding:36px 40px 80px;max-width:1100px;}
-.hero{background:linear-gradient(135deg,var(--navy) 0%,#2E5490 55%,#3A72B0 100%);border-radius:var(--r-lg);padding:36px 40px;margin-bottom:32px;position:relative;overflow:hidden;}
+.hero{background:linear-gradient(135deg,#EEF3FC 0%,#F7FAFD 100%);border:1px solid var(--border-hi);border-radius:var(--r-lg);padding:36px 40px;margin-bottom:32px;position:relative;overflow:hidden;}
 .hero::before{content:'';position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;background:rgba(0,176,240,.08);}
-.hero-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--sky);text-transform:uppercase;margin-bottom:10px;}
-.hero-title{font-family:var(--disp);font-size:30px;color:#fff;line-height:1.15;margin-bottom:10px;}
-.hero-title em{font-style:italic;color:rgba(255,255,255,.6);}
-.hero-desc{color:rgba(255,255,255,.65);font-size:14px;max-width:540px;line-height:1.6;margin-bottom:20px;}
+.hero-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--blue);text-transform:uppercase;margin-bottom:10px;}
+.hero-title{font-family:var(--disp);font-size:30px;color:var(--navy);line-height:1.15;margin-bottom:10px;}
+.hero-title em{font-style:italic;color:var(--text-3);}
+.hero-desc{color:var(--text-2);font-size:14px;max-width:540px;line-height:1.6;margin-bottom:20px;}
 .chips{display:flex;gap:8px;flex-wrap:wrap;}
-.chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);font-size:11px;padding:4px 10px;border-radius:20px;font-weight:500;}
-.chip-sky{background:rgba(0,176,240,.2);border-color:rgba(0,176,240,.35);color:var(--sky);}
+.chip{background:var(--bg);border:1px solid var(--border-hi);color:var(--text-2);font-size:11px;padding:4px 10px;border-radius:20px;font-weight:500;}
+.chip-sky{background:#EEF9FF;border-color:var(--sky);color:var(--blue);}
 .section{margin-bottom:40px;scroll-margin-top:72px;}
 .sec-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);}
 .sec-num{width:32px;height:32px;background:var(--navy);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:500;flex-shrink:0;}
@@ -59,6 +59,31 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
 .alert-red{background:#FEE8E8;border-left:4px solid var(--red);color:#7A0010;}
 .alert-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
 .ul-list{margin:8px 0 14px 22px;color:var(--text-2);font-size:14px;line-height:1.9;}
+
+/* FLOW */
+.flow-wrap{display:flex;flex-direction:column;gap:0;margin-bottom:22px;}
+.flow-step{display:flex;align-items:stretch;gap:0;}
+.flow-left{width:56px;display:flex;flex-direction:column;align-items:center;flex-shrink:0;}
+.flow-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:2px solid var(--border);background:var(--card);z-index:1;position:relative;}
+.fc-comercial{border-color:var(--sky);background:#EEF3FC;}
+.fc-cto{border-color:#5B2C8D;background:#F4EEF8;}
+.fc-it{border-color:var(--orange);background:#FFF3E0;}
+.flow-line{width:2px;flex:1;background:var(--border);margin:2px auto;}
+.flow-step:last-child .flow-line{display:none;}
+.flow-right{flex:1;padding:0 0 20px 16px;}
+.flow-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px;transition:all .2s;}
+.flow-card:hover{border-color:var(--border-hi);box-shadow:0 4px 12px rgba(30,50,100,.08);}
+.flow-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.flow-step-num{font-family:var(--mono);font-size:10px;color:var(--text-3);}
+.flow-tag{font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:8px;}
+.tag-comercial{background:#EEF3FC;color:var(--navy);}
+.tag-cto{background:#F4EEF8;color:#5B2C8D;}
+.tag-it{background:#FFF3E0;color:var(--orange);}
+.flow-title{font-size:14.5px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.flow-desc{font-size:13px;color:var(--text-2);line-height:1.5;}
+.flow-result{margin-top:8px;font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:5px;}
+.flow-result::before{content:'→';font-weight:700;color:var(--sky);}
+
 .amb-box{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:var(--r);padding:14px 16px;font-family:var(--mono);box-shadow:var(--shadow);margin-bottom:16px;}
 .amb-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
 .amb-row:last-child{margin-bottom:0;}
@@ -184,6 +209,46 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
         <li>Apoyo DTE si el cliente utiliza Acepta</li>
         <li>Acompañamiento en la puesta en marcha</li>
       </ul>
+
+      <div class="sub-title">Flujo General del Proceso</div>
+      <div class="flow-wrap">
+        <div class="flow-step">
+          <div class="flow-left"><div class="flow-circle fc-comercial">📋</div><div class="flow-line"></div></div>
+          <div class="flow-right"><div class="flow-card">
+            <div class="flow-meta"><span class="flow-step-num">PASO 1</span><span class="flow-tag tag-comercial">Comercial / GEX</span></div>
+            <div class="flow-title">Levantamiento inicial y OT</div>
+            <div class="flow-desc">Comercial o GEX recopila las necesidades del cliente mediante el checklist comercial y genera la OT.</div>
+            <div class="flow-result">OT enviada a Proyectos Onboarding</div>
+          </div></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-left"><div class="flow-circle fc-cto">🔍</div><div class="flow-line"></div></div>
+          <div class="flow-right"><div class="flow-card">
+            <div class="flow-meta"><span class="flow-step-num">PASO 2</span><span class="flow-tag tag-cto">Proyectos Onboarding</span></div>
+            <div class="flow-title">Selección de tablas y solicitud a IT</div>
+            <div class="flow-desc">Junto al cliente, revisa las tablas de la BD de origen y acuerda qué información se copiará a la nueva BD.</div>
+            <div class="flow-result">Solicitud enviada a IT</div>
+          </div></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-left"><div class="flow-circle fc-it">⚙️</div><div class="flow-line"></div></div>
+          <div class="flow-right"><div class="flow-card">
+            <div class="flow-meta"><span class="flow-step-num">PASO 3</span><span class="flow-tag tag-it">IT Manager</span></div>
+            <div class="flow-title">Creación de la BD</div>
+            <div class="flow-desc">IT crea la nueva BD en el ambiente ASP y copia las tablas acordadas desde la BD de origen.</div>
+            <div class="flow-result">BD creada y lista para configurar</div>
+          </div></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-left"><div class="flow-circle fc-cto">📅</div></div>
+          <div class="flow-right"><div class="flow-card">
+            <div class="flow-meta"><span class="flow-step-num">PASO 4</span><span class="flow-tag tag-cto">Proyectos Onboarding</span></div>
+            <div class="flow-title">Configuración y sesiones con el cliente</div>
+            <div class="flow-desc">Se ejecutan las sesiones mínimas: revisión de BD, presentación de ciclo, explicación de importadores, carga de inventario y contable, apoyo DTE si aplica, y puesta en marcha (ver sección 5).</div>
+            <div class="flow-result">Cliente operativo en la nueva BD</div>
+          </div></div>
+        </div>
+      </div>
     </div>
 
     <!-- S2: LEVANTAMIENTO -->
@@ -428,6 +493,7 @@ window.addEventListener('scroll',()=>{document.getElementById('back-top').classL
 renderTablas();
 renderVerif(VERIF1,'verif-body-1');
 renderVerif(VERIF2,'verif-body-2');
+if(location.hash){setTimeout(()=>{document.querySelector(location.hash)?.scrollIntoView({block:'start'});},50);}
 </script>
 </body>
 </html>
