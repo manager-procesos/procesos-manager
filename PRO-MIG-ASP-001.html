@@ -168,7 +168,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
   <a class="sb-nav" href="#s3"><div class="sb-nav-num">3</div> Factibilidad y Datos</a>
   <a class="sb-nav" href="#s4"><div class="sb-nav-num">4</div> OT y Sesiones</a>
   <a class="sb-nav" href="#s5"><div class="sb-nav-num">5</div> Flujo de Migración</a>
-  <a class="sb-nav" href="#s6"><div class="sb-nav-num">6</div> Sesión de Validación</a>
+  <a class="sb-nav" href="#s6"><div class="sb-nav-num">6</div> Sesiones de Ejecución</a>
   <a class="sb-nav" href="#s7"><div class="sb-nav-num">7</div> Responsabilidades</a>
   <a class="sb-nav" href="#s8"><div class="sb-nav-num">8</div> Aprobaciones</a>
   <div class="sb-footer">
@@ -283,7 +283,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
         <div class="dato-card">
           <div class="dato-icon">🔢</div>
           <div class="dato-title">Número de sesiones</div>
-          <div class="dato-desc">Cantidad exacta de sesiones requeridas. Base: 1 BD. Por cada BD adicional se suman 2 sesiones más.</div>
+          <div class="dato-desc">Cantidad exacta de sesiones requeridas. Base: 2 sesiones (Validación + Capacitación de Accesos) para 1 BD. Por cada BD adicional se suman 2 sesiones más.</div>
         </div>
         <div class="dato-card">
           <div class="dato-icon">📅</div>
@@ -328,7 +328,7 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
             <div class="flow-card">
               <div class="flow-meta"><span class="flow-step-num">DATO 1</span><span class="flow-tag tag-comercial">● Obligatorio</span></div>
               <div class="flow-title">Cantidad de sesiones indicadas por Consultoría Técnica</div>
-              <div class="flow-desc">Exactamente las sesiones que Cto. Técnica indicó en la respuesta de factibilidad. 1 BD base + 2 sesiones adicionales por cada BD extra.</div>
+              <div class="flow-desc">Exactamente las sesiones que Cto. Técnica indicó en la respuesta de factibilidad. Base: 2 sesiones (Validación + Capacitación de Accesos) para 1 BD, + 2 sesiones adicionales por cada BD extra.</div>
             </div>
           </div>
         </div>
@@ -448,20 +448,20 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
       </div>
     </div>
 
-    <!-- S6: SESIÓN VALIDACIÓN -->
+    <!-- S6: SESIONES DE EJECUCIÓN -->
     <div class="section" id="s6">
       <div class="sec-header">
         <div class="sec-num">6</div>
-        <div class="sec-title">Sesión de Validación con el Cliente</div>
+        <div class="sec-title">Sesiones de Ejecución con el Cliente</div>
       </div>
-      <div class="sec-desc">El Consultor Técnico conduce la sesión de validación final con el cliente para confirmar que todo está correcto y que puede operar en ASP.</div>
+      <div class="sec-desc">Consultoría Técnica conduce dos sesiones con el cliente para cerrar la migración: una de validación y otra de capacitación de accesos.</div>
 
       <div class="alert alert-blue" style="margin-bottom:20px;">
         <span class="alert-icon">ℹ</span>
-        <div>El proceso de migración a ASP incluye <strong>una sola sesión de validación</strong> con el cliente. Esta sesión cubre el acceso al sistema, verificación de datos, Ramaflex, impresión, importación/exportación y DTE si aplica. <strong>No incluye capacitación del sistema ni sesiones adicionales de uso.</strong> Si el cliente requiere capacitación, debe coordinarse como un servicio independiente.</div>
+        <div>El proceso de migración a ASP incluye <strong>2 sesiones</strong> como parte de la ejecución: <strong>Validación</strong> y <strong>Capacitación de Accesos</strong> (Ramaflex). <strong>No incluye capacitación del sistema/uso ni sesiones adicionales.</strong> Si el cliente requiere capacitación de uso, debe coordinarse como un servicio independiente.</div>
       </div>
 
-      <div class="sub-title">Contenido de la sesión de validación</div>
+      <div class="sub-title">Sesión 1 · Validación</div>
       <table class="sess-table">
         <thead>
           <tr>
@@ -478,30 +478,43 @@ body{font-family:var(--font);font-size:14.5px;line-height:1.7;color:var(--text);
           </tr>
           <tr>
             <td><div class="sess-num">2</div></td>
-            <td><div class="sess-name">Ingreso a Ramaflex</div><div style="font-size:12.5px;color:var(--text-2);margin-top:4px;">Mostrar al cliente cómo ingresar al entorno ASP a través de Ramaflex. Validar acceso de usuarios.</div></td>
-            <td><span class="flow-tag tag-cto">Cto. Técnico</span></td>
-          </tr>
-          <tr>
-            <td><div class="sess-num">3</div></td>
             <td><div class="sess-name">Impresión</div><div style="font-size:12.5px;color:var(--text-2);margin-top:4px;">Verificar que los formatos de impresión funcionan correctamente en el nuevo ambiente ASP.</div></td>
             <td><span class="flow-tag tag-cto">Cto. Técnico</span></td>
           </tr>
           <tr>
-            <td><div class="sess-num">4</div></td>
+            <td><div class="sess-num">3</div></td>
             <td><div class="sess-name">Proceso de Importación y Exportación</div><div style="font-size:12.5px;color:var(--text-2);margin-top:4px;">Validar los flujos de importación y exportación — es el cambio más relevante al pasar de Local a ASP. El cliente debe entender cómo funciona en el nuevo ambiente.</div></td>
             <td><span class="flow-tag tag-cto">Cto. Técnico</span></td>
           </tr>
           <tr>
-            <td><div class="sess-num">5</div></td>
+            <td><div class="sess-num">4</div></td>
             <td><div class="sess-name">Sesión DTE (si aplica)</div><div style="font-size:12.5px;color:var(--text-2);margin-top:4px;">Si el cliente tiene Acepta con Manager, se realiza sesión adicional con el área DTE para validar la facturación electrónica en el nuevo ambiente.</div></td>
             <td><span class="flow-tag tag-dte">DTE (si aplica)</span></td>
           </tr>
         </tbody>
       </table>
 
+      <div class="sub-title" style="margin-top:20px;">Sesión 2 · Capacitación de Accesos</div>
+      <table class="sess-table">
+        <thead>
+          <tr>
+            <th>N°</th>
+            <th>Ítem a validar</th>
+            <th>Responsable</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="sess-num">1</div></td>
+            <td><div class="sess-name">Ingreso a Ramaflex</div><div style="font-size:12.5px;color:var(--text-2);margin-top:4px;">Mostrar al cliente cómo ingresar al entorno ASP a través de Ramaflex. Validar acceso de cada usuario.</div></td>
+            <td><span class="flow-tag tag-cto">Cto. Técnico</span></td>
+          </tr>
+        </tbody>
+      </table>
+
       <div class="alert alert-orange" style="margin-top:16px;">
         <span class="alert-icon">⚠</span>
-        <div><strong>Importación y exportación</strong> es el proceso que más cambia al migrar de Local a ASP. Es fundamental que el cliente lo entienda y valide en esta sesión.</div>
+        <div><strong>Importación y exportación</strong> es el proceso que más cambia al migrar de Local a ASP. Es fundamental que el cliente lo entienda y valide en la Sesión 1.</div>
       </div>
     </div>
 
